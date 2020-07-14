@@ -1049,7 +1049,8 @@ button.slick-next, button.slick-next:hover {
     right: -25px;
     width: 20px;
     height: 31px;
-    background-image: url("../img/left-right-arrow.png");
+    background-image: url("../img/partner-arrow-right.svg");
+    background-repeat: no-repeat;
     background-size: 40px;
     cursor: pointer;
     border: none;
@@ -1065,8 +1066,9 @@ button.slick-prev, button.slick-prev:hover {
     z-index: 1;
     width: 20px;
     height: 31px;
-    background-image: url("../img/left-right-arrow.png");
+    background-image: url("../img/partner-arrow-left.svg");
     background-size: 40px;
+    background-repeat: no-repeat;
     background-position-x: right;
     cursor: pointer;
     border: none;
@@ -1980,9 +1982,9 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
 .under-cv-img-div {
     font-style: normal;
     font-weight: 500;
-    font-size: 17px;
     line-height: 23px;
     color: #212529;
+    padding: 4px 0;
 }
 .cv-img-div {
     padding: 2px 2px 30px 2px;
@@ -1992,9 +1994,6 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
     font-weight: normal;
     line-height: 20px;
     color: #212529;
-}
-.under-cv-img-div {
-    padding: 10px 0;
 }
 .cv-img-div img {
     width: 95%;
@@ -2216,6 +2215,9 @@ table:not(#ent-table) {
     color: #FFFFFF;
     background: #2D7ABF;
     border-radius: 3px;
+}
+.fs-18px {
+    font-size: 18px;
 }
 .sums .btns {
     font-style: normal;

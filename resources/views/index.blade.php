@@ -187,7 +187,7 @@
                     @foreach($partners as $k => $v)
                         <div>
                             <a href="{{$v->link}}" target="_blank">
-                                <img class="img-fluid" src="/img/partners/{{$v->image}}">
+                                 <img class="img-fluid" src="{{asset("/img/partners/$v->image")}}" alt=">">
                             </a>
                         </div>
                     @endforeach

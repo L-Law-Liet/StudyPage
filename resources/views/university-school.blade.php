@@ -12,7 +12,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Область образовани</label>
+                    <label>Область образования</label>
                     <select class="form-control" name="sphere">
                         <option value="default">Выберите</option>
                     </select>
@@ -82,7 +82,7 @@
                         <li>
                             <div style="margin-bottom: 30px;">
                                 <h3>
-                                    <a href="/poisk/view/">
+                                    <a href="#">
                                         <strong>Математика</strong>
                                         <span>Казахский национальный университет имени Аль-Фараби</span> • Алматы
                                     </a>
@@ -121,7 +121,7 @@
                         <li>
                             <div style="margin-bottom: 30px;">
                                 <h3>
-                                    <a href="/poisk/view/">
+                                    <a href="#">
                                         <strong>Математика</strong>
                                         <span>Казахский национальный университет имени Аль-Фараби</span> • Алматы
                                     </a>
@@ -160,7 +160,7 @@
                         <li>
                             <div style="margin-bottom: 30px;">
                                 <h3>
-                                    <a href="/poisk/view/">
+                                    <a href="#">
                                         <strong>Математика</strong>
                                         <span>Казахский национальный университет имени Аль-Фараби</span> • Алматы
                                     </a>
@@ -199,7 +199,7 @@
                         <li>
                             <div style="margin-bottom: 30px;">
                                 <h3>
-                                    <a href="/poisk/view/">
+                                    <a href="#">
                                         <strong>Математика</strong>
                                         <span>Казахский национальный университет имени Аль-Фараби</span> • Алматы
                                     </a>
@@ -238,7 +238,7 @@
                         <li>
                             <div style="margin-bottom: 30px;">
                                 <h3>
-                                    <a href="/poisk/view/">
+                                    <a href="#">
                                         <strong>Математика</strong>
                                         <span>Казахский национальный университет имени Аль-Фараби</span> • Алматы
                                     </a>

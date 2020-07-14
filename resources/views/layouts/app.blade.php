@@ -393,21 +393,5 @@
         }
     }
 </script>
-{{--<script>--}}
-{{--    $(document).ready(function() {--}}
-{{--        $("#close-popup").click(e => {--}}
-{{--            console.log(e.target.id);--}}
-{{--            console.log('A');--}}
-{{--            $('html').toggleClass('bg-popup');--}}
-{{--            $('#popup-box').css('display', 'none');--}}
-{{--        });--}}
-{{--        $("#logged").click(e => {--}}
-{{--            console.log(e.target.id);--}}
-{{--                console.log('B');--}}
-{{--                $('html').toggleClass('bg-popup');--}}
-{{--                $('#popup-box').css('display', 'block');--}}
-{{--        });--}}
-{{--    });--}}
-{{--</script>--}}
 </body>
 </html>

@@ -29,9 +29,10 @@
                                 <div class="cv-img-div">
                                     <img src="{{asset('img/narxoz-img.svg')}}" alt="">
                                 </div>
-                                <div class="under-cv-img-div">
+                                <div class="under-cv-img-div mb-2">
                                     <p class="m-1"><b>Общежитие: </b>Да</p>
-                                    <p class="m-1"><b>Веб-сайт: </b>narxoz.kz</p>
+                                    <p class="m-1"><b>Военная кафедра: </b>Нет</p>
+                                    <p class="m-1"><b>Веб-сайт: </b><u>narxoz.kz</u></p>
                                 </div>
                             </div>
                             <div class="w-63 ml-4 pr-0">

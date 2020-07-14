@@ -29,23 +29,9 @@
                         <option value="default">Выберите</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label>Поступление в ВУЗ</label>
-                    <select class="form-control" name="when">
-                        <option value="after9">После 9 класса</option>
-                        <option value="afterSchool">После колледжа</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>1-й профильный предмет</label>
-                    <select class="form-control" name="firstSubject">
-                        <option value="default">Выберите</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>2-й профильный предмет</label>
-                    <select class="form-control" name="secondSubject">
+                    <label>Сфера направления</label>
+                    <select class="form-control" name="sphereDirect">
                         <option value="default">Выберите</option>
                     </select>
                 </div>
@@ -122,9 +108,10 @@
                                         <td>Стоимость обучения</td>
                                         <td>700 000 тг. / год</td>
                                     </tr>
+
                                     <tr>
                                         <td>Поступление в ВУЗ</td>
-                                        <td>После колледжа</td>
+                                        <td>После школы</td>
                                     </tr>
                                     <tr>
                                         <td>Профильный предмет</td>
@@ -163,7 +150,7 @@
 
                                     <tr>
                                         <td>Поступление в ВУЗ</td>
-                                        <td>После колледжа</td>
+                                        <td>После школы</td>
                                     </tr>
                                     <tr>
                                         <td>Профильный предмет</td>
@@ -202,7 +189,7 @@
 
                                     <tr>
                                         <td>Поступление в ВУЗ</td>
-                                        <td>После колледжа</td>
+                                        <td>После школы</td>
                                     </tr>
                                     <tr>
                                         <td>Профильный предмет</td>
@@ -241,7 +228,7 @@
 
                                     <tr>
                                         <td>Поступление в ВУЗ</td>
-                                        <td>После колледжа</td>
+                                        <td>После школы</td>
                                     </tr>
                                     <tr>
                                         <td>Профильный предмет</td>
@@ -280,7 +267,7 @@
 
                                     <tr>
                                         <td>Поступление в ВУЗ</td>
-                                        <td>После колледжа</td>
+                                        <td>После школы</td>
                                     </tr>
                                     <tr>
                                         <td>Профильный предмет</td>
