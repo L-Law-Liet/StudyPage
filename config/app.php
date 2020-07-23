@@ -163,7 +163,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
-
+        Dosarkz\EPayAlfaBank\AlfaBankServiceProvider::class,
     ],
 
     /*
@@ -215,6 +215,7 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
         'Image' => Intervention\Image\Facades\Image::class,
+        'AlfaBank' => Dosarkz\EPayAlfaBank\Facades\AlfaBank::class,
 
     ],
 

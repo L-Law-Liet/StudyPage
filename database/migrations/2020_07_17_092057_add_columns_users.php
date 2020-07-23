@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUrlDirection extends Migration
+class AddColumnsUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddUrlDirection extends Migration
      */
     public function up()
     {
-        Schema::table('directions', function (Blueprint $table) {
-            $table->string('url')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+           $table->string('surname')->nullable();
+           $table->date('birthDate')->nullable();
+           $table->string('gender')->nullable();
+           $table->string('region')->nullable();
         });
     }
 

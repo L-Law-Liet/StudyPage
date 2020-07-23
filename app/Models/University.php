@@ -15,4 +15,12 @@ class University extends Model
     public function relType(){
         return $this->belongsTo(Type::class, 'type_id', 'id');
     }
+    public function grants()
+    {
+        return $this->hasMany('App\GrantsDiscounts');
+    }
+    public function programs()
+    {
+        return $this->hasMany('App\LearnProgram');
+    }
 }

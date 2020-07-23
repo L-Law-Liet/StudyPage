@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUrlCities extends Migration
+class AddDegreeHasColumnLearnPrograms extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUrlCities extends Migration
      */
     public function up()
     {
-        Schema::table('cities', function (Blueprint $table) {
-            $table->string('url')->nullable();
+        Schema::table('learn_programs', function (Blueprint $table) {
+            $table->boolean('has');
         });
     }
 

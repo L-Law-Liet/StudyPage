@@ -12,7 +12,7 @@
         <div class="d-flex justify-content-between">
             <div class="w-63">
                 <div id="faq">
-                    <h3 class="text-center">ВЫБОР ПРОФЕССИИ</h3>
+                    <h3 class="text-center">Признаки хорошего ВУЗа</h3>
                     <p class="faq-text">
                         Каждому молодому человеку приходится сталкиваться с проблемой выбора будущей профессии,
                         выбора жизненного пути. Зачастую мы выбираем этот путь необдуманно, делаем случайный выбор,
@@ -38,17 +38,7 @@
                     </p>
                 </div>
             </div>
-            <div class="w-37">
-                <ul class="faq-list">
-                    <li><a class="color-C11800" href="#"><img src="{{asset('img/arrow-dots-red.svg')}}" alt="">Выбор профессии</a></li>
-                    <li><a href="#"><img src="{{asset('img/arrow-dots-black.svg')}}" alt="">Признаки хорошего ВУЗа</a></li>
-                    <li><a href="#"><img src="{{asset('img/arrow-dots-black.svg')}}" alt="">Предметы определяющие будущую профессию</a></li>
-                    <li><a href="#"><img src="{{asset('img/arrow-dots-black.svg')}}" alt="">Вещи, которые нужно знать перед днем открытых дверей</a></li>
-                    <li><a href="#"><img src="{{asset('img/arrow-dots-black.svg')}}" alt="">Поступление в колледж</a></li>
-                    <li><a href="#"><img src="{{asset('img/arrow-dots-black.svg')}}" alt="">Поступление в ВУЗ</a></li>
-                    <li><a href="#"><img src="{{asset('img/arrow-dots-black.svg')}}" alt="">Калькулятор ЕНТ и можно ли ему верить при поступлении</a></li>
-                </ul>
-            </div>
+            @include('faq/faq-navbar')
         </div>
     </div>
 @endsection

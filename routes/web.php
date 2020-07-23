@@ -242,36 +242,55 @@ Route::post('/callback', 'IndexController@postCallback');
 Route::post('/proposal', 'IndexController@postProposal');
 
 Route::get('/login', 'LoginController@showLoginForm');
+Route::post('/logging', 'CustomAuthController@login')->name('logging');
 Route::get('/forgot-passwd', 'PagesController@showForgotPasswd');
 Route::get('/registration', 'PagesController@showRegistrationForm');
 Route::get('/cabinet', 'PagesController@showCabinet');
 Route::get('/change-pwd', 'PagesController@changePassword');
 Route::prefix('college/')->group(function (){
-    Route::get('/', 'PagesController@showCollege');
-    Route::get('/view/{id}', 'PagesController@viewCollege');
+    Route::get('/{id?}', 'PagesController@showCollege')->name('college-list');
+    Route::get('/view/{sid}/uid/{uid}', 'PagesController@viewCollege');
 });
-Route::get('/university-school', 'PagesController@showUniversityAfterSchool');
-Route::get('/university-college', 'PagesController@showUniversityAfterCollege');
+Route::get('/university-school/{pages}', 'PagesController@showUniversityAfterSchool')->name('uni-school');
+Route::get('/university-college/{pages}', 'PagesController@showUniversityAfterCollege')->name('uni-col');
+//Route::get('/magistr/{id?}/{degree}', 'PagesController@showMagistr');
+Route::get('/doctor/{degree}/{pages}', 'PagesController@showDoctor')->name('doctor');
 Route::get('/university/list/multiprofile', function (){
     return view('multiprofile-rating');
 });
-Route::get('/faq', 'PagesController@showFAQ');
+Route::prefix('faq/')->group(function (){
+    Route::get('select-profession', 'PagesController@showFAQSelectProfession');
+    Route::get('good', 'PagesController@showFAQGoodUni');
+    Route::get('future', 'PagesController@showFAQFutureProfession');
+    Route::get('open-door', 'PagesController@showFAQOpenDoors');
+    Route::get('college', 'PagesController@showFAQToCollege');
+    Route::get('univer', 'PagesController@showFAQToUni');
+    Route::get('calc', 'PagesController@showFAQEntCalc');
+});
 Route::get('/list/partner', 'PagesController@partnerList');
 Route::get('/list/univer', 'PagesController@univerList');
 Route::get('/list/college', 'PagesController@collegeList');
-Route::get('/college-view', 'PagesController@viewCollegeFromList');
-Route::get('/college-achievements', 'PagesController@achievementsCollegeFromList');
-Route::get('/college-coop', 'PagesController@coopCollegeFromList');
-Route::get('/college-rating', 'PagesController@ratingCollegeFromList');
-Route::get('/college-discounts', 'PagesController@discountsCollegeFromList');
-Route::get('/college-edu', 'PagesController@eduCollegeFromList');
-Route::get('/college-docs', 'PagesController@docsCollegeFromList');
-Route::get('/college-contacts', 'PagesController@contactsCollegeFromList');
-Route::get('/calculator-ent', 'PagesController@entCalculator');
-Route::get('/result-ent', 'PagesController@entResult');
-Route::get('/result-ent2', 'PagesController@entResult2');
+Route::prefix('college')->group(function (){
+    Route::get('/view/{id}/{name}', 'PagesController@viewCollegeFromList');
+    Route::get('/achievements/{id}/{name}', 'PagesController@achievementsCollegeFromList');
+    Route::get('/coop/{id}/{name}', 'PagesController@coopCollegeFromList');
+    Route::get('/rating/{id}/{name}', 'PagesController@ratingCollegeFromList');
+    Route::get('/discounts/{id}/{name}', 'PagesController@discountsCollegeFromList');
+    Route::get('/edu/{id}/{name}', 'PagesController@eduCollegeFromList');
+    Route::get('/docs/{id}/{name}', 'PagesController@docsCollegeFromList');
+    Route::get('/contacts/{id}/{name}', 'PagesController@contactsCollegeFromList');
+});
+Route::get('/univer/view/{id}', 'PagesController@viewUniver');
+//Route::get('sfsdghjjhgfgd', 'EpayController@requestResult');
+Route::get('/calculator-ent', 'PagesController@entCalculator')->name('calculator-ent');
+Route::post('/result-ent', 'PagesController@entResult')->name('result-ent');
+Route::get('result-ent/{score}/{profs1}/{profs2}/{map}', 'PagesController@showENTResult')->name('ent-show');
+Route::get('/result-ent2/{prob}/{score}/{profs1}/{profs2}', 'PagesController@entResult2')->name('result-ent2');
 Route::get('/callback-view', 'PagesController@showCallback');
-
+Route::post('payment', 'EpayController@payment')->name('payment');
+Route::get('success-payment/{m}/{sum}', 'PagesController@successPayment')->name('success-payment');
+Route::get('fail-payment/{m}', 'PagesController@failPayment')->name('fail-payment');
+Route::get('show-payment/{m}', 'PagesController@showPayment')->name('show-payment');
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@section('css')
+    <style>
+        main.mt-5 {
+            margin-top: 0 !important;
+        }
+    </style>
+@endsection
 @section('content')
 
     <div class="container">
@@ -7,16 +13,16 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <p class="back-link">
-                        <a href=" url()->previous() "><span class="sprites back"></span>Вернуться к результатам поиска</a>
+                        <a href="{{url()->previous()}}"><span><img class="mr-2" src="{{asset('img/arrow-left.svg')}}" alt=""></span>Вернуться к результатам поиска</a>
                     </p>
                     <div class="sgs-adress-header">
                         <h2>
                             <div>
-                               <span class="sgs-rod"> ИНФОРМАТИКА </span>
+                               <span class="sgs-rod"> {{$s->name_ru}} </span>
                             </div>
                             <div>
-                                <span class="sgs-rod"> Казахский национальный университет имени Аль-Фараби </span>
-                                <span class="sgs-rod">• АЛМАТЫ </span>
+                                <span class="sgs-rod"> {{$u->name_ru}} </span>
+                                <span class="sgs-rod">• {{$u->relCity->name_ru}} </span>
                             </div>
                         </h2>
                     </div>
@@ -33,17 +39,21 @@
                     <div class="tab-content">
                         <div id="overview" class="tab-pane fade active in" role="tabpanel" tabindex="0" aria-hidden="false" aria-labelledby="ui-tab-1">
                             <h3>Язык обучения</h3>
-                            <p> Казахский / Русский </p>
+                            <p> {{\App\Models\Language::where('id', \App\Models\CostEducation::where('specialty_id', $s->id)->where('university_id', $u->id)->first()->language_id)->first()->name_ru}} </p>
                             <h3>Срок обучения</h3>
-                            <p> 3 года / 6 семестров </p>
-                            <h3>Квалификация</h3>
-                            <p> Бакалавриат </p>
+                            <p> {{$s->education_time}} </p>
+                            <h3>{{$f[0]}}</h3>
+                            <p> {{$requirement->relDegree->name_ru}} </p>
                             <h3>Стоимость обучения</h3>
-                            <p> 350 000 тенге / год</p>
-                            <h3>Поступление в колледж</h3>
-                            <p> После 9 класса </p>
+                            <p> {{\App\Models\CostEducation::where('specialty_id', $s->id)->where('university_id', $u->id)->first()->price}} тенге / год</p>
+                            <h3>{{$f[1]}}</h3>
+                            <p> {{$f[2]}} </p>
+                            @if($f[3] ?? '')
+                                <h3>{{$f[3]}}</h3>
+                                <p> {{$f[4]}} </p>
+                                @endif
                             <h3>Форма обучения</h3>
-                            <p> Очная (дневная) </p>
+                            <p> {{$s->getCost()->education_form}} </p>
                         </div>
                         <div id="doc" class="tab-pane fade" role="tabpanel" tabindex="-1" aria-hidden="true" aria-labelledby="ui-tab-2">
                             @if(is_object($requirement)) {!! $requirement->content_ru !!} @endif
@@ -55,13 +65,13 @@
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                     <div class="sgs-adress">
                         <h3>Контакты</h3>
-                        <p><b> Казахский национальный университет имени Аль - Фараби </b></p>
-                        <p> Приемная комиссия </p>
-                        <p> проспект Аль-Фараби 71 </p>
-                        <p> 050040 Алматы </p>
-                        <p>Тел: 8(727) 377-33-30, 8(727) 377-33-30 </p>
-                        <p> E-mail: info@kaznu.kz </p>
-                        <p> Сайт: kaznu.kz </p>
+                        <p><b> {{$u->name_ru}} </b></p>
+                        <?=$u->subdivision?>
+                        <p> {{$u->address_ru}} </p>
+                        <p> {{$u->postcode}} {{$u->relCity->name_ru}} </p>
+                        <p>Тел: {{$u->phone}} </p>
+                        <p> {{$u->email}} </p>
+                        <p> Сайт: {{ltrim($u->web_site, 'Website: ')}} </p>
                     </div>
                 </div>
             </div>

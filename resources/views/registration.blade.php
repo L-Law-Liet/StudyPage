@@ -11,48 +11,53 @@
                 </div>
                 <div class="login-content">
                     <div class="login-form">
-                        <form id="login-form" action="">
+                        <form id="login-form" action="{{route('register')}}" method="post">
+                            {{csrf_field()}}
                             <div class="login-form-div">
                                 <label>Фамилия*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="text" name="surname">
                             </div>
                             <div class="login-form-div">
                                 <label>Имя*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="text" name="name">
                             </div>
                             <div class="login-form-div">
                                 <label>Дата рождения*</label>
-                                <input class="login-form-input p-1 date-unstyle" type="date">
+                                <input class="login-form-input p-1" type="date" min="1920-01-01" max="2020-01-01" name="birthDate">
                             </div>
                             <div class="login-form-div">
                                 <label>Пол*</label>
-                                <select class="login-form-input p-1 w-100" name="gender" id="">
+                                <select class="login-form-input p-1 w-100" name="gender">
+                                    <option value="m">Мужчина</option>
+                                    <option value="f">Женщина</option>
                                 </select>
                             </div>
                             <div class="login-form-div">
                                 <label>Регион*</label>
-                                <select class="login-form-input p-1 w-100" name="gender" id="">
+                                <select class="login-form-input p-1 w-100" name="region">
+                                    <option value="4">Алматы</option>
+                                    <option value="1">Нур-Султан</option>
                                 </select>
                             </div>
 
                             <div class="login-form-div">
                                 <label>Электронная почта*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="text" name="email">
                             </div>
                             <div class="login-form-div">
                                 <label>Контактный телефон*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="tel" name="phone">
                             </div>
                             <div class="login-form-div">
                                 <label>Пароль*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="password" name="password">
                             </div>
                             <div class="login-form-div">
                                 <label>Повторите пароль*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="password" name="password_confirmation">
                             </div>
                             <div class="login-form-div">
-                                <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Войти">
+                                <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Зарегистрироваться">
                             </div>
                         </form>
                     </div>

@@ -17,19 +17,13 @@
     <div class="container">
         <div id="college-view-right">
             <div>
-                <h3 class="text-center">По результатам теста Ваш балл составляет: <b>95</b></h3>
+                <h3 class="text-center">По результатам теста Ваш балл составляет: <b>{{$score}}</b></h3>
             </div>
             <div>
                 <table id="ent-table">
                     <thead>
                     <tr>
-                        <td colspan="3" class="ent-td w-75 p-2" >Шансы поступить на грант</td>
-                        <td class="ent-td w-25 not-33" rowspan="2">Шансы поступить на платное (100)</td>
-                    </tr>
-                    <tr>
-                        <td class="ent-td">Высокий (0)</td>
-                        <td class="ent-td">Средний (0)</td>
-                        <td class="ent-td">Низкий (50)</td>
+                        <td colspan="4" class="ent-td w-75 p-2" >{{$title}}</td>
                     </tr>
                     </thead>
                     <tbody class="ent-tbody">
@@ -39,66 +33,38 @@
                         <td>“Меньше с 6 по 13 баллов” чем проходной балл на грант (10)</td>
                         <td class=" not-33">“Меньше с 14 баллов” чем проходной балл на грант, но не меньше проходного балла на платное</td>
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                              <div class="justify-content-between d-flex">
-                            <div class="mr-1"><i class="fas fa-graduation-cap"></i></div><div><b> Подготовка учителей иностранного языка</b></div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="mr-1"><i class="fas fa-building"></i></div><p>Евразийский национальный университет имени Л. Н. Гумилева</p>
-                        </div>
-                            <b>Проходной балл:</b>
-                        </td>
-                        <td class=" not-33">
-                              <div class="justify-content-between d-flex">
-                            <div class="mr-1"><i class="fas fa-graduation-cap"></i></div><div><b> Подготовка учителей иностранного языка</b></div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="mr-1"><i class="fas fa-building"></i></div><p>Евразийский национальный университет имени Л. Н. Гумилева</p>
-                        </div>
-                            <b>Проходной балл: 75</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                        </td>
-                        <td class=" not-33">
-                              <div class="justify-content-between d-flex">
-                            <div class="mr-1"><i class="fas fa-graduation-cap"></i></div><div><b> Подготовка учителей иностранного языка</b></div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="mr-1"><i class="fas fa-building"></i></div><p>Евразийский национальный университет имени Л. Н. Гумилева</p>
-                        </div>
-                            <b>Проходной балл: 75</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                        </td>
-                        <td class=" not-33">
-                              <div class="justify-content-between d-flex">
-                            <div class="mr-1"><i class="fas fa-graduation-cap"></i></div><div><b> Подготовка учителей иностранного языка</b></div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="mr-1"><i class="fas fa-building"></i></div><p>Евразийский национальный университет имени Л. Н. Гумилева</p>
-                        </div>
-                            <b>Проходной балл: 50</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                        </td>
-                        <td class=" not-33"></td>
-                    </tr>
-
+                    @for($i = 0; $i < ceil(count($array)/4); $i++)
+                        <tr>
+                            @php
+                            $row = ($i+1)*4;
+                            if ($row > ceil(count($array)))
+                                $row = ceil(count($array));
+                            @endphp
+                            @for($j = $i*4; $j < $row; $j++)
+                               @if($j%3 == 0)
+                                    <td class=" not-33">
+                                                <div class="justify-content-start d-flex">
+                                                    <div class="mr-1"><i class="fas fa-graduation-cap"></i></div><div><b> {{$array[$j]->relSubdirection->name_ru}}</b></div>
+                                                </div>
+                                                <div class="d-flex justify-content-start">
+                                                    <div class="mr-1"><i class="fas fa-building"></i></div><p>{{$array[$j]->getCost()->relUniversity->name_ru}}</p>
+                                                </div>
+                                                <b>Проходной балл: {{$array[$j]->getCost()->passing_score}}</b>
+                                    </td>
+                                   @else
+                                    <td>
+                                            <div class="justify-content-start d-flex">
+                                                <div class="mr-1"><i class="fas fa-graduation-cap"></i></div><div><b>{{$array[$j]->relSubdirection->name_ru}}</b></div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="mr-1"><i class="fas fa-building"></i></div><p>{{$array[$j]->getCost()->relUniversity->name_ru}}</p>
+                                            </div>
+                                            <b>Проходной балл: {{$array[$j]->getCost()->passing_score}}</b>
+                                    </td>
+                                   @endif
+                                @endfor
+                        </tr>
+                        @endfor
                     </tbody>
                 </table>
             </div>

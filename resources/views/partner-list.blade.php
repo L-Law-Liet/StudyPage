@@ -12,13 +12,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @for($i = 1; $i < 8; $i++)
+                    @foreach($partners as $partner)
                         <tr>
-                            <td>{{ $i }}</td>
-                            <td> Казахский агротехнический университет имени С. Сейфуллина</td>
-                            <td style="">Алматы</td>
+                            <td>{{ $partner->id }}</td>
+                            <td> {{ $partner->name }}</td>
+                            <td style="">{{ $partner->region }}</td>
                         </tr>
-                    @endfor
+                    @endforeach
                     </tbody>
                 </table>
             </div>

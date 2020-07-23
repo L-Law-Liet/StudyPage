@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+    <div id="messagError" style="display: {{($message?? '')? 'block' : 'none'}}"
+         class="alert alert-info text-center w-50 p-1 rounded-lg position-absolute">
+        {{$message ?? ''}}
+    </div>
     <div class="main">
         <div class="container">
             <form method="GET" action="/poisk">
@@ -23,9 +27,10 @@
                             <div class="form-group m-b-0">
                                 <label class="col-form-label"><i class="fas fa-graduation-cap"></i> Степень</label>
                                 <select id="st" name="degree_id" class="form-control degreec">
+
                                     <option value="0">Выберите</option>
-                                    @foreach($degrees as $k => $v)
-                                        <option data-url="{{ $v->url }}" value="{{ $v->id }}">{{ $v->name_ru }}</option>
+                                    @foreach($degrees as $d)
+                                        <option value="{{ $d->id }}">{{ $d->name_ru }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -187,7 +192,7 @@
                     @foreach($partners as $k => $v)
                         <div>
                             <a href="{{$v->link}}" target="_blank">
-                                 <img class="img-fluid" src="{{asset("/img/partners/$v->image")}}" alt=">">
+                                <img class="img-fluid" src="{{asset("/img/partners/$v->image")}}">
                             </a>
                         </div>
                     @endforeach
@@ -195,9 +200,13 @@
             </div>
         </div>
     </div>
-    <link href="/css/chosen.min.css" rel="stylesheet" type="text/css">
-    <script src="/js/chosen.jquery.min.js"></script>
+    <link href="{{asset('css/chosen.min.css')}}" rel="stylesheet" type="text/css">
+    <script src="{{asset('js/chosen.jquery.min.js')}}"></script>
     <script>
+        setTimeout(fade_out, 6000);
+        function fade_out() {
+            $("#messagError").fadeOut().empty();
+        }
         $('.directionc').chosen();
         $('.cityc').chosen();
         $('.degreec').chosen();

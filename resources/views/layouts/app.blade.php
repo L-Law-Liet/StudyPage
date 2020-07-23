@@ -56,6 +56,8 @@
 				accurateTrackBounce:true
 			});
     </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <noscript><div><img src="https://mc.yandex.ru/watch/57544288" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     @yield('css')
 </head>
@@ -103,10 +105,10 @@
                                  <li><a target="_blank" href="<?=$soc?>" style="border:none; background-size: 14px" id="<?=$id?>" class="<?=$class?>"></a></li>
                                  <? } ?>
                                  <? } ?>
-                                 @if(!Auth::check())
+                                 @if(Auth::check())
                                      <li class="log-cab ml-4 d-inline-block">
-                                                <div class="d-inline mr-2">
-                                                    <u><a class="d-inline" id="logged" href="#">Пополнить счет</a></u><b id="balance">0 ед</b>
+                                                <div class="d-inline mr-4">
+                                                    <u><a class="d-inline" id="logged" href="#">Пополнить счет</a></u><b id="balance">{{Auth::user()->bill}} ед.</b>
                                                 </div>
 
                                                 <a id="cabinetDropdown" class="float-right mt-0 nav-link p-0" href="#" aria-expanded="false"
@@ -114,11 +116,15 @@
                                                     <img style="width: 30px; height: 18px" src="/img/login.svg">
                                                     Кабинет
                                                 </a>
-
+                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" hidden>
+                                             @csrf
+                                         </form>
                                                 <div id="cab-dd-menu" class="dropdown-menu" aria-labelledby="cabinetDropdown">
                                                     <a class="dd-item" href="{{url('cabinet')}}">Личные данные</a>
                                                     <a class="dd-item" href="{{url('change-pwd')}}">Сменить пароль</a>
-                                                    <a class="dd-item" href="#">Выход</a>
+                                                    <a class="dd-item" href="{{route('logout')}}"
+                                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">Выход</a>
                                                 </div>
                                      </li>
                                  @else
@@ -184,7 +190,7 @@
                         <a class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{url('college')}}">КОЛЛЕДЖ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{url('university-school')}}">ВУЗЫ</a>
+                        <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{url('university-school', 0)}}">ВУЗЫ</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link dC dK @if(Request::path() == 'list') active @endif" href="/list/">РЕЙТИНГ</a>
@@ -210,7 +216,7 @@
                                     </div>
                                     <div class="d-inline-block nav-items">
                                         <img style="margin-bottom: 3px;" src="/img/arrow.svg" alt="->">
-                                        <a href="{{url('faq')}}">ВОПРОСЫ И ОТВЕТЫ</a>
+                                        <a href="{{url('faq/select-profession')}}">ВОПРОСЫ И ОТВЕТЫ</a>
                                     </div>
                                 </div>
                             </div>
@@ -228,10 +234,16 @@
     <div id="map" class="container">
         <div class="subnav">
             @php
-            $map = preg_split("/[,]+/", $map);
-            $lastMap = $map[count($map)-1];
-            for ($i = 0; $i < count($map)-1; $i++){
-                echo $map[$i];
+                $map = isset($map) ? $map : '';
+                $map = preg_split("/[,]+/", $map);
+                $k = array_search(' Список колледжей ', $map);
+            if ($name ?? '' == 'univer' && $k){
+                $map[$k] = ' Список ВУЗов ';
+            }
+
+                $lastMap = $map[count($map)-1];
+                for ($i = 0; $i < count($map)-1; $i++){
+                    echo $map[$i];
             @endphp
             <img src="{{asset('img/faq-arrow-right.svg')}}">
             @php
@@ -249,19 +261,22 @@
                 <div>
                     <span class="close">&times;</span>
                 </div>
+                <form action="{{route('payment')}}" method="post">
+                    @csrf
                 <p>Сумма пополнения</p>
                 <div class="dialog-input-div border-bottom p-0 d-flex justify-content-between">
-                    <input class="border-0 w-75" value="0" type="tel" id="amountInput" title="Сумма пополнения"><div class="w-25 dialog-valuta pt-2">&#8376</div>
+                    <input name="sum" oninput="minZero(event)" class="border-0 w-75" value="0" type="number" id="amountInput" title="Сумма пополнения"><div class="w-25 dialog-valuta pt-2">&#8376;</div>
                 </div>
                 <div class="d-flex justify-content-between mt-2 mb-2 sums">
-                    <div class="w-25 btns m-1 text-center p-1">300</div>
-                    <div class="w-25 btns m-1 text-center p-1">400</div>
-                    <div class="w-25 btns m-1 text-center p-1">500</div>
-                    <div class="w-25 btns m-1 text-center p-1">1000</div>
+                    <div onclick="setCash(event)" id="300" class="w-25 btn btns m-1 text-center p-1">300</div>
+                    <div onclick="setCash(event)" id="400" class="w-25 btn btns m-1 text-center p-1">400</div>
+                    <div onclick="setCash(event)" id="500" class="w-25 btn btns m-1 text-center p-1">500</div>
+                    <div onclick="setCash(event)" id="1000" class="w-25 btn btns m-1 text-center p-1">1000</div>
                 </div>
                 <div class="dialog-button-div mt-2 pt-1 mb-2">
                     <button class="border-0 p-2">Оплатить</button>
                 </div>
+                </form>
             </div>
 
         </div>
@@ -278,33 +293,33 @@
                             <span>Степень</span>
                             <ul>
                                 <li class="">
-                                    <a href="/poisk?degree_id=bakalavriat&direction_id=any&subdirection_id=any&specialty_id=any&city_id=any&pr1=any&pr2=any&un_id=any&type_id=any&page=1">Бакалавриат</a>
+                                    <a href="{{url('college')}}">Колледж</a>
+                                </li>
+                                <li class="">
+                                    <a href="{{url('university-college', 0)}}">Бакалавриат</a>
                                 </li>
                                 <li>
-                                    <a href="/poisk?degree_id=magistratura&direction_id=any&subdirection_id=any&specialty_id=any&city_id=any&pr1=any&pr2=any&un_id=any&type_id=any&page=1">Магистратура</a>
+                                    <a href="{{url('doctor', [2, 0])}}">Магистратура</a>
                                 </li>
                                 <li>
-                                    <a href="/poisk?degree_id=doktorantura&direction_id=any&subdirection_id=any&specialty_id=any&city_id=any&pr1=any&pr2=any&un_id=any&type_id=any&page=1">Докторантура</a>
+                                    <a href="{{url('doctor', [3, 0])}}">Докторантура</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <span>Поступление</span>
+                            <span>Навигатор</span>
                             <ul>
-                                {{--<li>--}}
-                                    {{--<a href="/city/view/2">Города</a>--}}
-                                {{--</li>--}}
-                                {{--<li>--}}
-                                    {{--<a href="/article/6">ЕНТ / КТА</a>--}}
-                                {{--</li>--}}
                                 <li>
-                                    <a href="/navigator/">Навигатор</a>
+                                    <a href="{{url('list')}}">Рейтинг</a>
                                 </li>
                                 <li>
-                                    <a href="/list/">Список ВУЗов</a>
+                                    <a href="{{url('list/college')}}">Список колледжей</a>
                                 </li>
                                 <li>
-                                    <a href="/rating/">Рейтинг ВУЗов</a>
+                                    <a href="{{url('list/univer')}}">Список ВУЗов</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('faq/select-profession')}}">Вопросы и ответы</a>
                                 </li>
                             </ul>
                         </li>
@@ -312,13 +327,16 @@
                             <span>Соглашение</span>
                             <ul>
                                 <li>
-                                    <a href="/article/5">ВУЗам</a>
-                                </li>
-                                <li>
-                                    <a href="/article/4">Пользователям</a>
+                                    <a href="/article/5">Колледжам/ВУЗам</a>
                                 </li>
                                 <li>
                                     <a href="/article/3">Рекламодателям</a>
+                                </li>
+                                <li>
+                                    <a href="/article/5">Пользовательское соглашение</a>
+                                </li>
+                                <li>
+                                    <a href="/article/4">Политика конфедициальности</a>
                                 </li>
                             </ul>
                         </li>
@@ -329,10 +347,13 @@
                                     <a href="/article/2">О сайте</a>
                                 </li>
                                 <li>
-                                    <a href="/article/1">Добавить ВУЗ</a>
+                                    <a href="/article/1">Добавить колледж/ВУЗ</a>
                                 </li>
                                 <li>
                                     <a href="{{url('callback-view')}}">Обратная связь</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('/#city')}}">ВУЗы в городах Казахстана</a>
                                 </li>
                             </ul>
                         </li>
@@ -390,6 +411,17 @@
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
+        }
+    }
+    function setCash(event) {
+        document.getElementById('amountInput').value = event.target.id;
+    }
+    function minZero(event) {
+        if(event.target.value[0] == 0){
+            event.target.value = parseInt(event.target.value);
+        }
+        if(event.target.value < 0){
+            event.target.value = 0;
         }
     }
 </script>

@@ -9,14 +9,8 @@
         }
     </style>
 @endsection
-@section('subnav')
-    <div class="container">
-        <div class="college-view-nav">
-            <a href="{{url()->previous()}}"><img class="mr-2" src="{{asset('img/arrow-left.svg')}}" alt=""><span>Вернуться к списку колледжей /</span></a><span class="color-2D7ABF"> Университет Нархоз</span>
-        </div>
-    </div>
-@endsection
 @section('content')
+    @include('college/subnav')
 
     <div class="container">
         <div class="row">
@@ -34,12 +28,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @for($i = 1; $i < 5; $i++)
-                                        <tr>
-                                            <td>Педагогические науки</td>
-                                            <td class="tl"><b>+</b></td>
-                                        </tr>
-                                    @endfor
+                                    @foreach($university->programs as $program)
+                                        @if($program->degree->id == 1)
+                                            <tr>
+                                                <td>{{$program->name}}</td>
+                                                <td class="tl"><b>{{($program->has)? '+' : '-'}}</b></td>
+                                            </tr>
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -52,12 +48,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @for($i = 1; $i < 5; $i++)
-                                        <tr>
-                                            <td>Педагогические науки</td>
-                                            <td class="tl"><b>+</b></td>
-                                        </tr>
-                                    @endfor
+                                    @foreach($university->programs as $program)
+                                        @if($program->degree->id == 2)
+                                            <tr>
+                                                <td>{{$program->name}}</td>
+                                                <td class="tl"><b>{{($program->has)? '+' : '-'}}</b></td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -70,12 +68,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @for($i = 1; $i < 5; $i++)
-                                        <tr>
-                                            <td>Педагогические науки</td>
-                                            <td class="tl"><b>+</b></td>
-                                        </tr>
-                                    @endfor
+                                    @foreach($university->programs as $program)
+                                        @if($program->degree->id == 3)
+                                            <tr>
+                                                <td>{{$program->name}}</td>
+                                                <td class="tl"><b>{{($program->has)? '+' : '-'}}</b></td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>

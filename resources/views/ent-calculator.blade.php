@@ -10,7 +10,45 @@
     </style>
 @endsection
 @section('content')
+       <div id="messagError" style="display: {{($error)? 'block' : 'none'}}"
+            class="alert alert-danger text-center w-50 p-1 rounded-lg position-absolute">
+       {{$error?? ''}}
+       </div>
+    @if(session('m'))
 
+        <div id="Message" class="message">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div>
+                    <span class="close1">&times;</span>
+                </div>
+                <p class="text-center">{{session('m')}}</p>
+
+                <div class="dialog-button-div mt-2 pt-1 mb-2">
+                    <button id="logged1" class="border-0 p-2">Пополнить счет</button>
+                </div>
+            </div>
+
+        </div>
+        @elseif(session('m1'))
+        <div id="Message" class="message">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div>
+                    <span class="close1">&times;</span>
+                </div>
+                <h5 class="text-center m-3">{{session('m1')}}</h5>
+
+                <div class="dialog-button-div m-4">
+                    <button onclick="window.location='{{url('login')}}'" class="border-0 p-2">Войти</button>
+                </div>
+            </div>
+
+        </div>
+
+        @endif
     <div class="container">
                 <div id="college-view-right">
                     <div>
@@ -21,66 +59,109 @@
                             попробуйте смоделировать их.
                         </p>
                     </div>
-                    <form action="{{action('PagesController@entResult')}}" method="get">
+                    <form action="{{action('PagesController@entResult')}}" method="post">
+                        @csrf
                         <div class="row mt-5">
                             <div class="row col-6">
-                                <div class="col-12">
+                                <div class="col-6">
+                                    <label>Выберите язык обучения</label>
+                                </div>
+                                <div class="col-6">
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort sortorder">
-                                            <option selected="" disabled="" value="default">Выберите язык обучения</option>
+                                        <select class="form-control sgs-sort sortorder" name="lang">
+                                            <option selected="" disabled="" value="default"></option>
+                                            @foreach(\App\Models\Language::all() as $l)
+                                                <option value="{{$l->id}}">{{$l->name_ru}}</option>
+                                                @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort sortorder" name="sort">
+                                        <select class="form-control sgs-sort sortorder" name="1profSelect">
                                             <option selected="" disabled="" value="default">1-й профильный предмет</option>
+                                            @foreach($ss as $s)
+                                                <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                                                @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort sortorder" name="sort">
+                                        <select class="form-control sgs-sort sortorder" name="2profSelect">
                                             <option selected="" disabled="" value="default">2-й профильный предмет</option>
+                                            @foreach($ss as $s)
+                                                <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort" name="sort">
-                                            <option selected="" disabled="" value="default">Балл</option>
-                                        </select>
+                                        <input oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="1profPoint">
                                     </div>
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort" name="sort">
-                                            <option selected="" disabled="" value="default">Балл</option>
-                                        </select>
+                                        <input oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="2profPoint">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="w-50">Математическая грамотность</label>
-                                    <select class="form-control sgs-sort w-50" name="mat-g">
-                                        <option selected="" disabled="" value="default">Балл</option>
-                                    </select>
+
+                                    <input oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="matGr" id="matGr">
                                 </div>
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="50">Грамотность чтения</label>
-                                    <select class="form-control sgs-sort w-50" name="read-g">
-                                        <option selected="" disabled="" value="default">Балл</option>
-                                    </select>
+
+                                    <input oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="readGr">
                                 </div>
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="w-50">История Казахстана</label>
-                                    <select class="form-control sgs-sort w-50" name="h-kz">
-                                        <option selected="" disabled="" value="default">Балл</option>
-                                    </select>
+                                    <input oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="historyKZ">
                                 </div>
                             </div>
                         </div>
                         <div class="text-center m-5">
+                            <input type="text" hidden name="access" value="1">
                             <button type="submit" class="know-chance p-3">Узнать шансы (50 ед.)</button>
                         </div>
                     </form>
                 </div>
     </div>
+    <script>
+        function max20(event) {
+            if(event.target.value > 20){
+                event.target.value = 20;
+            }
+            if(event.target.value < 0){
+                event.target.value = 0;
+            }
+        }
+        function max40(event) {
+            if(event.target.value > 40){
+                event.target.value = 40;
+            }
+            if(event.target.value < 0){
+                event.target.value = 0;
+            }
+        }
+        // Get the modal
+        var modal1 = document.getElementById("Message");
+
+        // Get the <span> element that closes the modal
+        var span1 = document.getElementsByClassName("close1")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span1.onclick = function() {
+            modal1.style.display = "none";
+        }
+        $('#logged1').on('click', function () {
+            modal1.style.display = "none";
+            $('#logged').click();
+        });
+
+        setTimeout(fade_out, 3500);
+        function fade_out() {
+            $("#messagError").fadeOut().empty();
+        }
+    </script>
 @endsection

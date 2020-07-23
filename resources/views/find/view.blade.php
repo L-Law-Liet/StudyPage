@@ -28,6 +28,7 @@
                         </li>
                     @endif
                     @php $rating = \App\Models\CostEducation::getRating($specialty->relSpecialty->id) @endphp
+
                     @if(count($rating) > 0)
                         <li role="presentation" class=""><a data-toggle="tab" href="#rating" role="tab" id="ui-tab-3" tabindex="-1" aria-selected="false" aria-controls="rating">Рейтинг</a>
                         </li>

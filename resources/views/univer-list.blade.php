@@ -12,13 +12,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @for($i = 1; $i < 8; $i++)
+                    @php
+                    $i = 1;
+                    @endphp
+                    @foreach($universities as $university)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td><a class="college-list-a" href="#">Медицинский университет Астана</a></td>
-                            <td style="">00{{$i}}</td>
+                            <td><a class="college-list-a" href="{{url('college/view', [$university->id, 'univer'])}}">{{$university->name_ru}}</a></td>
+                            <td style="">{{str_pad($university->city_id, 3, '0', STR_PAD_LEFT)}}</td>
                         </tr>
-                    @endfor
+                        @php $i++;
+                        @endphp
+                    @endforeach
                     </tbody>
                 </table>
             </div>

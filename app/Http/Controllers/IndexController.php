@@ -20,8 +20,16 @@ use Illuminate\Support\Facades\Mail;
 
 class IndexController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $message = $request->get('message');
+        if (!session()->get('refPay')){
+            session(['refPay' => url()->previous()]);
+        }
+        if (strstr(session()->get('refPay'), '?', TRUE) == strstr(url()->previous(), '?', TRUE)){
+            $message = null;
+        }
+
         setcookie("asd", 'OK', time()+360000);
        // echo '1:'.$_COOKIE["asd"];
        // die;
@@ -33,6 +41,7 @@ class IndexController extends Controller
         $data['cityslider'] = City::where('active', 1)->get();
         $data['partners'] = Parner::all();
         $data['cost_count'] = CostEducation::get()->count();
+        $data['message'] = $message;
         return view('index', $data)->with('map', 'Главная');
     }
 
@@ -59,8 +68,22 @@ class IndexController extends Controller
     public function getArticle($id){
 
         $data['article'] = Article::findOrFail($id);
-
-        return view('article', $data);
+        if ($id == 1){
+            $map = 'Добавить ВУЗ';
+        }
+        else if ($id == 2) {
+            $map = 'О сайте';
+        }
+        else if ($id == 3) {
+            $map = 'Рекламодателям';
+        }
+        else if ($id == 4) {
+            $map = 'Пользователям';
+        }
+        else {
+            $map = 'ВУЗам';
+        }
+        return view('article', $data)->with('map', 'Главная , '.$map);
     }
 
     public function getTest(){

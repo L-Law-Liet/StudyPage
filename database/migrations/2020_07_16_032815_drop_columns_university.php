@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSourceCol extends Migration
+class DropColumnsUniversity extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,8 @@ class AddSourceCol extends Migration
      */
     public function up()
     {
-        Schema::create('ranking_source', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('source');
-            $table->timestamps();
-        });
-
-        Schema::table('cost_education', function ($table) {
-            $table->string('source')->after('passing_score_kz');
-        });
+        DB::statement("ALTER TABLE `universities` DROP `group_learn_program`");
+        DB::statement("ALTER TABLE `universities` DROP `count_grants`");
     }
 
     /**

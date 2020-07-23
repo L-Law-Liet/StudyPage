@@ -93,7 +93,7 @@ return [
     'numeric'              => 'The :attribute must be a number.',
     'present'              => 'The :attribute field must be present.',
     'regex'                => 'The :attribute format is invalid.',
-    'required'             => 'Поле :attribute обязательно для заполнение.',
+    'required'             => 'Введите пожалуйста :attribute.',
     'required_if'          => 'The :attribute field is required when :other is :value.',
     'required_unless'      => 'The :attribute field is required unless :other is in :values.',
     'required_with'        => 'The :attribute field is required when :values is present.',
@@ -125,9 +125,27 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'email' => [
+            'required' => 'Введите пожалуйста электронную почту или телефон',
         ],
+        'password' => [
+            'required' => 'Введите пожалуйста пароль',
+        ],
+        'surname' => [
+            'required' => 'Введите пожалуйста фамилию',
+        ],
+        'name' => [
+            'required' => 'Введите пожалуйста имя',
+        ],
+        'birthDate' => [
+            'required' => 'Введите пожалуйста дату рождения',
+        ],
+        'phone' => [
+            'required' => 'Введите пожалуйста номер телефона',
+        ],
+        'password_confirmation' => [
+            'required' => 'Повторите пожалуйста пароль',
+        ]
     ],
 
     /*
@@ -141,6 +159,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'birthDate' => 'дата рождения'
+    ],
 
 ];

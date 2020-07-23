@@ -36,6 +36,7 @@ $(document).ready(function() {
 		dDegree = e.target.value;
 		if (e.target.value !== undefined && e.target.value !== '' && e.target.value !== 0 && e.target.value !== '0') {
 			degUrl = $(this).find(':selected').data('url');
+			console.log('____',dDegree,'____');
 		} else {
 			degUrl = 'any';
 		}
@@ -45,6 +46,7 @@ $(document).ready(function() {
 		dDirection_id = e.target.value;
 		if (e.target.value !== undefined && e.target.value !== '' && e.target.value !== 0 && e.target.value !== '0') {
 			dirUrl = $(this).find(':selected').data('url');
+			console.log('-------------::::', dirUrl);
 		} else {
 			dirUrl = 'any';
 		}
@@ -68,10 +70,12 @@ $(document).ready(function() {
 		ChangeCount();
 	});
 	function ChangeCount () {
+		console.log('-_-_-:', dDirection_id);
 		$.ajax({
 			type: 'GET',
 			url: '/fmain/' + dDegree + '/' + dDirection_id + '/' + dCity_id + '/' + dQuery,
 			success: function (data) {
+				console.log(data)
 				$('.cc').html(data);
 			}
 		})
@@ -80,9 +84,10 @@ $(document).ready(function() {
 	$('body').on('click', '.goSearch', function (e) {
 		e.preventDefault();
 		if (dQuery != undefined && dQuery !== 'none' && dQuery != '') {
-			window.location.href = '/poisk?degree_id=' + degUrl + '&direction_id=' + dirUrl + '&subdirection_id=any&specialty_id=any&city_id=' + citUrl + '&pr1=any&pr2=any&un_id=any&type_id=any&search=' + dQuery + '&page=1';
+			window.location.href = '/poisk?degree_id=' + degUrl + '&direction_id=' + dDirection_id + '&subdirection_id=any&specialty_id=any&city_id=' + dCity_id + '&pr1=any&pr2=any&un_id=any&type_id=any&search=' + dQuery + '&page=1';
 		} else {
-			window.location.href = '/poisk?degree_id=' + degUrl + '&direction_id=' + dirUrl + '&subdirection_id=any&specialty_id=any&city_id=' + citUrl + '&pr1=any&pr2=any&un_id=any&type_id=any&page=1';
+			console.log('-------------:', degUrl);
+			window.location.href = '/poisk?degree_id=' + dDegree + '&direction_id=' + dDirection_id + '&subdirection_id=any&specialty_id=any&city_id=' + dCity_id + '&pr1=any&pr2=any&un_id=any&type_id=any&page=1';
 		}
 	});
 
@@ -800,3 +805,4 @@ window.onclick = function(event) {
 		modal.style.display = "none";
 	}
 }
+

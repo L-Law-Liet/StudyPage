@@ -63,7 +63,8 @@ class NavigatorController
     public function getView($id){
 
         $data['cityslider'] = Navigator::findOrFail($id);
-        return view('admin.navigator.view', $data);
+        $map = 'Главная , Навигатор';
+        return view('admin.navigator.view', compact('data', 'map'));
     }
 
     public function getDelete($id){

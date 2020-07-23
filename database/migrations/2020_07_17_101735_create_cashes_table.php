@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUrlDegress extends Migration
+class CreateCashesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUrlDegress extends Migration
      */
     public function up()
     {
-        Schema::table('degrees', function (Blueprint $table) {
-            $table->string('url')->nullable();
+        Schema::table('users', function (Blueprint $table){
+            $table->unsignedInteger('bill')->default(0);
         });
     }
 
@@ -25,6 +25,6 @@ class AddUrlDegress extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('cashes');
     }
 }

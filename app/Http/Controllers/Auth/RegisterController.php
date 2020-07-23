@@ -55,9 +55,15 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'surname' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'birthDate' => ['required', 'before:5 years ago'],
+            'gender' => 'required',
+            'region' => 'required',
+            'phone' => ['required', 'unique:users'],
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|same:password',
         ]);
     }
 
@@ -72,14 +78,18 @@ class RegisterController extends Controller
         Session::flash('flash_message', trans('auth.registration_successful'));
         $user = User::create([
             'name' => $data['name'],
+            'surname' => $data['surname'],
+            'birthDate' => $data['birthDate'],
+            'gender' => $data['gender'],
+            'region' => $data['region'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'confirmed' => 0, //Не подтвержден
             'verify_token' => Str::random(32),
         ]);
-        $thisUser = User::findOrFail($user->id); //var_dump($thisUser); die;
-        $this->sendEmail($thisUser);
+//        $thisUser = User::findOrFail($user->id); //var_dump($thisUser); die;
+//        $this->sendEmail($thisUser);
 
         return $user;
     }
@@ -89,7 +99,7 @@ class RegisterController extends Controller
      * Handle a registration request for the application.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function register(Request $request)
     {

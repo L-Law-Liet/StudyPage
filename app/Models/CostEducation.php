@@ -17,13 +17,16 @@ class CostEducation extends Model
     public function relSpecialty(){
         return $this->belongsTo(Specialty::class, 'specialty_id', 'id');
     }
+    public function degree(){
+        return $this->belongsTo(Degree::class, 'degree_id', 'id');
+    }
 
     public function relLanguage(){
         return $this->belongsTo(Language::class, 'language_id', 'id');
     }
 
     public static function getRating($specialty_id){
-        return CostEducation::select(DB::raw('cost_education.*, CAST(total AS int) AS total'))
+        return CostEducation::select(DB::raw('cost_education.*, total'))
             ->where('specialty_id', $specialty_id)->whereNotNull('total')
             ->orderBy('total', 'ASC')->get(); //CAST(total AS int) AS total - преобразование типов
     }

@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\University;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call([
+            LearnProgramSeeder::class
+        ]);
     }
 }

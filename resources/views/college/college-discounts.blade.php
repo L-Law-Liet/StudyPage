@@ -9,14 +9,8 @@
         }
     </style>
 @endsection
-@section('subnav')
-    <div class="container">
-        <div class="college-view-nav">
-            <a href="{{url()->previous()}}"><img class="mr-2" src="{{asset('img/arrow-left.svg')}}" alt=""><span>Вернуться к списку колледжей /</span></a><span class="color-2D7ABF"> Университет Нархоз</span>
-        </div>
-    </div>
-@endsection
 @section('content')
+    @include('college/subnav')
 
     <div class="container">
         <div class="row">
@@ -35,13 +29,19 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @for($i = 1; $i < 8; $i++)
+                                    @php
+                                    $i = 1;
+                                    @endphp
+                                    @foreach($university->grants as $grant)
                                         <tr>
                                             <td>{{ $i }}</td>
-                                            <td>Педагогика и психология</td>
-                                            <td class="tl">{{110-$i*10}}</td>
+                                            <td>{{$grant->name}}</td>
+                                            <td class="tl">{{$grant->count_grants}}</td>
                                         </tr>
-                                    @endfor
+                                        @php
+                                            $i++;
+                                        @endphp
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

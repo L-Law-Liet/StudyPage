@@ -11,14 +11,15 @@
                 </div>
                 <div class="login-content">
                     <div class="login-form">
-                        <form id="login-form" action="">
+                        <form id="login-form" action="{{route('logging')}}" method="post">
+                            {{csrf_field()}}
                             <div class="login-form-div">
                                 <label>Электронная почта или телефон*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="text" name="email">
                             </div>
                             <div class="login-form-div">
                                 <label>Пароль*</label>
-                                <input class="login-form-input p-1" type="text">
+                                <input class="login-form-input p-1" type="password" name="password">
                             </div>
                             <div class="login-form-div">
                                 <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Войти">

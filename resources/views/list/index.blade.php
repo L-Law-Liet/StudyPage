@@ -13,13 +13,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @for($i = 1; $i < 8; $i++)
+                    @php $i = 1 @endphp
+                    @foreach($rating as $r)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td>Казахский национальный университет имени аль-Фараби</td>
-                            <td style="">Алматы</td>
+                            <td>{{$r->relUniversity->name_ru}}</td>
+                            <td style="">{{$r->relCity->name_ru}}</td>
                         </tr>
-                    @endfor
+                        @php $i++ @endphp
+                    @endforeach
                     <tr>
                         <td colspan="3"><b>Источник:</b> Независимое агентство аккредитации и рейтинга (НААР-2019)</td>
                     </tr>
