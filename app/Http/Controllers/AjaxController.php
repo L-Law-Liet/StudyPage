@@ -18,9 +18,15 @@ use App\Models\Subdirection;
 use App\Models\University;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 
-class AjaxController
+class AjaxController extends Controller
 {
+    public function doctorFilter(Request $request){
+        dd(1);
+        //dd($request->all());
+    }
+
     public function getCity(){
         $data = Input::all();
         $cities = City::where('id', $data['city_id'])->where('active', 1)->pluck('name_ru', 'id')->all();

@@ -38,7 +38,7 @@ return [
     'digits_between'       => 'The :attribute must be between :min and :max digits.',
     'dimensions'           => 'The :attribute has invalid image dimensions.',
     'distinct'             => 'The :attribute field has a duplicate value.',
-    'email'                => 'Поле :attribute заполнен в не правильном формате.',
+    'email'                => 'Поле :attribute заполнен в неправильном формате.',
     'exists'               => 'The selected :attribute is invalid.',
     'file'                 => 'The :attribute must be a file.',
     'filled'               => 'The :attribute field must have a value.',
@@ -126,10 +126,13 @@ return [
 
     'custom' => [
         'email' => [
-            'required' => 'Введите пожалуйста электронную почту или телефон',
+            'required' => 'Введите пожалуйста электронную почту',
+            'email' => 'Неправильный формат Электронной почты'
         ],
         'password' => [
             'required' => 'Введите пожалуйста пароль',
+            'confirmed' => 'Пароль должен быть подтвержден',
+            'min' => 'Пароль должен иметь минимум 8 символов'
         ],
         'surname' => [
             'required' => 'Введите пожалуйста фамилию',
@@ -141,10 +144,13 @@ return [
             'required' => 'Введите пожалуйста дату рождения',
         ],
         'phone' => [
+            'numeric' => 'Неправильный формат номера телефона',
             'required' => 'Введите пожалуйста номер телефона',
         ],
         'password_confirmation' => [
             'required' => 'Повторите пожалуйста пароль',
+            'same' => 'Пароли не совпадают!',
+
         ]
     ],
 

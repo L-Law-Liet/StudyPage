@@ -61,7 +61,7 @@ class RegisterController extends Controller
             'birthDate' => ['required', 'before:5 years ago'],
             'gender' => 'required',
             'region' => 'required',
-            'phone' => ['required', 'unique:users'],
+            'phone' => ['required', 'unique:users', 'numeric'],
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required|same:password',
         ]);

@@ -35,8 +35,9 @@
                             <div class="login-form-div">
                                 <label>Регион*</label>
                                 <select class="login-form-input p-1 w-100" name="region">
-                                    <option value="4">Алматы</option>
-                                    <option value="1">Нур-Султан</option>
+                                    @foreach($cs as $c)
+                                        <option value="{{$c->id}}">{{$c->name_ru}}</option>
+                                        @endforeach
                                 </select>
                             </div>
 
@@ -46,7 +47,7 @@
                             </div>
                             <div class="login-form-div">
                                 <label>Контактный телефон*</label>
-                                <input class="login-form-input p-1" type="tel" name="phone">
+                                <input oninput="phone1(event)" class="login-form-input p-1" maxlength="12" value="+7" type="tel" name="phone">
                             </div>
                             <div class="login-form-div">
                                 <label>Пароль*</label>
@@ -80,4 +81,10 @@
             </div>
         </div>
     </div>
+    <script>
+        function phone1(event) {
+            console.log(event.target.value);
+            event.target.value = '+7'+event.target.value.substr(2);
+        }
+    </script>
     @endsection

@@ -246,7 +246,7 @@ Route::post('/logging', 'CustomAuthController@login')->name('logging');
 Route::get('/forgot-passwd', 'PagesController@showForgotPasswd');
 Route::get('/registration', 'PagesController@showRegistrationForm');
 Route::get('/cabinet', 'PagesController@showCabinet');
-Route::get('/change-pwd', 'PagesController@changePassword');
+Route::get('/change-pwd', 'PagesController@changePassword')->name('change-pwd');
 Route::prefix('college/')->group(function (){
     Route::get('/{id?}', 'PagesController@showCollege')->name('college-list');
     Route::get('/view/{sid}/uid/{uid}', 'PagesController@viewCollege');
@@ -280,6 +280,9 @@ Route::prefix('college')->group(function (){
     Route::get('/docs/{id}/{name}', 'PagesController@docsCollegeFromList');
     Route::get('/contacts/{id}/{name}', 'PagesController@contactsCollegeFromList');
 });
+Route::post('cabinet/edit', 'UserController@edit');
+Route::post('change-pwd/reset', 'UserController@resetPassword');
+Route::get('cabinet/edit', 'UserController@update');
 Route::get('/univer/view/{id}', 'PagesController@viewUniver');
 //Route::get('sfsdghjjhgfgd', 'EpayController@requestResult');
 Route::get('/calculator-ent', 'PagesController@entCalculator')->name('calculator-ent');
@@ -291,6 +294,8 @@ Route::post('payment', 'EpayController@payment')->name('payment');
 Route::get('success-payment/{m}/{sum}', 'PagesController@successPayment')->name('success-payment');
 Route::get('fail-payment/{m}', 'PagesController@failPayment')->name('fail-payment');
 Route::get('show-payment/{m}', 'PagesController@showPayment')->name('show-payment');
+Route::get('ajax-filter', 'AjaxController@doctorFilter');
+
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

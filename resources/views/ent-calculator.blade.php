@@ -10,10 +10,6 @@
     </style>
 @endsection
 @section('content')
-       <div id="messagError" style="display: {{($error)? 'block' : 'none'}}"
-            class="alert alert-danger text-center w-50 p-1 rounded-lg position-absolute">
-       {{$error?? ''}}
-       </div>
     @if(session('m'))
 
         <div id="Message" class="message">
@@ -68,8 +64,8 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort sortorder" name="lang">
-                                            <option selected="" disabled="" value="default"></option>
+                                        <select required class="form-control sgs-sort sortorder" name="lang">
+                                            <option value=""></option>
                                             @foreach(\App\Models\Language::all() as $l)
                                                 <option value="{{$l->id}}">{{$l->name_ru}}</option>
                                                 @endforeach
@@ -78,16 +74,16 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort sortorder" name="1profSelect">
-                                            <option selected="" disabled="" value="default">1-й профильный предмет</option>
+                                        <select required class="form-control sgs-sort sortorder" name="1profSelect">
+                                            <option value="">1-й профильный предмет</option>
                                             @foreach($ss as $s)
                                                 <option value="{{$s->id}}">{{$s->name_ru}}</option>
                                                 @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select class="form-control sgs-sort sortorder" name="2profSelect">
-                                            <option selected="" disabled="" value="default">2-й профильный предмет</option>
+                                        <select required class="form-control sgs-sort sortorder" name="2profSelect">
+                                            <option value="">2-й профильный предмет</option>
                                             @foreach($ss as $s)
                                                 <option value="{{$s->id}}">{{$s->name_ru}}</option>
                                             @endforeach
@@ -96,10 +92,10 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <input oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="1profPoint">
+                                        <input required oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="1profPoint">
                                     </div>
                                     <div class="form-group">
-                                        <input oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="2profPoint">
+                                        <input required oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="2profPoint">
                                     </div>
                                 </div>
                             </div>
@@ -107,16 +103,16 @@
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="w-50">Математическая грамотность</label>
 
-                                    <input oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="matGr" id="matGr">
+                                    <input required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="matGr" id="matGr">
                                 </div>
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="50">Грамотность чтения</label>
 
-                                    <input oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="readGr">
+                                    <input required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="readGr">
                                 </div>
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="w-50">История Казахстана</label>
-                                    <input oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="historyKZ">
+                                    <input required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="historyKZ">
                                 </div>
                             </div>
                         </div>

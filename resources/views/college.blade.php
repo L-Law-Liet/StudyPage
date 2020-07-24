@@ -78,7 +78,7 @@
                         <li>
                                 <div style="margin-bottom: 30px;">
                                     <h3>
-                                        <a href="{{url('/college/view', [$costs[$i]->relSpecialty->id, $costs[$i]->relUniversity->id])}}">
+                                        <a href="{{url('/college/view', [$costs[$i]->relSpecialty->id, 'uid', $costs[$i]->relUniversity->id])}}">
                                             <strong>{{$costs[$i]->relSpecialty->name_ru}}</strong>
                                             <span>{{$costs[$i]->relUniversity->name_ru}}</span> • {{$costs[$i]->relUniversity->relCity->name_ru}}
                                         </a>

@@ -31,7 +31,7 @@
                         </li>
                         <li role="presentation" class=""><a data-toggle="tab" href="#doc" role="tab" id="ui-tab-2" tabindex="-1" aria-selected="false" aria-controls="doc">Документ</a>
                         </li>
-                        <li role="presentation" class=""><a data-toggle="tab" href="#pageCollege" role="tab" id="ui-tab-3" tabindex="-1" aria-selected="false" aria-controls="pageCollege">Страница Колледжа</a>
+                        <li onclick="window.location='{{url('college/view', [$u->id, $href])}}'" role="presentation" class="clickable-el"><a data-toggle="tab" role="tab" id="ui-tab-3" tabindex="-1" aria-selected="false" aria-controls="pageCollege">Страница {{($href == 'univer')?'ВУЗа':'КОЛЛЕДЖА'}}</a>
                         </li>
                     </ul>
                 </div>

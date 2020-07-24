@@ -2291,3 +2291,6 @@ table:not(#ent-table) {
 .clickable-el {
     cursor: pointer;
 }
+#epayCurrency {
+    font-family: normal, sans-serif !important;
+}

@@ -34,6 +34,10 @@ class Specialty extends Model
     public function relSphere(){
         return $this->belongsTo(Sphere::class, 'sphere_id', 'id');
     }
+
+    public function specialisties () {
+        return $this->hasMany('App\CostEducation');
+    }
     public function getCost(){
         return CostEducation::where('specialty_id', $this->id)->first();
     }

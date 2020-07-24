@@ -1,31 +1,33 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
+
         <div class="d-flex justify-content-center">
             <div class="w-75 cabinet">
                 <div>
                     <h3 class="text-center">Личный кабинет</h3>
                 </div>
-                <form action="" class="">
+                <form action="{{action('UserController@edit')}}" method="post" class="">
+                    @csrf
                     <div class="d-flex justify-content-between">
                         <div class="m-2 w-100">
                             <div class="w-100 cabinet-label-input m-2">
                                 <div>
                                     <label class="mb-1">Фамилия</label>
                                 </div>
-                                <input class="login-form-input p-2 w-100" type="text" value="{{Auth::user()->surname}}">
+                                <input name="surname" class="login-form-input p-2 w-100" type="text" value="{{Auth::user()->surname}}">
                             </div>
                             <div class="w-100 cabinet-label-input m-2">
                                 <div>
                                     <label class="mb-1">Дата рождения</label>
                                 </div>
-                                <input class="login-form-input p-2 w-100" type="date" max="2020-01-01" min="1920-01-01" value="{{Auth::user()->birthDate}}">
+                                <input name="birthDate" class="login-form-input p-2 w-100" type="date" max="2020-01-01" min="1920-01-01" value="{{Auth::user()->birthDate}}">
                             </div>
                             <div class="w-100 cabinet-label-input m-2">
                                 <div>
                                     <label class="mb-1">Регион</label>
                                 </div>
-                                <select class="login-form-input p-2 w-100" name="city">
+                                <select class="login-form-input p-2 w-100 fs-18px" name="city">
                                     @foreach($cities as $city)
                                     <option @if(Auth::user()->region == $city->id) selected @endif value="{{$city->id}}">{{$city->name_ru}}</option>
                                     @endforeach
@@ -36,7 +38,7 @@
                                 <div>
                                     <label class="mb-1">Контактный телефон</label>
                                 </div>
-                                <input oninput="phone(event)" maxlength="10" class="login-form-input p-2 w-100" type="text" value="+7{{substr(Auth::user()->phone, 2)}}">
+                                <input name="phone" oninput="phone1(event)" maxlength="12" class="login-form-input p-2 w-100" type="tel" value="+7{{substr(Auth::user()->phone, 2)}}">
                             </div>
                         </div>
                         <div class="m-2 w-100">
@@ -44,13 +46,13 @@
                                 <div>
                                     <label class="mb-1">Имя</label>
                                 </div>
-                                <input class="login-form-input p-2 w-100" type="text" value="{{Auth::user()->name}}">
+                                <input name="name" class="login-form-input p-2 w-100" type="text" value="{{Auth::user()->name}}">
                             </div>
                             <div class="w-100 cabinet-label-input m-2">
                                 <div>
                                     <label class="mb-1">Пол</label>
                                 </div>
-                                <select class="login-form-input p-2 w-100" name="city">
+                                <select class="login-form-input p-2 w-100 fs-18px" name="gender">
                                     <option @if(Auth::user()->gender == 'm') selected @endif value="m">Мужчина</option>
                                     <option @if(Auth::user()->gender == 'fm') selected @endif value="fm">Женщина</option>
                                 </select>
@@ -59,7 +61,7 @@
                                 <div>
                                     <label class="mb-1">Электронная почта</label>
                                 </div>
-                                <input class="login-form-input p-2 w-100" type="email" value="{{Auth::user()->email}}">
+                                <input name="email" class="login-form-input p-2 w-100" type="email" value="{{Auth::user()->email}}">
                             </div>
                         </div>
                     </div>
@@ -71,9 +73,8 @@
         </div>
     </div>
     <script>
-        function phone(event) {
-            event.target.value[0] = '+';
-            event.target.value[1] = '7';
+        function phone1(event) {
+            event.target.value = '+7'+event.target.value.substr(2);
         }
     </script>
     @endsection

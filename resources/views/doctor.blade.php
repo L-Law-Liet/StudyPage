@@ -7,14 +7,16 @@
             <div class="col-md-4 left-block">
                 <div class="form-group">
                     <label>Степень обучения</label>
-                    <select class="form-control" name="degree">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="degree">
+                        @foreach(\App\Models\Degree::all() as $d)
+                            <option @if($d->id == $degree) selected @endif value="{{$d->id}}">{{$d->name_ru}}</option>
+                            @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Область образования</label>
-                    <select class="form-control" name="sphere">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="sphere">
+                        <option value="">Выберите</option>
                         @foreach($sphere as $s)
                             <option value="{{$s->id}}">{{$s->name_ru}}</option>
                         @endforeach
@@ -22,8 +24,8 @@
                 </div>
                 <div class="form-group">
                     <label>Направление подготовки</label>
-                    <select class="form-control" name="direction">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="direction">
+                        <option value="">Выберите</option>
                         @foreach($dir as $d)
                             <option value="{{$d->id}}">{{$d->name_ru}}</option>
                         @endforeach
@@ -31,8 +33,8 @@
                 </div>
                 <div class="form-group">
                     <label>Группа образовательных программ</label>
-                    <select class="form-control" name="programGroup">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="programGroup">
+                        <option value="">Выберите</option>
                         @foreach($sub as $s)
                             <option value="{{$s->id}}">{{$s->name_ru}}</option>
                         @endforeach
@@ -40,8 +42,8 @@
                 </div>
                 <div class="form-group">
                     <label>Сфера направления</label>
-                    <select class="form-control" name="sphereDirect">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="sphereDirect">
+                        <option value="">Выберите</option>
                         @foreach($sp as $s)
                             <option value="{{$s->id}}">{{$s->name_ru}}</option>
                         @endforeach
@@ -50,39 +52,42 @@
                 <div class="form-group">
                     <label>Стоимость обучения</label>
                     <div class="d-flex justify-content-between">
-                        <input class="form-control w-50 mr-2 p-2 " type="text" placeholder="от">
-                        <input class="form-control w-50 ml-3 p-2 " type="text" placeholder="до">
+                        <input name="startCost" class="ajax-filter form-control w-50 mr-2 p-2 " value="" type="number" placeholder="от">
+                        <input name="endCost" class="ajax-filter form-control w-50 ml-3 p-2 " value="" type="number" placeholder="до">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Форма обучения</label>
-                    <select class="form-control" name="studyForm">
+                    <select class="ajax-filter form-control" name="studyForm">
+                        <option value="">Выберите</option>
                         <option value="ochnaya">Очная(дневная)</option>
+                        <option value="dist">Дистанционная</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Регион</label>
-                    <select class="form-control" name="region">
-                        @foreach($cs as $s)
-                            <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                    <select class="ajax-filter form-control" name="region">
+                        <option @if(!$city_id) selected @endif value="">Выберите</option>
+                        @foreach($cs as $c)
+                            <option @if($city_id == $c->id) selected @endif value="{{$c->id}}">{{$c->name_ru}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label>ВУЗ</label>
-                    <select class="form-control" name="univer">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="univer">
+                        <option @if($university_id?? '') @else selected @endif value="">Выберите</option>
                         @foreach($us as $s)
-                            <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                            <option @if($university_id?? '' == $s->id) selected @endif value="{{$s->id}}">{{$s->name_ru}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Тип учебного заведения</label>
-                    <select class="form-control" name="uniType">
-                        <option value="default">Выберите</option>
+                    <select class="ajax-filter form-control" name="uniType">
+                        <option @if($university_id?? '') @else selected @endif value="">Выберите</option>
                         @foreach($ts as $s)
-                            <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                            <option @if($type_id?? '' == $s->id) selected @endif value="{{$s->id}}">{{$s->name_ru}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -96,11 +101,11 @@
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 mt--3">
                             <form class="form-horizontal sgs-list-sort" role="form">
                                 <div class="form-group m-b-0">
-                                    <select class="form-control sgs-sort" id="sortorder" name="sort">
-                                        <option selected disabled value="default">Сортировка по</option>
-                                        <option value="name">Наименование</option>
-                                        <option value="town">Город</option>
-                                        <option value="cost">Стоимость</option>
+                                    <select class="ajax-filter form-control sgs-sort" id="sortorder" name="sort">
+                                        <option @if($sortSelect??'') @else selected @endif value="">Сортировка по</option>
+                                        <option @if($sortSelect??'' == 'name') selected @endif value="name">Наименование</option>
+                                        <option @if($sortSelect??'' == 'city') selected @endif value="city">Город</option>
+                                        <option @if($sortSelect??'' == 'cost') selected @endif value="cost">Стоимость</option>
                                     </select>
                                 </div>
                             </form>
@@ -178,4 +183,21 @@
             </div>
         </div>
     </div>
+    <script>
+        $('.ajax-filter').on('change', function () {
+            let arr = [];
+            var all = $(".ajax-filter").map(function() {
+                arr[$(this).attr('name')] = $(this).val();
+            });
+            console.log('--------', arr);
+            $.ajax({
+                type : 'get',
+                url : `/ajax-filter`,
+                data : {'a' : arr},
+                success:function (data) {
+                    console.log('success!--',data);
+                }
+            });
+        })
+    </script>
 @endsection

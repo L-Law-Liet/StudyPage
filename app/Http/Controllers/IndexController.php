@@ -23,13 +23,13 @@ class IndexController extends Controller
     public function index(Request $request)
     {
         $message = $request->get('message');
-        if (!session()->get('refPay')){
-            session(['refPay' => url()->previous()]);
-        }
-        if (strstr(session()->get('refPay'), '?', TRUE) == strstr(url()->previous(), '?', TRUE)){
+        if (preg_replace('#[^/]*$#', '', session()->get('refPay')) == preg_replace('#[^/]*$#', '', url()->current())){
             $message = null;
         }
-
+        if (!session()->get('refPay')){
+            session(['refPay' => url()->current()]);
+            session()->save();
+        }
         setcookie("asd", 'OK', time()+360000);
        // echo '1:'.$_COOKIE["asd"];
        // die;
@@ -42,8 +42,10 @@ class IndexController extends Controller
         $data['partners'] = Parner::all();
         $data['cost_count'] = CostEducation::get()->count();
         $data['message'] = $message;
+
         return view('index', $data)->with('map', 'Главная');
     }
+
 
     public function getCity($id){
 

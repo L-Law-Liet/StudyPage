@@ -30,6 +30,7 @@ class EpayController extends Controller
         $pay = AlfaBank::registerDo(new DoRegisterRequest($params));
         $order->name = $pay['orderId'];
         $order->save();
+        session()->forget('refPay');
         return redirect($pay['formUrl']);
     }
 

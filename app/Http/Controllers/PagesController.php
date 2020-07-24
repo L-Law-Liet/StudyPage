@@ -57,7 +57,13 @@ class PagesController extends Controller
             $ar['requirement'] = Requirement::where('degree_id', 3)->first();
             $features = [ 'Степень обучения' , 'Сфера направления', $speciality->relSphere->name_ru ];
         }
-        return view('view-college')->with('s', $speciality)->with('u', $u)->with('requirement', $ar['requirement'])->with('map', $map)->with('f', $features);
+        if (str_contains(url()->previous(), '/college')) {
+            $hrefTitle = 'college';
+        }
+        else {
+            $hrefTitle = 'univer';
+        }
+        return view('view-college')->with('s', $speciality)->with('u', $u)->with('requirement', $ar['requirement'])->with('map', $map)->with('f', $features)->with('href', $hrefTitle);
     }
     public function viewUniver($id){
 //        $u = University::find($id);
@@ -250,8 +256,17 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
                 }
             }
         }
+
+        usort($sHigh, array('App\Http\Controllers\PagesController', 'L'));
+        usort($sMiddle, array('App\Http\Controllers\PagesController', 'L'));
+        usort($sLow, array('App\Http\Controllers\PagesController', 'L'));
+        usort($sPaid, array('App\Http\Controllers\PagesController', 'L'));
         $sRes = [$sHigh, $sMiddle, $sLow, $sPaid];
         return view('ent-result', ['sRes' => $sRes, 'score' => $L, 'profs' =>$arrProf, 'map' => $map]);
+    }
+    public static function L($a, $b) {
+        if($a->getCost()->passing_score == $b->getCost()->passing_score){ return 0 ; }
+        return ($a->getCost()->passing_score > $b->getCost()->passing_score) ? -1 : 1;
     }
     public function entResult2($type, $entScore, $profs1, $profs2){
         $array = [];
@@ -309,6 +324,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
             default:
                 return redirect()->action('IndexController@index');
         }
+        usort($array, array('App\Http\Controllers\PagesController', 'L'));
         return view('ent-result2', ['score' => $entScore, 'title' => $title])->with('map', 'Главная , Калькулятор ЕНТ , Результаты')->with('array', $array);
     }
     public function viewCollegeFromList($id, $name){
@@ -350,7 +366,8 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         return view('college.college-contacts')->with('university', $university)->with('class', 'contacts')->with('map', 'Главная , Навигатор , Список колледжей , Контакты')->with('name', $name);
     }
     public function showRegistrationForm(){
-        return view('registration')->with('map', 'Главная , Регистрация');
+        $cs = City::all();
+        return view('registration')->with('map', 'Главная , Регистрация')->with('cs', $cs);
     }
     public function changePassword(){
         return view('change-password')->with('map', 'Главная , Сменить пароль');
@@ -374,3 +391,4 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         return redirect('/?message='.$m);
     }
 }
+

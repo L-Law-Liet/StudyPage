@@ -82,25 +82,24 @@
             <p style="color: #2D7ABF;">ПЛАНИРУЕТЕ ПОСТУПИТЬ? СЕРВИСЫ “РЕЙТИНГ” И/ИЛИ “КАЛЬКУЛЯТОР ЕНТ” КАК РАЗ ДЛЯ ВАС!</p>
             <div>
                 <div class="d-flex justify-content-between mb-4">
-                    <div class="d-table" style="width: 552px;
+                    <div onclick="window.location='{{url('calculator-ent')}}'" class="clickable-el d-table" style="width: 552px;
                             height: 234px;
-                            {{--url({{asset('img/bgCalc.svg')}}) no-repeat--}}
-                            background: linear-gradient(0deg, rgba(18, 75, 126, 0.6), rgba(18, 75, 126, 0.6));">
+                            background: url({{asset('img/bgCalc.png')}}) no-repeat;">
 
                             <div class="align-middle d-table-cell text-center text-white text-in-table">КАЛЬКУЛЯТОР ЕНТ</div>
                     </div>
-                    <div class="d-table" style="width: 388px; height: 234px; background: #124B7E;">
-                        <div class="align-middle d-table-cell text-center text-white text-in-table">РЕЙТИНГ</div>
+                    <div class="clickable-el d-table" style="width: 388px; height: 234px; background: #124B7E;">
+                        <div onclick="window.location='{{url('/list/')}}'" class="align-middle d-table-cell text-center text-white text-in-table">РЕЙТИНГ</div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mb-4">
-                    <div class="d-table three-tables">
-                        <div class="align-middle d-table-cell text-center text-white">ИНФОРМАЦИЯ О ВСЕХ КОЛЛЕДЖАХ КАЗАХСТАНА</div>
+                    <div class="clickable-el d-table three-tables">
+                        <div onclick="window.location='{{url('list/college')}}'" class="align-middle d-table-cell text-center text-white">ИНФОРМАЦИЯ О ВСЕХ КОЛЛЕДЖАХ КАЗАХСТАНА</div>
                     </div>
-                    <div class="d-table three-tables">
+                    <div onclick="window.location='{{url('list/univer')}}'" class="clickable-el d-table three-tables">
                         <div class="align-middle d-table-cell text-center text-white">ИНФОРМАЦИЯ О ВСЕХ ВУЗАХ КАЗАХСТАНА</div>
                     </div>
-                    <div class="d-table three-tables">
+                    <div onclick="window.location='{{url('faq/select-profession')}}'" class="clickable-el d-table three-tables">
                         <div class="align-middle d-table-cell text-center text-white">ВОПРОСЫ И ОТВЕТЫ</div>
                     </div>
                 </div>
