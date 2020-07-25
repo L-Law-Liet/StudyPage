@@ -47,7 +47,7 @@
                             </div>
                             <div class="login-form-div">
                                 <label>Контактный телефон*</label>
-                                <input oninput="phone1(event)" class="login-form-input p-1" maxlength="12" value="+7" type="tel" name="phone">
+                                <input onkeypress='validate(event)' oninput="phone1(event)" class="login-form-input p-1" maxlength="12" value="+7" type="tel" name="phone">
                             </div>
                             <div class="login-form-div">
                                 <label>Пароль*</label>

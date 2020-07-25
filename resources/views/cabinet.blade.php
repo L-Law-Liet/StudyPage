@@ -38,7 +38,7 @@
                                 <div>
                                     <label class="mb-1">Контактный телефон</label>
                                 </div>
-                                <input name="phone" oninput="phone1(event)" maxlength="12" class="login-form-input p-2 w-100" type="tel" value="+7{{substr(Auth::user()->phone, 2)}}">
+                                <input onkeypress='validate(event)' name="phone" oninput="phone1(event)" maxlength="12" class="login-form-input p-2 w-100" type="tel" value="+7{{substr(Auth::user()->phone, 2)}}">
                             </div>
                         </div>
                         <div class="m-2 w-100">

@@ -201,13 +201,4 @@
     </div>
     <link href="{{asset('css/chosen.min.css')}}" rel="stylesheet" type="text/css">
     <script src="{{asset('js/chosen.jquery.min.js')}}"></script>
-    <script>
-        setTimeout(fade_out, 6000);
-        function fade_out() {
-            $("#messagError").fadeOut().empty();
-        }
-        $('.directionc').chosen();
-        $('.cityc').chosen();
-        $('.degreec').chosen();
-    </script>
 @endsection

@@ -92,10 +92,10 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <input required oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="1profPoint">
+                                        <input onkeypress='validate(event)' required oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="1profPoint">
                                     </div>
                                     <div class="form-group">
-                                        <input required oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="2profPoint">
+                                        <input onkeypress='validate(event)' required oninput="max40(event)" class="form-control sgs-sort" placeholder="Балл" type="number" max="40" min="0" name="2profPoint">
                                     </div>
                                 </div>
                             </div>
@@ -103,16 +103,16 @@
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="w-50">Математическая грамотность</label>
 
-                                    <input required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="matGr" id="matGr">
+                                    <input onkeypress='validate(event)' required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="matGr" id="matGr">
                                 </div>
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="50">Грамотность чтения</label>
 
-                                    <input required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="readGr">
+                                    <input onkeypress='validate(event)' required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="readGr">
                                 </div>
                                 <div class="form-group d-flex justify-content-between">
                                     <label class="w-50">История Казахстана</label>
-                                    <input required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="historyKZ">
+                                    <input onkeypress='validate(event)' required oninput="max20(event)" class="form-control sgs-sort w-50" placeholder="Балл" type="number" max="20" min="0" name="historyKZ">
                                 </div>
                             </div>
                         </div>
