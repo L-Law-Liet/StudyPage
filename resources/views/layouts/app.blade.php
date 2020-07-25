@@ -56,8 +56,6 @@
 				accurateTrackBounce:true
 			});
     </script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <noscript><div><img src="https://mc.yandex.ru/watch/57544288" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     @yield('css')
 </head>
