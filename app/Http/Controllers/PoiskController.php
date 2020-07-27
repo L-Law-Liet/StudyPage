@@ -33,10 +33,10 @@ class PoiskController extends Controller
     }
     public function index()
     {
-        if(Input::get('degree_id') == 1){
-            return redirect()->route('uni-col', ['pages' => 0, 'direction_id' => Input::get('direction_id'),
-                'city_id' => Input::get('city_id'), 'search' => Input::get('search')]);
-        }
+//        if(Input::get('degree_id') == 1){
+//            return redirect()->route('uni-col', ['pages' => 0, 'direction_id' => Input::get('direction_id'),
+//                'city_id' => Input::get('city_id'), 'search' => Input::get('search')]);
+//        }
         return redirect()->route('doctor', ['degree' => Input::get('degree_id'), 'pages' => 0, 'direction_id' => Input::get('direction_id'),
             'city_id' => Input::get('city_id'), 'search' => Input::get('search')]);
     }

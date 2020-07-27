@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CalculatorCost;
+use App\GrantsDiscounts;
 use App\Models\City;
 use App\Models\CostEducation;
 use App\Models\Direction;
@@ -39,23 +40,23 @@ class PagesController extends Controller
         $speciality = Specialty::find($sid);
         $ar['requirement'] = Requirement::where('degree_id', 1)->first();
         $features = [ 'Квалификация' , 'Поступление в колледж', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income];
-        if(str_contains(url()->previous(), 'university-school')){
-            $map = 'Главная , ВУЗ , Обзор';
-            $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профильный предмет', $speciality->relSubject->name_ru ];
-        }
-        else if (str_contains(url()->previous(), 'university-college')){
-            $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профессиональные дисциплины', $speciality->relSubdirection->name_ru ];
-            $map = 'Главная , Бакалавриат , Обзор';
-        }
-        else if (str_contains(url()->previous(), 'magistr')){
+        if ($speciality->degree_id == 2){
             $map = 'Главная , Магистратура , Обзор';
             $ar['requirement'] = Requirement::where('degree_id', 2)->first();
             $features = [ 'Степень обучения' , 'Сфера направления', $speciality->relSphere->name_ru];
         }
-        else if (str_contains(url()->previous(), 'doctor')){
+        else if ($speciality->degree_id == 3){
             $map = 'Главная , Докторантура , Обзор';
             $ar['requirement'] = Requirement::where('degree_id', 3)->first();
             $features = [ 'Степень обучения' , 'Сфера направления', $speciality->relSphere->name_ru ];
+        }
+        else if(CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income == 'После 9 класса'){
+            $map = 'Главная , ВУЗ , Обзор';
+            $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профильный предмет', $speciality->relSubject->name_ru ];
+        }
+        else if (CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income == 'После школы'){
+            $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профессиональные дисциплины', $speciality->relSubdirection->name_ru ];
+            $map = 'Главная , Бакалавриат , Обзор';
         }
         if (str_contains(url()->previous(), '/college')) {
             $hrefTitle = 'college';
@@ -137,23 +138,29 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         if ($request->get('search')){
             $query = $request->get('search');
         }
-        $specialties = PagesController::mainFilter($degree, $direction_id, $city_id, $query);
-        $sphere = Direction::all();
-        $dir = Subdirection::all();
+        $costs = PagesController::mainFilter($degree, $direction_id, $city_id, $query);
+        $directions = Direction::all();
+        $subDir = Subdirection::all();
         $sub = Subject::all();
         $sp = Sphere::all();
         $cs = City::all();
         $ts = Type::all();
         $us = University::all();
-        if ($degree == 2){
+        $specs = Specialty::all();
+        if ($degree == 1) {
+            $map = 'Главная , Бакалавриат';
+        }
+        elseif ($degree == 2){
             $map = 'Главная , Магистратура';
         }
-        else {
+        elseif($degree == 3) {
             $map = 'Главная , Докторантура';
         }
-        //dd($ar['specialties']);
-        return view('doctor', ['sphere' => $sphere, 'dir' => $dir, 'sub' => $sub, 'sp' => $sp, 'us' => $us,
-            'ts' => $ts, 'cs' => $cs])->with('costs', $specialties)->with('page', $pages)->with('degree', $degree)
+        else {
+            $map = 'Главная , Специалности';
+        }
+        return view('doctor', ['dirs' => $directions, 'subDir' => $subDir, 'sub' => $sub, 'sp' => $sp, 'us' => $us, 'specs' => $specs,
+            'ts' => $ts, 'cs' => $cs])->with('costs', $costs)->with('page', $pages)->with('degree', $degree)
             ->with('query', $query)->with('dir_id', $request->get('direction_id'))->with('city_id', $request->get('city_id'))->with('map', $map);
     }
 

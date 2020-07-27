@@ -59,7 +59,7 @@
     <noscript><div><img src="https://mc.yandex.ru/watch/57544288" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     @yield('css')
 </head>
-<body oncontextmenu="return false" oncopy="return false;" oncontextmenu="return false" onselectstart="return false;">
+<body>
 <div id="app">
     <input type="hidden" name="_token" value="{{ csrf_token() }}"> <!-- На главной странице множество js не работают из-за отсутствия токена -->
     <div id="header">

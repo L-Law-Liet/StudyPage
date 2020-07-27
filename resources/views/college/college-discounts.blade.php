@@ -33,6 +33,7 @@
                                     $i = 1;
                                     @endphp
                                     @foreach($university->grants as $grant)
+
                                         <tr>
                                             <td>{{ $i }}</td>
                                             <td>{{$grant->name}}</td>

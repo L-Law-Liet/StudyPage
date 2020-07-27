@@ -21,11 +21,11 @@
                         <div class="d-flex justify-content-between">
                             <div class="w-37">
                                 <div class="cv-img-div">
-                                    <img src="{{asset('img/narxoz-img.svg')}}" alt="">
+                                    <img src="{{asset('img/'.$university->image)}}" alt="">
                                 </div>
                                 <div class="under-cv-img-div mb-2">
-                                    <p class="m-1"><b>Общежитие: </b>Да</p>
-                                    <p class="m-1"><b>Военная кафедра: </b>Нет</p>
+                                    <p class="m-1"><b>Общежитие: </b>{{($university->dormitory)?'Да':'Нет'}}</p>
+                                    <p class="m-1"><b>Военная кафедра: </b>{{($university->military_dep)?'Да':'Нет'}}</p>
                                     <p class="m-1"><b>Веб-сайт: </b><u>{{ltrim($university->web_site, 'Website:')}}</u></p>
                                 </div>
                             </div>

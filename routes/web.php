@@ -294,7 +294,7 @@ Route::post('payment', 'EpayController@payment')->name('payment');
 Route::get('success-payment/{m}/{sum}', 'PagesController@successPayment')->name('success-payment');
 Route::get('fail-payment/{m}', 'PagesController@failPayment')->name('fail-payment');
 Route::get('show-payment/{m}', 'PagesController@showPayment')->name('show-payment');
-Route::get('ajax-filter', 'AjaxController@doctorFilter');
+Route::get('ajax-filter/{pages}/{query?}', 'AjaxController@doctorFilter');
 
 Auth::routes();
 
