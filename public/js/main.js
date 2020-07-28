@@ -82,15 +82,24 @@ $(document).ready(function() {
 	};
 
 	$('body').on('click', '.goSearch', function (e) {
+		console.log('GG');
 		e.preventDefault();
-		if (dQuery != undefined && dQuery !== 'none' && dQuery != '') {
-			window.location.href = '/poisk?degree_id=' + degUrl + '&direction_id=' + dDirection_id + '&subdirection_id=any&specialty_id=any&city_id=' + dCity_id + '&pr1=any&pr2=any&un_id=any&type_id=any&search=' + dQuery + '&page=1';
-		} else {
-			console.log('-------------:', degUrl);
-			window.location.href = '/poisk?degree_id=' + dDegree + '&direction_id=' + dDirection_id + '&subdirection_id=any&specialty_id=any&city_id=' + dCity_id + '&pr1=any&pr2=any&un_id=any&type_id=any&page=1';
+		if (document.getElementById('st').value > 0){
+			if (dQuery != undefined && dQuery !== 'none' && dQuery != '') {
+				window.location.href = '/poisk?degree_id=' + degUrl + '&direction_id=' + dDirection_id + '&subdirection_id=any&specialty_id=any&city_id=' + dCity_id + '&pr1=any&pr2=any&un_id=any&type_id=any&search=' + dQuery + '&page=1';
+			} else {
+				console.log('-------------:', degUrl);
+				window.location.href = '/poisk?degree_id=' + dDegree + '&direction_id=' + dDirection_id + '&subdirection_id=any&specialty_id=any&city_id=' + dCity_id + '&pr1=any&pr2=any&un_id=any&type_id=any&page=1';
+			}
+		}
+		else {
+			document.getElementById('st').style.background = '#ff726f';
+			setInterval(bgGG, 1500);
 		}
 	});
-
+	function bgGG(){
+		document.getElementById('st').style.background = '#fff';
+	}
 	$('#degree_id').on('change', function() {
 		ChangeUrl('page', '1');
 		$('.dC').removeClass('active');
@@ -896,3 +905,8 @@ function dopFilter(event) {
 		}
 	}
 }
+function searchButtonF() {
+	console.log('WP');
+		document.getElementById('st').style.background = 'white';
+	}
+

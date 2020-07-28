@@ -81,10 +81,5 @@
             </div>
         </div>
     </div>
-    <script>
-        function phone1(event) {
-            console.log(event.target.value);
-            event.target.value = '+7'+event.target.value.substr(2);
-        }
-    </script>
+
     @endsection

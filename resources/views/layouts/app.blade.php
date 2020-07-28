@@ -37,13 +37,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     {{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">--}}
-
+    @stack('pre-css')
     <!-- Styles -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/slick.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
-
+@stack('css')
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
 			(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -57,7 +57,6 @@
 			});
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/57544288" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    @yield('css')
 </head>
 <body>
 <div id="app">
@@ -100,16 +99,20 @@
                                      $id = 'fb';
                                  }
                                  ?>
-                                 <li><a target="_blank" href="<?=$soc?>" style="border:none; background-size: 14px" id="<?=$id?>" class="<?=$class?>"></a></li>
+                                 <li><a target="_blank" href="<?=$soc?>" style="border:none; background-size: 26px" id="<?=$id?>" class="<?=$class?>">
+                                         @if($id == 'in')
+                                             <i style="size: 2.56em" class="fab fa-instagram"></i>
+                                             @endif
+                                     </a></li>
                                  <? } ?>
                                  <? } ?>
                                  @if(Auth::check())
-                                     <li class="log-cab ml-4 d-inline-block">
+                                     <li class="log-cab ml-4 mt-1 d-inline-block">
                                                 <div class="d-inline mr-4">
                                                     <u><a class="d-inline" id="logged" href="#">Пополнить счет</a></u><b id="balance">{{Auth::user()->bill}} ед.</b>
                                                 </div>
 
-                                                <a id="cabinetDropdown" class="float-right mt-0 nav-link p-0" href="#" aria-expanded="false"
+                                                <a id="cabinetDropdown" class="float-right nav-link p-0" href="#" aria-expanded="false"
                                                    role="button" data-toggle="dropdown" aria-haspopup="true">
                                                     <img style="width: 30px; height: 18px" src="/img/login.svg">
                                                     Кабинет
@@ -126,9 +129,13 @@
                                                 </div>
                                      </li>
                                  @else
-                                         <li class="log-cab ml-4 d-inline-block">
-                                             <a id="login" class="float-right mt-0" href="{{url('login')}}">
-                                                 <img style="width: 30px; height: 18px" src="/img/login.svg">
+                                         <li class="log-cab ml-4 mt-1 d-inline-block">
+                                             <a id="register" class="float-right" href="#">
+                                                 <img style="width: 30px; height: 18px" src="{{asset('/img/login.svg')}}">
+                                                 Регистрация
+                                             </a>
+                                             <a id="login" class="float-right" href="#">
+                                                 <img style="width: 30px; height: 18px" src="{{asset('/img/login.svg')}}">
                                                  Вход
                                              </a>
                                          </li>
@@ -179,41 +186,53 @@
             </ul>
         </div>
     </div>
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel navbar-unipage">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <nav class="navbar navbar-expand-md navbar-light navbar-laravel navbar-unipage {{ isset($is_main) ? 'is_index' : '' }}">
+        <div class="container {{ isset($is_main) ? 'is_index' : '' }}">
+            <div class="collapse navbar-collapse {{ isset($is_main) ? 'is_index' : '' }}" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav">
+                <ul class="navbar-nav {{ isset($is_main) ? 'is_index' : '' }}">
                     <li class="nav-item">
-                        <a class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{url('college')}}">КОЛЛЕДЖ</a>
+                        <a class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{url('college')}}">КОЛЛЕДЖИ</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{url('university-school', 0)}}">ВУЗЫ</a>
                     </li>
-                    <li class="nav-item">
-                    <a class="nav-link dC dK @if(Request::path() == 'list') active @endif" href="/list/">РЕЙТИНГ</a>
+                    <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} nav-item">
+                    <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(Request::path() == 'list') active @endif" href="/list/">РЕЙТИНГ</a>
+                        <div id="nav-content-rating" class="dropdown-menu {{ isset($is_main) ? 'is_index' : '' }} nav-content">
+                            <div id="nav-inner-content-rating" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 d-flex justify-content-between nav-content">
+                                <div class="d-inline-block nav-items">
+                                    <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
+                                    <a href="{{url('list/college')}}">РЕЙТИНГ КОЛЛЕДЖЕЙ</a>
+                                </div>
+                                <div class="d-inline-block nav-items">
+                                    <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
+                                    <a href="{{url('list/univer')}}">РЕЙТИНГ ВУЗОВ</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     {{--<li class="nav-item">--}}
                         {{--<a class="nav-link @if(Request::path() == 'calculator') active @endif" href="{{ route('calculator') }}">Калькулятор ЕНТ</a>--}}
                     {{--</li>--}}
-                    <li id="li-nav" class="nav-item">
-                        <a id="navigator" href="#" class="nav-link z-index">НАВИГАТОР</a>
-                            <div id="nav-content" class="dropdown-menu nav-content">
-                                <div id="nav-inner-content" class="m-2 ml-4 mr-4 d-flex justify-content-between nav-content">
+                    <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} nav-item">
+                        <a id="navigator" href="#" class="nav-link {{ isset($is_main) ? 'is_index' : '' }} z-index">НАВИГАТОР</a>
+                            <div id="nav-content" class="dropdown-menu {{ isset($is_main) ? 'is_index' : '' }} nav-content">
+                                <div id="nav-inner-content" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 d-flex justify-content-between nav-content">
                                     <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="/img/arrow.svg" alt="->">
+                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
                                         <a href="{{url('list/college')}}">СПИСОК КОЛЛЕДЖЕЙ</a>
                                     </div>
                                     <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="/img/arrow.svg" alt="->">
+                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
                                         <a href="{{url('list/univer')}}">СПИСОК ВУЗОВ</a>
                                     </div>
                                     <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="/img/arrow.svg" alt="->">
+                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
                                         <a href="{{url('list/partner')}}">ПАРТНЕРЫ</a>
                                     </div>
                                     <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="/img/arrow.svg" alt="->">
+                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
                                         <a href="{{url('faq/select-profession')}}">ВОПРОСЫ И ОТВЕТЫ</a>
                                     </div>
                                 </div>
@@ -230,28 +249,31 @@
         </div>
     </nav>
     <div id="map" class="container">
-        <div class="subnav">
-            @php
-                $map = isset($map) ? $map : '';
-                $map = preg_split("/[,]+/", $map);
-                $k = array_search(' Список колледжей ', $map);
-            if ($name ?? '' == 'univer' && $k){
-                $map[$k] = ' Список ВУЗов ';
-            }
+        @if(str_contains($map, ','))
+            <div class="subnav">
+                @php
+                    $map = isset($map) ? $map : '';
+                    $map = preg_split("/[,]+/", $map);
+                    $k = array_search(' Список колледжей ', $map);
+                if ($name ?? '' == 'univer' && $k){
+                    $map[$k] = ' Список ВУЗов ';
+                }
 
-                $lastMap = $map[count($map)-1];
-                for ($i = 0; $i < count($map)-1; $i++){
-                    echo $map[$i];
-            @endphp
-            <img src="{{asset('img/faq-arrow-right.svg')}}">
-            @php
-            }
-            echo "<span class='subnav-last-child'>$lastMap</span>";
-            @endphp
-        </div>
+                    $lastMap = $map[count($map)-1];
+                    for ($i = 0; $i < count($map)-1; $i++){
+                        echo $map[$i];
+                @endphp
+                <img src="{{asset('img/faq-arrow-right.svg')}}">
+                @php
+                    }
+                    echo "<span class='subnav-last-child'>$lastMap</span>";
+                @endphp
+            </div>
+            @endif
     </div>
     @yield('subnav')
-    <main class="py-4 mt-5">
+    <div class="clearfix mb-4"></div>
+    <main class="">
         <div id="myModal" class="modal">
 
             <!-- Modal content -->
@@ -278,6 +300,143 @@
             </div>
 
         </div>
+        <div id="myLoginModal" class="modal">
+
+            <!-- Modal content -->
+                <div class="login-content">
+                    <div class="justify-content-center d-flex">
+                        <div id="form" class="">
+                            <div class="float-right">
+                                <img class="loginClose clickable-el" src="{{asset('img/login_form_close.svg')}}" alt="">
+                            </div>
+                            <div id="login-header" class="text-center m-1">
+                                Вход
+                            </div>
+                            <div class="login-content">
+                                <div class="login-form">
+                                    <form id="login-form" action="{{route('logging')}}" method="post">
+                                        {{csrf_field()}}
+                                        <div class="login-form-div">
+                                            <label>Электронная почта или телефон*</label>
+                                            <input class="login-form-input p-1" type="text" name="email">
+                                        </div>
+                                        <div class="login-form-div">
+                                            <label>Пароль*</label>
+                                            <input class="login-form-input p-1" type="password" name="password">
+                                        </div>
+                                        <div class="login-form-div">
+                                            <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Войти">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="reg-href" class="text-center mt-1 mb-1">
+                                    У Вас не имеется личный кабинет? <a style="color: #2D7ABF;"  onclick="redirectToReg()" href="#">Регистрация</a>
+                                    <a style="color: #2D7ABF;" href="{{url('forgot-passwd')}}">Забыли пароль?</a>
+                                </div>
+                                <div class="login-form">
+                                    <div class="login-form-div mt-2 mb-3 justify-content-between d-flex">
+                                        <img src="img/login_line.svg" alt=""> Или
+                                        <img src="img/login_line.svg" alt="">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <button id="fb_btn" class="p-1 text-white">
+                                            <img class="mr-1 mb-1" src="img/fb_logo.svg" alt="">Продолжить с Facebook</button>
+                                    </div>
+                                    <div class="login-form-div">
+                                        <button id="google-btn" class="p-1">
+                                            <img class="mr-1" src="img/google_logo.svg" alt="">Продолжить с Google</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div id="myRegModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="login-content">
+                <div class="justify-content-center d-flex">
+                    <div id="form" class="">
+                        <div class="float-right">
+                            <img class="regClose clickable-el" src="{{asset('img/login_form_close.svg')}}" alt="">
+                        </div>
+                        <div id="login-header" class="text-center m-1">
+                            Регистрация
+                        </div>
+                        <div class="login-content">
+                            <div class="login-form">
+                                <form id="login-form" action="{{route('register')}}" method="post">
+                                    {{csrf_field()}}
+                                    <div class="login-form-div">
+                                        <label>Фамилия*</label>
+                                        <input class="login-form-input p-1" type="text" name="surname">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Имя*</label>
+                                        <input class="login-form-input p-1" type="text" name="name">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Дата рождения*</label>
+                                        <input class="login-form-input p-1" type="date" min="1920-01-01" max="2020-01-01" name="birthDate">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Пол*</label>
+                                        <select class="login-form-input p-1 w-100" name="gender">
+                                            <option value="m">Мужчина</option>
+                                            <option value="f">Женщина</option>
+                                        </select>
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Регион*</label>
+                                        <select class="login-form-input p-1 w-100" name="region">
+                                            @foreach(\App\Models\City::all() as $c)
+                                                <option value="{{$c->id}}">{{$c->name_ru}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="login-form-div">
+                                        <label>Электронная почта*</label>
+                                        <input class="login-form-input p-1" type="text" name="email">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Контактный телефон*</label>
+                                        <input onkeypress='validate(event)' oninput="phone1(event)" class="login-form-input p-1" maxlength="12" value="+7" type="tel" name="phone">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Пароль*</label>
+                                        <input class="login-form-input p-1" type="password" name="password">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <label>Повторите пароль*</label>
+                                        <input class="login-form-input p-1" type="password" name="password_confirmation">
+                                    </div>
+                                    <div class="login-form-div">
+                                        <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Зарегистрироваться">
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="reg-href" class="text-center mt-1 mb-1 policy">
+                                Регистрируясь, Вы подтверждаете свое согласие
+                                <a class="color-2D7ABF" href="#">с Политическим соглашением. Полной</a>
+                                конфедициальностью на обработку персональных
+                                данных и на использование файлов “cookie”.
+                            </div>
+                            <div class="login-form">
+                                <div id="reg-line" class="mt-2 mb-3 justify-content-start d-flex">
+                                    <img src="img/reg-line.svg" alt="">
+                                </div>
+                                <div id="reg-href" class="text-center mt-1 mb-1">
+                                    У Вас уже имеется личный кабинет?
+                                    <a onclick="redirectToLogin()" class="color-2D7ABF" href="#">Войти</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @include('error')
         @yield('content')
     </main>
@@ -291,7 +450,7 @@
                             <span>Степень</span>
                             <ul>
                                 <li class="">
-                                    <a href="{{url('college')}}">Колледж</a>
+                                    <a href="{{url('college')}}">Колледжи</a>
                                 </li>
                                 <li class="">
                                     <a href="{{url('university-college', 0)}}">Бакалавриат</a>
@@ -411,6 +570,9 @@
             modal.style.display = "none";
         }
     }
+
+
+
     function setCash(event) {
         document.getElementById('amountInput').value = event.target.id;
     }
@@ -422,6 +584,75 @@
             event.target.value = 0;
         }
     }
+</script>
+<script>
+    var loginModal = document.getElementById("myLoginModal");
+
+    // Get the button that opens the modal
+    var loginBtn = document.getElementById("login");
+
+    // Get the <span> element that closes the modal
+    var loginSpan = document.getElementsByClassName("loginClose")[0];
+
+    // When the user clicks the button, open the modal
+    loginBtn.onclick = function() {
+        loginModal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    loginSpan.onclick = function() {
+        loginModal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == loginModal) {
+            loginModal.style.display = "none";
+        }
+    }
+</script>
+<script>
+    var regModal = document.getElementById("myRegModal");
+
+    // Get the button that opens the modal
+    var regBtn = document.getElementById("register");
+
+    // Get the <span> element that closes the modal
+    var regSpan = document.getElementsByClassName("regClose")[0];
+
+    // When the user clicks the button, open the modal
+    regBtn.onclick = function() {
+        regModal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    regSpan.onclick = function() {
+        regModal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == regModal) {
+            regModal.style.display = "none";
+        }
+    }
+</script>
+<script>
+    function phone1(event) {
+        console.log(event.target.value);
+        event.target.value = '+7'+event.target.value.substr(2);
+    }
+</script>
+<script !src="">
+function redirectToLogin() {
+    $('#myRegModal').hide();
+    $('#Message').hide();
+    $('#myLoginModal').show();
+}
+function redirectToReg() {
+    $('#myLoginModal').hide();
+    $('#myRegModal').show();
+}
 </script>
 </body>
 </html>

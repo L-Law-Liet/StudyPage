@@ -42,7 +42,6 @@ class IndexController extends Controller
         $data['partners'] = Parner::all();
         $data['cost_count'] = CostEducation::get()->count();
         $data['message'] = $message;
-
         return view('index', $data)->with('map', 'Главная');
     }
 
@@ -52,7 +51,7 @@ class IndexController extends Controller
         $data['city'] = City::findOrFail($id);
         $data['cities'] = City::where('active', 1)->orderBy('name_ru')->pluck('name_ru', 'id')->all();
 
-        return view('city.view', $data);
+        return view('city.view', $data)->with('map', 'Главная , Города , '.$data['city']->name_ru);
     }
 
     public function getNavigator($id){

@@ -6,7 +6,7 @@
                 <table class="table table-striped table-view">
                     <thead>
                     <tr>
-                        <th>№</th>
+                        <th style="width: 5% !important;">№</th>
                         <th class="tl">Наименование организации</th>
                         <th width="20%;">Регион</th>
                     </tr>
@@ -14,7 +14,7 @@
                     <tbody>
                     @foreach($partners as $partner)
                         <tr>
-                            <td>{{ $partner->id }}</td>
+                            <td style="width: 5% !important;">{{ $partner->id }}</td>
                             <td> {{ $partner->name }}</td>
                             <td style="">{{ $partner->region }}</td>
                         </tr>

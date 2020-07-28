@@ -90,7 +90,10 @@ class AjaxController extends Controller
         $ts = Type::all();
         switch ($a->sort){
             case 'name':
-                $costs = $costs->sortBy('specialty_id')->values();
+                $costs = CostEducation::with('relSpecialty')->get()
+                    ->sortBy(function($cost) {
+                        return $cost->relSpecialty->name_ru;
+                    });
                 break;
             case 'city':
                 $costs = $costs->sortBy('city_id')->values();
@@ -315,7 +318,7 @@ class AjaxController extends Controller
                         </div>
                         <div class=\"col-xs-12 col-sm-4 col-md-4 col-lg-4 mt--3\">
                                 <div class=\"form-group m-b-0\">
-                                    <select class=\"ajax-filter form-control\" id=\"sortorder\" name=\"sort\">
+                                    <select class=\"ajax-filter form-control Sgs-sort\" id=\"sortorder\" name=\"sort\">
                                         <option value=\"\">Сортировка по</option>";
         $result .= "<option ";
         if($a->sort == 'name'){
@@ -362,7 +365,14 @@ class AjaxController extends Controller
                                     </tr>
                                     <tr>
                                         <td>Стоимость обучения</td>
-                                        <td>" . $costs[$i]->price . " тг. / год</td>
+                                        <td>";
+                if ($costs[$i]->price){
+                    $result .= $costs[$i]->price;
+                }
+                else {
+                    $result .= '0';
+                }
+                $result .= " тг. / год</td>
                                     </tr>";
                 if ($costs[$i]->relSpecialty->degree_id == 2 || $costs[$i]->relSpecialty->degree_id == 3) {
                     $result .= "<tr>

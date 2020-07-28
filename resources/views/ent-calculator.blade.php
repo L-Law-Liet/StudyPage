@@ -38,7 +38,7 @@
                 <h5 class="text-center m-3">{{session('m1')}}</h5>
 
                 <div class="dialog-button-div m-4">
-                    <button onclick="window.location='{{url('login')}}'" class="border-0 p-2">Войти</button>
+                    <button onclick="redirectToLogin()" class="border-0 p-2">Войти</button>
                 </div>
             </div>
 
@@ -66,9 +66,8 @@
                                     <div class="form-group">
                                         <select required class="form-control sgs-sort sortorder" name="lang">
                                             <option value=""></option>
-                                            @foreach(\App\Models\Language::all() as $l)
-                                                <option value="{{$l->id}}">{{$l->name_ru}}</option>
-                                                @endforeach
+                                            <option value="1">Казахский</option>
+                                            <option value="2">Русский</option>
                                         </select>
                                     </div>
                                 </div>

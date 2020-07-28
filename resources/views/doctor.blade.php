@@ -127,7 +127,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 mt--3">
                                 <div class="form-group m-b-0">
-                                    <select class="ajax-filter form-control" id="sortorder" name="sort">
+                                    <select class="ajax-filter form-control Sgs-sort" id="sortorder" name="sort">
                                         <option @if($sortSelect??'') @else selected @endif value="">Сортировка по</option>
                                         <option @if($sortSelect??'' == 'name') selected @endif value="name">Наименование</option>
                                         <option @if($sortSelect??'' == 'city') selected @endif value="city">Город</option>
@@ -161,7 +161,7 @@
                                     </tr>
                                     <tr>
                                         <td>Стоимость обучения</td>
-                                        <td>{{$costs[$i]->price}} тг. / год</td>
+                                        <td>{{($costs[$i]->price)?$costs[$i]->price:'0'}} тг. / год</td>
                                     </tr>
                                     @if($costs[$i]->relSpecialty->degree_id == 2 || $costs[$i]->relSpecialty->degree_id == 3)
                                         <tr>
