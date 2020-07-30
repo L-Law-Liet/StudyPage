@@ -359,7 +359,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         if (!$id){
             $us = University::all();
         }
-       return view('rating.multiprofile-rating', compact('type', 'ratingName'))->with('map', $map)->with('class', $class)->with('us', $us);
+       return view('rating.multiprofile-rating', compact('type', 'ratingName'))->with('map', $map)->with('class', $class)->with('us', $us)->with('active', 'rating');
     }
     public function viewCollegeFromList($id, $name){
         $university = University::find($id);

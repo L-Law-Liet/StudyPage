@@ -199,8 +199,8 @@
                     <li class="nav-item">
                         <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{url('university-school', 0)}}">ВУЗЫ</a>
                     </li>
-                    <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} nav-item">
-                    <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(Request::path() == 'list') active @endif">РЕЙТИНГ</a>
+                    <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} position-relative nav-item">
+                    <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(($active ?? '') == 'rating')active @endif">РЕЙТИНГ</a>
                         <div id="nav-content-rating" class="dropdown-menu {{ isset($is_main) ? 'is_index' : '' }} nav-content">
                             <div id="nav-inner-content-rating" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 row p-1 nav-content">
                                 <div class="col-md-6 p-0 nav-items">
@@ -217,7 +217,7 @@
                     {{--<li class="nav-item">--}}
                         {{--<a class="nav-link @if(Request::path() == 'calculator') active @endif" href="{{ route('calculator') }}">Калькулятор ЕНТ</a>--}}
                     {{--</li>--}}
-                    <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} nav-item">
+                    <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} position-relative nav-item">
                         <a id="navigator" href="#" class="nav-link {{ isset($is_main) ? 'is_index' : '' }} {{isset($navActive)?'active':''}} z-index">НАВИГАТОР</a>
                             <div id="nav-content" class="dropdown-menu {{ isset($is_main) ? 'is_index' : '' }} nav-content">
                                 <div id="nav-inner-content" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 row nav-content p-1">

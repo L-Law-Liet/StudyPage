@@ -11,7 +11,7 @@
                 <table class="table table-striped table-view">
                     <thead>
                     <tr>
-                        <th>Наименование {{($class[0] == $type)?'ВУЗа':'Колледжа'}}</th>
+                        <th>Наименование {{($class[0] == 1)?'ВУЗа':'Колледжа'}}</th>
                         <th width="20%;">Город</th>
                     </tr>
                     </thead>

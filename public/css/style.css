@@ -1312,8 +1312,8 @@ ul.social-icons li a:not(#login):not(#register):not(#logged):not(#cabinetDropdow
 }
 #nav-content {
     display: none;
-    width: 960px;
-    left: 261px;
+    width: 961px;
+    left: -574px;
     background: #FFFFFF;
     border-radius: 0;
     z-index: 1;
@@ -1321,7 +1321,7 @@ ul.social-icons li a:not(#login):not(#register):not(#logged):not(#cabinetDropdow
     margin-top: 0;
 }
 #nav-content-rating {
-    left: 261px;
+    left: -382px;
     width: 960px;
     display: none;
     background: #FFFFFF;
