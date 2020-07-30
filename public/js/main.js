@@ -82,7 +82,6 @@ $(document).ready(function() {
 	};
 
 	$('body').on('click', '.goSearch', function (e) {
-		console.log('GG');
 		e.preventDefault();
 		if (document.getElementById('st').value > 0){
 			if (dQuery != undefined && dQuery !== 'none' && dQuery != '') {
@@ -93,8 +92,8 @@ $(document).ready(function() {
 			}
 		}
 		else {
-			document.getElementById('st').style.background = '#ff726f';
-			setInterval(bgGG, 1500);
+			console.log('GG');
+			$('#Zearch').trigger('click');
 		}
 	});
 	function bgGG(){
@@ -813,7 +812,7 @@ window.onclick = function(event) {
 	if (event.target == modal) {
 		modal.style.display = "none";
 	}
-}
+};
 function validate(evt) {
 	var theEvent = evt || window.event;
 
@@ -835,9 +834,6 @@ setTimeout(fade_out, 6000);
 function fade_out() {
 	$("#messagError").fadeOut().empty();
 }
-$('.directionc').chosen();
-$('.cityc').chosen();
-$('.degreec').chosen();
 function dopFilter(event) {
 	if (event.target.id == 'degreeSelect'){
 		if (event.target.value == '1'){
@@ -905,8 +901,4 @@ function dopFilter(event) {
 		}
 	}
 }
-function searchButtonF() {
-	console.log('WP');
-		document.getElementById('st').style.background = 'white';
-	}
 

@@ -31,6 +31,7 @@
     <script src="{{ asset('js/bootstrap.min.js') }}" ></script>
     <script src="{{ asset('js/slick.min.js') }}" ></script>
     <script src="{{ asset('js/main.js') }}" ></script>
+    <script src="{{asset('js/chosen.jquery.min.js')}}"></script>
     @yield('js')
 
     <!-- Fonts -->
@@ -43,6 +44,7 @@
     <link href="{{ asset('css/slick.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{asset('css/chosen.min.css')}}" rel="stylesheet" type="text/css">
 @stack('css')
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
@@ -131,11 +133,11 @@
                                  @else
                                          <li class="log-cab ml-4 mt-1 d-inline-block">
                                              <a id="register" class="float-right" href="#">
-                                                 <img style="width: 30px; height: 18px" src="{{asset('/img/login.svg')}}">
                                                  Регистрация
                                              </a>
+                                             <span class="border-0 mr-2 float-right">/</span>
+                                             <img style="width: 30px; height: 18px" src="{{asset('/img/login.svg')}}">
                                              <a id="login" class="float-right" href="#">
-                                                 <img style="width: 30px; height: 18px" src="{{asset('/img/login.svg')}}">
                                                  Вход
                                              </a>
                                          </li>
@@ -198,16 +200,16 @@
                         <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{url('university-school', 0)}}">ВУЗЫ</a>
                     </li>
                     <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} nav-item">
-                    <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(Request::path() == 'list') active @endif" href="/list/">РЕЙТИНГ</a>
+                    <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(Request::path() == 'list') active @endif">РЕЙТИНГ</a>
                         <div id="nav-content-rating" class="dropdown-menu {{ isset($is_main) ? 'is_index' : '' }} nav-content">
-                            <div id="nav-inner-content-rating" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 d-flex justify-content-between nav-content">
-                                <div class="d-inline-block nav-items">
+                            <div id="nav-inner-content-rating" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 row p-1 nav-content">
+                                <div class="col-md-6 p-0 nav-items">
                                     <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                    <a href="{{url('list/college')}}">РЕЙТИНГ КОЛЛЕДЖЕЙ</a>
+                                    <a href="{{url('university/list/multiprofile', 2)}}">РЕЙТИНГ КОЛЛЕДЖЕЙ</a>
                                 </div>
-                                <div class="d-inline-block nav-items">
+                                <div class="col-md-6 p-0 nav-items">
                                     <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                    <a href="{{url('list/univer')}}">РЕЙТИНГ ВУЗОВ</a>
+                                    <a href="{{url('university/list/multiprofile', 1)}}">РЕЙТИНГ ВУЗОВ</a>
                                 </div>
                             </div>
                         </div>
@@ -216,24 +218,29 @@
                         {{--<a class="nav-link @if(Request::path() == 'calculator') active @endif" href="{{ route('calculator') }}">Калькулятор ЕНТ</a>--}}
                     {{--</li>--}}
                     <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} nav-item">
-                        <a id="navigator" href="#" class="nav-link {{ isset($is_main) ? 'is_index' : '' }} z-index">НАВИГАТОР</a>
+                        <a id="navigator" href="#" class="nav-link {{ isset($is_main) ? 'is_index' : '' }} {{isset($navActive)?'active':''}} z-index">НАВИГАТОР</a>
                             <div id="nav-content" class="dropdown-menu {{ isset($is_main) ? 'is_index' : '' }} nav-content">
-                                <div id="nav-inner-content" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 d-flex justify-content-between nav-content">
-                                    <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                        <a href="{{url('list/college')}}">СПИСОК КОЛЛЕДЖЕЙ</a>
+                                <div id="nav-inner-content" class="m-2 {{ isset($is_main) ? 'is_index' : '' }} ml-4 mr-4 row nav-content p-1">
+                                    <div class="col-md-6 p-0">
+                                        <div class="nav-items mb-3">
+                                            <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
+                                            <a href="{{url('list/college')}}">СПИСОК КОЛЛЕДЖЕЙ</a>
+                                        </div>
+                                        <div class="nav-items">
+                                            <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
+                                            <a href="{{url('list/univer')}}">СПИСОК ВУЗОВ</a>
+                                        </div>
                                     </div>
-                                    <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                        <a href="{{url('list/univer')}}">СПИСОК ВУЗОВ</a>
-                                    </div>
-                                    <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                        <a href="{{url('list/partner')}}">ПАРТНЕРЫ</a>
-                                    </div>
-                                    <div class="d-inline-block nav-items">
-                                        <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                        <a href="{{url('faq/select-profession')}}">ВОПРОСЫ И ОТВЕТЫ</a>
+                                    <div class="col-md-6 p-0">
+
+                                        <div class="nav-items mb-3">
+                                            <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
+                                            <a href="{{url('list/partner')}}">ПАРТНЕРЫ</a>
+                                        </div>
+                                        <div class="nav-items">
+                                            <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
+                                            <a href="{{url('faq/select-profession')}}">ВОПРОСЫ И ОТВЕТЫ</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +268,18 @@
 
                     $lastMap = $map[count($map)-1];
                     for ($i = 0; $i < count($map)-1; $i++){
-                        echo $map[$i];
+                        switch (trim($map[$i])){
+                            case 'Главная':
+                                $path = '/';
+                                break;
+                            case 'Рейтинг ВУЗов':
+                                $path = 'university/list/multiprofile/0';
+                                break;
+                            case 'Рейтинг Колледжей':
+                                $path = 'university/list/multiprofile/1';
+                                break;
+                        }
+                        echo "<a href=\"".url($path??'#')."\">$map[$i]</a>";
                 @endphp
                 <img src="{{asset('img/faq-arrow-right.svg')}}">
                 @php
@@ -382,14 +400,14 @@
                                     </div>
                                     <div class="login-form-div">
                                         <label>Пол*</label>
-                                        <select class="login-form-input p-1 w-100" name="gender">
+                                        <select class="login-form-input chsn p-1 w-100" name="gender">
                                             <option value="m">Мужчина</option>
                                             <option value="f">Женщина</option>
                                         </select>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Регион*</label>
-                                        <select class="login-form-input p-1 w-100" name="region">
+                                        <select class="login-form-input chsn p-1 w-100" name="region">
                                             @foreach(\App\Models\City::all() as $c)
                                                 <option value="{{$c->id}}">{{$c->name_ru}}</option>
                                             @endforeach
@@ -653,6 +671,7 @@ function redirectToReg() {
     $('#myLoginModal').hide();
     $('#myRegModal').show();
 }
+$('.chsn').chosen();
 </script>
 </body>
 </html>

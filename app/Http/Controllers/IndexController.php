@@ -95,7 +95,7 @@ class IndexController extends Controller
 
     public function getCallback(){
 
-        return view('callback');
+        return view('callback')->with('map', 'Главная , Обратная связь');
     }
 
     public function postCallback(){

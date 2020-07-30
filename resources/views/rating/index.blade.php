@@ -7,7 +7,7 @@
                 <table class="table table-striped table-view">
                     <thead>
                         <tr>
-                            <th>№</th>
+                            <th class="w-30px">№</th>
                             <th class="tl">Наименование ВУЗа</th>
                             <th width="20%;">Город</th>
                             {{--<th class="text-center">Итого (Балл)</th>--}}

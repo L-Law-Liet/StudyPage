@@ -16,6 +16,8 @@ use App\Models\Subject;
 use App\Models\Type;
 use App\Models\University;
 use App\Models\User;
+use App\Profile;
+use App\ProfileUniversity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -125,7 +127,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
     $S = $s->get();
     return $S;
 }
-    public function showDoctor($degree, $pages, Request $request){
+    public function showDoctor($degree, $page, Request $request){
         $city_id = 0;
         $direction_id = 0;
         $query = null;
@@ -160,44 +162,44 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
             $map = 'Главная , Специалности';
         }
         return view('doctor', ['dirs' => $directions, 'subDir' => $subDir, 'sub' => $sub, 'sp' => $sp, 'us' => $us, 'specs' => $specs,
-            'ts' => $ts, 'cs' => $cs])->with('costs', $costs)->with('page', $pages)->with('degree', $degree)
+            'ts' => $ts, 'cs' => $cs])->with('costs', $costs)->with('page', $page)->with('degree', $degree)
             ->with('query', $query)->with('dir_id', $request->get('direction_id'))->with('city_id', $request->get('city_id'))->with('map', $map);
     }
 
 
     public function showFAQSelectProfession(){
-        return view('faq.select-prof')->with('active', 'select-prof')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.select-prof')->with('active', 'select-prof')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
     public function showFAQGoodUni(){
-        return view('faq.good')->with('active', 'good')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.good')->with('active', 'good')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
     public function showFAQFutureProfession(){
-        return view('faq.future')->with('active', 'future')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.future')->with('active', 'future')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
     public function showFAQOpenDoors(){
-        return view('faq.open-door')->with('active', 'open-door')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.open-door')->with('active', 'open-door')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
     public function showFAQToCollege(){
-        return view('faq.college')->with('active', 'college')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.college')->with('active', 'college')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
     public function showFAQToUni(){
-        return view('faq.univer')->with('active', 'univer')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.univer')->with('active', 'univer')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
     public function showFAQEntCalc(){
-        return view('faq.calc')->with('active', 'calc')->with('map', 'Главная , Вопросы и ответы');
+        return view('faq.calc')->with('active', 'calc')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
     }
 
     public function collegeList(){
         $universities = University::where('city_id', '<>', null)->get();
-        return view('college-list')->with('universities', $universities)->with('map', 'Главная , Навигатор , Список колледжей');
+        return view('college-list')->with('universities', $universities)->with('map', 'Главная , Навигатор , Список колледжей')->with('navActive', 1);
     }
     public function univerList(){
         $universities = University::where('city_id', '<>', null)->get();
-        return view('univer-list')->with('universities', $universities)->with('map', 'Главная , Навигатор , Список ВУЗов');
+        return view('univer-list')->with('universities', $universities)->with('map', 'Главная , Навигатор , Список ВУЗов')->with('navActive', 1);
     }
     public function partnerList(){
         $partners = Parner::all();
-        return view('partner-list')->with('partners', $partners)->with('map', 'Главная , Навигатор , Партнеры');
+        return view('partner-list')->with('partners', $partners)->with('map', 'Главная , Навигатор , Партнеры')->with('navActive', 1);
     }
     public function entCalculator($error = null){
         if (!session()->get('refreshed')){
@@ -333,6 +335,31 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         }
         usort($array, array('App\Http\Controllers\PagesController', 'L'));
         return view('ent-result2', ['score' => $entScore, 'title' => $title])->with('map', 'Главная , Калькулятор ЕНТ , Результаты')->with('array', $array);
+    }
+    public  function multiRating($type, $id = 0){
+        $class = $type;
+        if ($type == 1){
+            $map = 'Главная , Рейтинг ВУЗов';
+            $ratingName = 'Рейтинг ВУЗов - 2020';
+            if ($id){
+                $map .= ' , '.Profile::find($id)->name;
+                $us = University::whereIn('id', ProfileUniversity::where('profile_id', $id)->pluck('university_id')->toArray())->get();
+                $class .= $id;
+            }
+        }
+        elseif($type == 2) {
+            $map = 'Главная , Рейтинг Колледжей';
+            $ratingName = 'Рейтинг Колледжей - 2020';
+            if ($id){
+                $map .= ' , '.Profile::find($id)->name;
+                $us = University::whereIn('id', ProfileUniversity::where('profile_id', $id)->pluck('university_id')->toArray())->get();
+                $class .= $id;
+            }
+        }
+        if (!$id){
+            $us = University::all();
+        }
+       return view('rating.multiprofile-rating', compact('type', 'ratingName'))->with('map', $map)->with('class', $class)->with('us', $us);
     }
     public function viewCollegeFromList($id, $name){
         $university = University::find($id);

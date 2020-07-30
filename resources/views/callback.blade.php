@@ -12,48 +12,35 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-10 offset-md-1 callback-content">
-                <h3 class="text-center m-b-10 font-weight-bold callback-h3">ОБРАТНАЯ СВЯЗЬ</h3>
-                <?
-                    $a = \App\Models\Article::findOrFail(34);
-                    echo '<div style="text-align:center;">'.$a->description.'</div>';
-                ?>
-                <form action={{ URL::action("IndexController@postCallback") }} method="POST">
-                    @csrf
-                    <div class="form-group row">
-                        <div class="col-md-10 offset-md-1">
-                            <label>Ваше имя*</label>
-                            <input type="text" name="name" class="form-control p-2" value="{{ old('name') }}">
+            <div class="col-md-8 offset-md-2">
+                <h3 class="text-center m-b-10 font-weight-bold">ОБРАТНАЯ СВЯЗЬ</h3>
+                <div style="text-align:center;"><p>Администрация сайта прочтет сообщение и постарается ответить на него в кратчайшие сроки. ВНИМАНИЕ! Studypage.net&nbsp;вправе не отвечать, если: содержание сообщения нарушает законодательство; содержание сообщения противоречит основам морали и нравственности, несет оскорбительный характер; содержание сообщения не относится к деятельности Studypage.net; анонимное обращение.</p></div>                <form action="https://studypage.net/callback" method="POST">
+                    <input type="hidden" name="_token" value="gwF7BBQP1olBJjEJmsi4cjBAd3XK6gxHgFyYXgRF">                    <div class="form-group row">
+                        <label class="col-md-3">Ваше имя*</label>
+                        <div class="col-md-9">
+                            <input type="text" name="name" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-10 offset-md-1">
-                            <label>Контактный телефон*</label>
-                            <input type="text" name="phone" class="form-control p-2" value="{{ old('phone') }}">
+                        <label class="col-md-3 pr-1">Контактный телефон*</label>
+                        <div class="col-md-9">
+                            <input type="text" name="phone" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-10 offset-md-1">
-                            <label>Электронная почта*</label>
-                            <input type="email" name="email" class="form-control p-2" value="{{ old('email') }}">
+                        <label class="col-md-3">Электронная почта*</label>
+                        <div class="col-md-9">
+                            <input type="email" name="email" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-10 offset-md-1">
-                            <label>Электронная почта</label>
-                            <input type="email" name="email" class="form-control p-2" value="{{ old('email') }}">
+                        <label class="col-md-3">Сообщение*</label>
+                        <div class="col-md-9">
+                            <textarea rows="4" style="resize: none" name="question" class="form-control"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-md-10 offset-md-1">
-                            <label>Сообщение*</label>
-                            <textarea style="resize: none" rows="4" name="question" class="form-control p-2">{{ old('question') }}</textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-10 offset-md-1">
-                            <button class="btn btn-success float-right callback-btn">Отправить</button>
-                        </div>
+                    <div class="clearfix">
+                        <button class="btn w-25 btn-success float-right">Отправить</button>
                     </div>
                 </form>
             </div>

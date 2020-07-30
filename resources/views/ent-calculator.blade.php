@@ -64,8 +64,8 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select required class="form-control sgs-sort sortorder" name="lang">
-                                            <option value=""></option>
+                                        <select required class="form-control chsn" name="lang">
+                                            <option value="">Выберите</option>
                                             <option value="1">Казахский</option>
                                             <option value="2">Русский</option>
                                         </select>
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select required class="form-control sgs-sort sortorder" name="1profSelect">
+                                        <select required class="form-control sgs-sort sortorder chsn" name="1profSelect">
                                             <option value="">1-й профильный предмет</option>
                                             @foreach($ss as $s)
                                                 <option value="{{$s->id}}">{{$s->name_ru}}</option>
@@ -81,7 +81,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select required class="form-control sgs-sort sortorder" name="2profSelect">
+                                        <select id="ent-calc-2prof" required class="form-control sgs-sort sortorder chsn" name="2profSelect">
                                             <option value="">2-й профильный предмет</option>
                                             @foreach($ss as $s)
                                                 <option value="{{$s->id}}">{{$s->name_ru}}</option>
@@ -123,6 +123,7 @@
                 </div>
     </div>
     <script>
+
         function max20(event) {
             if(event.target.value > 20){
                 event.target.value = 20;

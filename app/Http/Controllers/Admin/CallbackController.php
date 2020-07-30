@@ -19,7 +19,7 @@ class CallbackController
         } else {
             setcookie("page", null);
         }
-        return view('callback', $data);
+        return view('callback', $data)->with('map', 'Главная , Обратная связь');
     }
 
     public function getAdd($id = null){

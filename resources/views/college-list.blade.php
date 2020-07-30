@@ -6,7 +6,7 @@
                 <table class="table table-striped table-view">
                     <thead>
                     <tr>
-                        <th>№</th>
+                        <th class="w-30px">№</th>
                         <th class="tl">Наименование колледжей</th>
                         <th width="20%;">Регион</th>
                     </tr>
@@ -18,8 +18,8 @@
                     @foreach($universities as $university)
                         <tr>
                             <td>{{ $i }}</td>
-                            <td><a class="college-list-a" href="{{url('college/view', [$university->id, 'college'])}}">{{$university->name_ru}}</a></td>
-                            <td style="">{{$university->relCity->name_ru}}</td>
+                            <td><a class="college-list-a {{isset($passiveLink)?'passive-list-a':''}}" href="{{url('college/view', [$university->id, 'college'])}}">{{$university->name_ru}}</a></td>
+                            <td style=""><a class="college-list-a {{isset($passiveLink)?'passive-list-a':''}}" href="{{url('/city/view', $university->city_id)}}">{{$university->relCity->name_ru}}</a></td>
                         </tr>
                         @php
                             $i++;

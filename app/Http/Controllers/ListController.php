@@ -42,11 +42,18 @@ class ListController extends Controller
 
         }
         if ($direction_id != 0) {
-            $subdirectionIds = Subdirection::select('id')
-                ->where('direction_id', $direction_id)->get()->toArray();
-            $s = $s->whereHas('relSpecialty', function ($q) use ($subdirectionIds) {
-                $q->whereIn('subdirection_id', $subdirectionIds);
-            });
+            if ($direction_id == 1){
+                $L = 'Очная (дневная)';
+            }
+            else{
+                $L = 'Заочная';
+            }
+            $s = $s->where('education_form', $L);
+//            $subdirectionIds = Subdirection::select('id')
+//                ->where('direction_id', $direction_id)->get()->toArray();
+//            $s = $s->whereHas('relSpecialty', function ($q) use ($subdirectionIds) {
+//                $q->whereIn('subdirection_id', $subdirectionIds);
+//            });
         }
         $ar['specialties'] = $s->paginate(10000);
         $ar['count'] = $ar['specialties']->total();

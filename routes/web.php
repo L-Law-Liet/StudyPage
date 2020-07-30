@@ -255,9 +255,7 @@ Route::get('/university-school/{pages}', 'PagesController@showUniversityAfterSch
 Route::get('/university-college/{pages}', 'PagesController@showUniversityAfterCollege')->name('uni-col');
 //Route::get('/magistr/{id?}/{degree}', 'PagesController@showMagistr');
 Route::get('/doctor/{degree}/{pages}', 'PagesController@showDoctor')->name('doctor');
-Route::get('/university/list/multiprofile', function (){
-    return view('multiprofile-rating');
-});
+Route::get('/university/list/multiprofile/{type}/{id?}', 'PagesController@multiRating');
 Route::prefix('faq/')->group(function (){
     Route::get('select-profession', 'PagesController@showFAQSelectProfession');
     Route::get('good', 'PagesController@showFAQGoodUni');

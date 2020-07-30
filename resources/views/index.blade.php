@@ -16,7 +16,7 @@
     </div>
     <div class="main">
         <div class="container">
-            <form method="GET" action="/poisk">
+            <form id="stForm" method="GET" action="/poisk">
                 @csrf
                 <div class="row main-row">
                     <div class="row main-row-inner">
@@ -36,23 +36,26 @@
                         <div class="col-4">
                             <div class="form-group m-b-0">
                                 <label class="col-form-label"><i class="fas fa-graduation-cap"></i> Степень</label>
-                                <select onclick="searchButtonF()" id="st" name="degree_id" class="form-control degreec">
+                                <select required="required" id="st" name="degree_id" class="form-control degreec">
 
-                                    <option value="0">Выберите</option>
+                                    <option value="">Выберите</option>
                                     @foreach($degrees as $d)
                                         <option value="{{ $d->id }}">{{ $d->name_ru }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+                        <button id="Zearch" type="submit" hidden></button>
                         <div class="col-4">
                             <div class="form-group m-b-0">
                                 <label class="col-form-label"><i class="fas fa-atlas"></i> Форма обучения</label>
                                 <select id="dr" name="direction_id" class="form-control directionc">
                                     <option value="0">Выберите</option>
-                                    @foreach($directions as $k => $v)
-                                        <option data-url="{{ $v->url }}" value="{{ $v->id }}">{{ $v->name_ru }}</option>
-                                    @endforeach
+                                    <option value="1">Очная (дневная)</option>
+                                    <option value="2">Дистанционная</option>
+                                    {{--                                    @foreach($directions as $k => $v)--}}
+{{--                                        <option data-url="{{ $v->url }}" value="{{ $v->id }}">{{ $v->name_ru }}</option>--}}
+{{--                                    @endforeach--}}
                                 </select>
                             </div>
                             <div class="form-group oG">
@@ -98,18 +101,18 @@
 
                             <div class="align-middle d-table-cell text-center text-white text-in-table">КАЛЬКУЛЯТОР ЕНТ</div>
                     </div>
-                    <div class="clickable-el d-table" style="width: 388px; height: 234px; background: #124B7E;">
+                    <div class="clickable-el d-table bg-plate" style="width: 388px; height: 234px;">
                         <div onclick="window.location='{{url('/list/')}}'" class="align-middle d-table-cell text-center text-white text-in-table">РЕЙТИНГ</div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mb-4">
-                    <div class="clickable-el d-table three-tables">
+                    <div class="clickable-el d-table three-tables bg-plate">
                         <div onclick="window.location='{{url('list/college')}}'" class="align-middle d-table-cell text-center text-white">ИНФОРМАЦИЯ О ВСЕХ КОЛЛЕДЖАХ КАЗАХСТАНА</div>
                     </div>
-                    <div onclick="window.location='{{url('list/univer')}}'" class="clickable-el d-table three-tables">
+                    <div onclick="window.location='{{url('list/univer')}}'" class="clickable-el d-table three-tables bg-plate">
                         <div class="align-middle d-table-cell text-center text-white">ИНФОРМАЦИЯ О ВСЕХ ВУЗАХ КАЗАХСТАНА</div>
                     </div>
-                    <div onclick="window.location='{{url('faq/select-profession')}}'" class="clickable-el d-table three-tables">
+                    <div onclick="window.location='{{url('faq/select-profession')}}'" class="clickable-el d-table bg-plate three-tables">
                         <div class="align-middle d-table-cell text-center text-white">ВОПРОСЫ И ОТВЕТЫ</div>
                     </div>
                 </div>
@@ -122,7 +125,7 @@
                             <h3 class="color-2D7ABF">ВУЗы в городах Казахстана</h3>
                         </div>
                         <div class="slide-teaser-slider-wrapper">
-                            <ul class="row m-0 list-unstyled">
+                            <ul class="row pl-0 m-0 list-unstyled">
                                 @foreach($cityslider as $k => $v)
                                     <li class="col-md-6 col-lg-4 post-teaser">
                                         <div class="teaser-inner">
@@ -229,7 +232,7 @@
                     @foreach($partners as $k => $v)
                         <div class="">
                             <a href="{{$v->link}}" target="_blank">
-                                <img class="m-auto img-fluid" src="{{asset("/img/partners/$v->image")}}">
+                                <img style="height: 120px" class="m-auto img-fluid" src="{{asset("/img/partners/$v->image")}}">
                             </a>
                         </div>
                     @endforeach
@@ -237,4 +240,9 @@
             </div>
         </div>
     </div>
+    <script !src="">
+        $('.directionc').chosen();
+        $('.cityc').chosen();
+        $('.degreec').chosen();
+    </script>
 @endsection
