@@ -28,27 +28,14 @@ class AjaxController extends Controller
 {
     public function doctorFilter($page, Request $request, $query = null){
         $a = json_decode($request->get('a'));
-        $degree = 0;
-        $city_id = 0;
-        $direction_id = 0;
-        if ($a->degree){
-            $degree = $a->degree;
-        }
-        if ($a->sphere){
-            $direction_id = $a->sphere;
-            $subDir = Subdirection::where('direction_id', $a->sphere)->get();
-        }
-        else {
-            $subDir = Subdirection::all();
-        }
+        $degree = $a->degree;
         if ($a->region){
-            $city_id = $a->region;
-            $us = University::where('city_id', $a->region);
+            $us = University::where('city_id', $a->region)->get();
         }
         else {
             $us = University::all();
         }
-        $costs = PagesController::mainFilter($degree, $direction_id, $city_id, $query);
+        $costs = PagesController::mainFilter($a->degree, $a->studyForm, $a->region, $query);
         if ($a->when){
             if ($a->when == 'after9' ){
                 $costs = $costs->where('income', 'После 9 класса')->values();
@@ -65,10 +52,17 @@ class AjaxController extends Controller
                 $costs = $costs->where('education_form', 'Заочная')->values();
             }
         }
+        if ($a->sphere){
+            $costs = $costs->whereIn('specialty_id', Specialty::whereIn('subdirection_id', Subdirection::where('direction_id', $a->sphere)->pluck('id')->toArray())->pluck('id')->toArray())->values();
+            $subDir = Subdirection::where('direction_id', $a->sphere)->get();
+        }
+        else {
+            $subDir = Subdirection::all();
+        }
+        $dirs = Direction::all();
         if ($a->direction){
-            $costs = $costs->whereIn('specialty_id', Specialty::where('subdirection_id', $a->direction)->pluck('id')->toArray());
+            $costs = $costs->whereIn('specialty_id', Specialty::where('subdirection_id', $a->direction)->pluck('id')->toArray())->values();
             $specs = Specialty::where('subdirection_id', $a->direction)->get();
-
         }
         else {
             $specs = Specialty::all();
@@ -78,13 +72,20 @@ class AjaxController extends Controller
         }
         if ($a->univer){
             $costs = $costs->where('university_id', $a->univer)->values();
-            //dd($costs);
         }
         if ($a->uniType){
-            $costs = $costs->whereIn('university_id', University::where('type_id', $a->uniType)->pluck('id')->toArray());
+            $costs = $costs->whereIn('university_id', University::where('type_id', $a->uniType)->pluck('id')->toArray())->values();
         }
-        $dirs = Direction::all();
-        $sub = Subject::all();
+        if ($a->startCost){
+            $costs = $costs->where('price', '>=', $a->startCost)->values();
+        }
+        if ($a->endCost){
+            $costs = $costs->where('price', '<=', $a->endCost)->values();
+        }
+        if ($a->pagSelect){
+            $page = $a->pagSelect;
+        }
+        $subs = Subject::all();
         $sp = Sphere::all();
         $cs = City::all();
         $ts = Type::all();
@@ -102,23 +103,23 @@ class AjaxController extends Controller
                 $costs = $costs->sortBy('price')->values();
                 break;
         }
-        $result = '';
-        if ($degree == 1) {
+        if ($a->degree == 1) {
             $map = 'Главная , Бакалавриат';
         }
-        elseif ($degree == 2){
+        elseif ($a->degree == 2){
             $map = 'Главная , Магистратура';
         }
-        elseif($degree == 3) {
+        elseif($a->degree == 3) {
             $map = 'Главная , Докторантура';
         }
         else {
             $map = 'Главная , Специалности';
         }
-        $result = view('filter', compact(['degree', 'dirs', 'direction_id', 'subDir',
-            'specs', 'sub', 'sp', 'cs', 'ts', 'city_id', 'us', 'costs', 'page', 'query', 'map']))
-            ->render();
-        return Response($result);
+        $city_id = $a->region;
+        $studyForm = $a->studyForm;
+        $result = view('filter', compact('a', 'degree', 'dirs', 'subDir','specs', 'subs', 'sp',
+            'cs', 'ts', 'us', 'costs', 'page', 'query', 'studyForm', 'city_id', 'map'));
+        return $result;
     }
 
     public function getCity(){

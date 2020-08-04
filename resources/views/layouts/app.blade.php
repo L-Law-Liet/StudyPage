@@ -8,6 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <?
+
+    setlocale(LC_MONETARY,"de_DE");
         $url = $_SERVER['REQUEST_URI'];
         if ($url != '/') {
             $url = preg_replace("/\&search.+/", "", $url);
@@ -42,7 +44,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/slick.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?v=1') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{asset('css/chosen.min.css')}}" rel="stylesheet" type="text/css">
 @stack('css')
@@ -110,8 +112,8 @@
                                  <? } ?>
                                  @if(Auth::check())
                                      <li class="log-cab ml-4 mt-1 d-inline-block">
-                                                <div class="d-inline mr-4">
-                                                    <u><a class="d-inline" id="logged" href="#">Пополнить счет</a></u><b id="balance">{{Auth::user()->bill}} ед.</b>
+                                                <div class="d-inline mr-3">
+                                                    <u><a class="d-inline" id="logged" href="#">Пополнить счет</a></u><b id="balance">{{number_format(Auth::user()->bill, 0, "", " ")}} ед.</b>
                                                 </div>
 
                                                 <a id="cabinetDropdown" class="float-right nav-link p-0" href="#" aria-expanded="false"
@@ -135,7 +137,7 @@
                                              <a id="register" class="float-right" href="#">
                                                  Регистрация
                                              </a>
-                                             <span class="border-0 mr-2 float-right">/</span>
+                                             <span class="border-0 mr-2 float-right color-2D7ABF">/</span>
                                              <img style="width: 30px; height: 18px" src="{{asset('/img/login.svg')}}">
                                              <a id="login" class="float-right" href="#">
                                                  Вход
@@ -194,10 +196,10 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav {{ isset($is_main) ? 'is_index' : '' }}">
                     <li class="nav-item">
-                        <a class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{url('college')}}">КОЛЛЕДЖИ</a>
+                        <a class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{route('doctor', [4, 0])}}">КОЛЛЕДЖИ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{url('university-school', 0)}}">ВУЗЫ</a>
+                        <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{route('doctor', [1, 0])}}">ВУЗЫ</a>
                     </li>
                     <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} position-relative nav-item">
                     <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(($active ?? '') == 'rating')active @endif">РЕЙТИНГ</a>
@@ -239,7 +241,7 @@
                                         </div>
                                         <div class="nav-items">
                                             <img style="margin-bottom: 3px;" src="{{asset('/img/arrow-dots-black.svg')}}" alt="->">
-                                            <a href="{{url('faq/select-profession')}}">ВОПРОСЫ И ОТВЕТЫ</a>
+                                            <a href="{{url('faq')}}">ВОПРОСЫ И ОТВЕТЫ</a>
                                         </div>
                                     </div>
                                 </div>
@@ -256,15 +258,13 @@
         </div>
     </nav>
     <div id="map" class="container">
+        @if($map??'')
         @if(str_contains($map, ','))
             <div class="subnav">
                 @php
                     $map = isset($map) ? $map : '';
-                    $map = preg_split("/[,]+/", $map);
-                    $k = array_search(' Список колледжей ', $map);
-                if ($name ?? '' == 'univer' && $k){
-                    $map[$k] = ' Список ВУЗов ';
-                }
+                    $map = preg_split("/[ ][,]+/", $map);
+
 
                     $lastMap = $map[count($map)-1];
                     for ($i = 0; $i < count($map)-1; $i++){
@@ -279,7 +279,7 @@
                                 $path = 'university/list/multiprofile/1';
                                 break;
                         }
-                        echo "<a href=\"".url($path??'#')."\">$map[$i]</a>";
+                        echo "<a class=\"underline\" href=\"".url($path??'#')."\">$map[$i]</a>";
                 @endphp
                 <img src="{{asset('img/faq-arrow-right.svg')}}">
                 @php
@@ -288,10 +288,15 @@
                 @endphp
             </div>
             @endif
+            @else
+
+            <div class="subnav pl-0">
+                <a href="{{url()->previous()}}"><span><img class="mr-2" src="{{asset('img/arrow-left.svg')}}" alt=""></span>Вернуться к результатам поиска</a>
+            </div>
+        @endif
     </div>
     @yield('subnav')
-    <div class="clearfix mb-4"></div>
-    <main class="">
+    <main class="mt-3">
         <div id="myModal" class="modal">
 
             <!-- Modal content -->
@@ -485,16 +490,16 @@
                             <span>Навигатор</span>
                             <ul>
                                 <li>
-                                    <a href="{{url('list')}}">Рейтинг</a>
+                                    <a href="{{url('university/list/multiprofile', 2)}}">Рейтинг колледжей</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('university/list/multiprofile', 1)}}">Рейтинг ВУЗов</a>
                                 </li>
                                 <li>
                                     <a href="{{url('list/college')}}">Список колледжей</a>
                                 </li>
                                 <li>
                                     <a href="{{url('list/univer')}}">Список ВУЗов</a>
-                                </li>
-                                <li>
-                                    <a href="{{url('faq/select-profession')}}">Вопросы и ответы</a>
                                 </li>
                             </ul>
                         </li>

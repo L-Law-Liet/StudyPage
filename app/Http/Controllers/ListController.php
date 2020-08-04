@@ -49,14 +49,10 @@ class ListController extends Controller
                 $L = 'Заочная';
             }
             $s = $s->where('education_form', $L);
-//            $subdirectionIds = Subdirection::select('id')
-//                ->where('direction_id', $direction_id)->get()->toArray();
-//            $s = $s->whereHas('relSpecialty', function ($q) use ($subdirectionIds) {
-//                $q->whereIn('subdirection_id', $subdirectionIds);
-//            });
         }
         $ar['specialties'] = $s->paginate(10000);
         $ar['count'] = $ar['specialties']->total();
-        return $ar['count'];
+
+        return number_format($ar['count'], 0, "", " ");
     }
 }

@@ -59,7 +59,7 @@
                                 </select>
                             </div>
                             <div class="form-group oG">
-                                <p class="m-t-18" style="text-align: right;">Доступно <span class="cc">{{ $cost_count }}</span> специальностей</p>
+                                <p class="m-t-18" style="text-align: right;">Доступно <span class="cc">{{ number_format($cost_count, 0, "", " ") }}</span> специальностей</p>
                             </div>
                         </div>
                         <div class="col-4">

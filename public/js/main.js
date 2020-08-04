@@ -834,71 +834,18 @@ setTimeout(fade_out, 6000);
 function fade_out() {
 	$("#messagError").fadeOut().empty();
 }
-function dopFilter(event) {
-	if (event.target.id == 'degreeSelect'){
-		if (event.target.value == '1'){
-			document.getElementById('sfera').style.display = 'none';
-			document.getElementById('forma').style.display = 'none';
-			document.getElementById('sferaSelect').value = '';
-			document.getElementById('formaSelect').value = '';
-			document.getElementById('income').style.display = 'block';
-		}
-		else if(event.target.value == '2' || event.target.value == '3'){
-			document.getElementById('forma').style.display = 'block';
-			document.getElementById('income').style.display = 'none';
-			document.getElementById('1prof').style.display = 'none';
-			document.getElementById('2prof').style.display = 'none';
-			document.getElementById('incomeSelect').value = '';
-			document.getElementById('1profSelect').value = '';
-			document.getElementById('2profSelect').value = '';
-		}
-		else {
-			document.getElementById('sfera').style.display = 'none';
-			document.getElementById('forma').style.display = 'none';
-			document.getElementById('sferaSelect').value = '';
-			document.getElementById('formaSelect').value = '';
-			document.getElementById('income').style.display = 'none';
-			document.getElementById('1prof').style.display = 'none';
-			document.getElementById('2prof').style.display = 'none';
-			document.getElementById('incomeSelect').value = '';
-			document.getElementById('1profSelect').value = '';
-			document.getElementById('2profSelect').value = '';
-		}
+function hideSubject(e) {
+	console.log('HS');
+	if (e.target.id == 'ent-calc-1prof'){
+		let L = 'sid'+ e.target.value;
+		console.log(L);
+		$('option').prop('disabled', false);
+		$('#'+L).prop('disabled', true);
 	}
-	if (event.target.id == 'incomeSelect'){
-		if (event.target.value == 'afterSchool'){
-			document.getElementById('1prof').style.display = 'block';
-			document.getElementById('2prof').style.display = 'block';
-			document.getElementById('forma').style.display = 'block';
-		}
-		else {
-			document.getElementById('formaSelect').value = '';
-			document.getElementById('forma').style.display = 'none';
-			document.getElementById('1prof').style.display = 'none';
-			document.getElementById('2prof').style.display = 'none';
-			document.getElementById('1profSelect').value = '';
-			document.getElementById('2profSelect').value = '';
-		}
-	}
-	if (event.target.id == 'oblSelect'){
-		if (event.target.value){
-			document.getElementById('dir').style.display = 'block';
-		}
 	else {
-			document.getElementById('dir').style.display = 'none';
-			document.getElementById('grup').style.display = 'none';
-			document.getElementById('dirSelect').value = '';
-			document.getElementById('grupSelect').value = '';
-		}
-	}
-	if (event.target.id == 'dirSelect'){
-		if (event.target.value){
-			document.getElementById('grup').style.display = 'block';
-		}
-		else {
-			document.getElementById('grup').style.display = 'none';
-			document.getElementById('grupSelect').value = '';
-		}
+		let L = 'fid'+ e.target.value;
+		console.log(L);
+		$('option').prop('disabled', false);
+		$('#'+L).prop('disabled', true);
 	}
 }
-

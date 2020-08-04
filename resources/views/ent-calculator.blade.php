@@ -73,18 +73,18 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <select required class="form-control sgs-sort sortorder chsn" name="1profSelect">
+                                        <select onchange="hideSubject(event)" id="ent-calc-1prof" required class="form-control sgs-sort sortorder chosen" name="1profSelect">
                                             <option value="">1-й профильный предмет</option>
                                             @foreach($ss as $s)
-                                                <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                                                <option id="fid{{$s->id}}" value="{{$s->id}}">{{$s->name_ru}}</option>
                                                 @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select id="ent-calc-2prof" required class="form-control sgs-sort sortorder chsn" name="2profSelect">
+                                        <select onchange="hideSubject(event)" id="ent-calc-2prof" required class="form-control sgs-sort sortorder chosen" name="2profSelect">
                                             <option value="">2-й профильный предмет</option>
                                             @foreach($ss as $s)
-                                                <option value="{{$s->id}}">{{$s->name_ru}}</option>
+                                                <option id="sid{{$s->id}}" value="{{$s->id}}">{{$s->name_ru}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -123,6 +123,36 @@
                 </div>
     </div>
     <script>
+        $(".chosen").chosen().on('change', function(evt, params) {
+            // console.log('GGGGG:', params);
+            // if (params.deselected !== undefined) {
+            //     $(this).find('option').not(':selected').map(function() {
+            //         if ($(this).attr('value') == params.deselected){
+            //             let L = $(this).prop('value');
+            //             console.log($(this).prop('id')[0], '11111');
+            //             if($(this).prop('id')[0] == 'f'){
+            //                 $('#sid' + L).prop('disabled', false).trigger("chosen:updated");
+            //             }
+            //             else {
+            //                 $('#fid' + L).prop('disabled', false).trigger("chosen:updated");
+            //             }
+            //         }
+            //     });
+            // }
+            if (params.selected !== undefined) {
+                $(this).find('option:selected').map(function() {
+                    if ($(this).attr('value') == params.selected) {
+                        let L = $(this).prop('value');
+                        if($(this).prop('id')[0] == 'f'){
+                            $('#sid' + L).prop('disabled', true).trigger("chosen:updated");
+                        }
+                        else {
+                            $('#fid' + L).prop('disabled', true).trigger("chosen:updated");
+                        }
+                    }
+                });
+            }
+        });
 
         function max20(event) {
             if(event.target.value > 20){

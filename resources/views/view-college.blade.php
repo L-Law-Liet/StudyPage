@@ -1,22 +1,12 @@
 @extends('layouts.app')
-@section('css')
-    <style>
-        main.mt-5 {
-            margin-top: 0 !important;
-        }
-    </style>
-@endsection
 @section('content')
 
     <div class="container">
         <div class="studiengangsuche sgs-detail" id="studiengangsuche">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <p class="back-link">
-                        <a href="{{url()->previous()}}"><span><img class="mr-2" src="{{asset('img/arrow-left.svg')}}" alt=""></span>Вернуться к результатам поиска</a>
-                    </p>
-                    <div class="sgs-adress-header">
-                        <h2>
+                    <div class="sgs-adress-header pb-3">
+                        <h2 class="mb-0">
                             <div>
                                <span class="sgs-rod"> {{$s->name_ru}} </span>
                             </div>
@@ -45,7 +35,7 @@
                             <h3>{{$f[0]}}</h3>
                             <p> {{$requirement->relDegree->name_ru}} </p>
                             <h3>Стоимость обучения</h3>
-                            <p> {{\App\Models\CostEducation::where('specialty_id', $s->id)->where('university_id', $u->id)->first()->price}} тенге / год</p>
+                            <p> {{number_format(\App\Models\CostEducation::where('specialty_id', $s->id)->where('university_id', $u->id)->first()->price, 0, "", " ")}} тенге / год</p>
                             <h3>{{$f[1]}}</h3>
                             <p> {{$f[2]}} </p>
                             @if($f[3] ?? '')

@@ -10,17 +10,16 @@
     </style>
 @endsection
 @section('content')
-    @include('college/subnav')
 
-    <div class="container">
+    <div class="container pt-2">
         <div class="row">
             <div class="col-8">
                 <div id="college-view-right">
-                    <h3 class="text-center">ДОКУМЕНТЫ ДЛЯ ПОСТУПЛЕНИЯ</h3>
-                    <div>
+                    <h4 class="text-center mb-4">{{$header}}</h4>
+                    <div class="text-justify">
                         <div class="cv-text">
                             <p>
-                                {{$university->docs_income}}
+                               {{$data}}
                             </p>
                         </div>
                     </div>

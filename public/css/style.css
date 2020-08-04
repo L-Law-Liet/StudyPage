@@ -81,7 +81,24 @@ h1, .h1, h2, .h2, h3, .h3, p.roof, .secondary-box.info h3, .secondary-box.info .
     height: auto;
 }
 .navbar-collapse{
-    background: url('../img/dotshorizontal_mainnavi.png') repeat-x 0 100%;
+    /*background: url('../img/dotshorizontal_mainnavi.png') repeat-x 0 0;*/
+    background-image: linear-gradient(to right, #b5b0b0 33%, rgba(255,255,255,0) 0%);
+    background-position: bottom;
+    background-size: 3.5px 1px;
+    background-repeat: repeat-x;
+    position: relative;
+}
+.navbar-collapse:before {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    content: '';
+    display: inline-block;
+    height: 1px;
+    background-image: linear-gradient(to right, #b5b0b0 33%, rgba(255,255,255,0) 0%);
+    background-position: bottom ,top;
+    background-size: 3.5px 1px;
+    background-repeat: repeat-x;
 }
 @media (min-width: 768px) {
     .navbar-expand-md .navbar-nav .nav-link {
@@ -565,7 +582,7 @@ a.secondary:before {
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 .right-block {
-    background: url(../img/dotsvertical.png) repeat-y 1% top;
+    background: url(../img/dotsvertical.png) repeat-y 0 top;
 }
 .sgs-list-header {
     margin: 0;
@@ -588,7 +605,6 @@ ul.sgs-list-ul {
 .pagination-block {
     height: 54px;
     margin: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
     border-radius: 3px;
 }
 h3 {
@@ -788,7 +804,7 @@ h1, .h1, h2, .h2, h3, .h3, .wohnheimfinder legend, .btn-primary, .nav-tabs>li>a,
 }
 .three-tables{
     padding: 70px 12px;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 31px;
     letter-spacing: -0.02em;
     text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
@@ -1066,12 +1082,20 @@ button.slick-prev, button.slick-next, .partners button.slick-next, .partners but
 }
 .city-teaser .slick-prev:before, .partners button.slick-prev:before {
     margin-right: 5px;
-    content: url("../img/chevron-left.svg");
+    background-image: url("../img/chevron-left.svg");
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
 
 }
 .city-teaser .slick-next:before, .partners button.slick-next:before {
     margin-left: 5px;
-    content: url("../img/chevron-right.svg");
+    background-image: url("../img/chevron-right.svg");
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
 }
 .partners button.slick-prev:hover, button.slick-next:hover {
     opacity: 1;
@@ -1083,6 +1107,14 @@ button.slick-prev, button.slick-next, .partners button.slick-next, .partners but
     width: 30px;
     border-bottom-right-radius: 60px;
     border-top-right-radius: 60px;
+}
+.partners button.slick-arrow {
+    max-height: 40px;
+    max-width: 20px;
+}
+.partners button.slick-arrow:before {
+    margin-top: 20%;
+    background-size: 80%;
 }
 #Ziti .slick-next, .partners button.slick-next {
     background: rgba(0,0,0,.6);
@@ -1222,10 +1254,9 @@ ul.social-icons li a:not(#login):not(#register):not(#logged):not(#cabinetDropdow
     color: #555555;
 }
 .ent-tbody td {
-    vertical-align: middle;
+    vertical-align: top;
     padding: 10px;
 }
-
 #ent-table {
     border-spacing: 4px;
 }
@@ -1973,15 +2004,12 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
 }
 .multi-profile-list li, .faq-list li, .cv-list li, ul selected-cv {
     list-style: none;
-    background: url('../img/horizontal-dots.svg') repeat-x left bottom !important;
-    padding: 7px 15px;
-}
-.faq-list:first-child:before {
-    display: block;
-    height: 10px;
-    width: 100%;
-    content: ' ';
-    background: url('../img/horizontal-dots.svg') repeat-x left bottom !important;
+    background-image: linear-gradient(to right, #b5b0b0 33%, rgba(255,255,255,0) 0%);
+    background-position: bottom;
+    background-size: 3.5px 1px;
+    background-repeat: repeat-x;
+    position: relative;
+    padding: 7px 0;
 }
 .ent-subtitle {
     font-style: normal;
@@ -1991,14 +2019,11 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
     text-align: center;
     color: #212529;
 }
-.multi-profile-list li:not(:nth-child(1)):not(:nth-child(8))  a, .faq-list li:not(:first-child) a, .cv-list li:not(.selected-cv) a{
+.multi-profile-list li a, .faq-list li a, .cv-list li:not(.selected-cv) a{
     color: black;
 }
 .multi-profile-list li a, .faq-list li a, .cv-list li a {
     text-decoration: none;
-}
-.multi-profile-list li:nth-child(1), .multi-profile-list li:nth-child(8) {
-    background: url(../img/multi-profile-arrow-down.svg) no-repeat 1% center;
 }
 .faq-list li img, .cv-list li img {
     margin: 0 8px 4px 0;
@@ -2010,25 +2035,30 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
     color: #C11800 !important;
 }
 .multi-profile-list, .faq-list, .cv-list {
-    padding: 5px;
     padding-bottom: 25px;
-    background: url(../img/dotsvertical.png) repeat-y 0% top;
+    background: url(../img/dotsvertical.png) repeat-y 0 top;
+    padding-left: 15px;
+    height: 100%;
 }
 .subnav {
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
     line-height: 15px;
-    background: url('../img/dots-horizontal.svg') no-repeat 50% 95%;
-    padding: 15px 10px;
+    background-image: linear-gradient(to right, #b5b0b0 33%, rgba(255,255,255,0) 0%);
+    background-position: bottom;
+    background-size: 3.5px 0.8px;
+    background-repeat: repeat-x;
+    position: relative;
+    padding: 18.8px 10px;
     margin-bottom: 10px;
+}
+.Img:hover {
+    filter: brightness(0);
 }
 .subnav-last-child {
     font-weight: 600;
     color: #2D7ABF;
-}
-#college-view-right {
-    margin-top: 30px;
 }
 #college-view-right h3 {
     font-style: normal;
@@ -2101,7 +2131,7 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
 .media-div:nth-child(odd) {
     background: #767676;
 }
-.chsn:invalid {
+.chsn:invalid, .chosen:invalid {
     z-index: -1;
     left: 20px;
     top: 20px;
@@ -2124,6 +2154,23 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
 }
 #ent-calc-2prof {
     top: 70px;
+}
+.red-hover:hover {
+    color: red;
+}
+.w-8 {
+    min-width: 8% !important;
+    max-width: 8% !important;
+}
+.ent-href {
+    color: black;
+    text-decoration: none !important;
+}
+.ent-href:hover {
+    color: #c11800;
+}
+.underline {
+    text-decoration: underline;
 }
 #faq h3 {
     font-style: normal;
@@ -2385,7 +2432,7 @@ table:not(#ent-table) {
 }
 #select-div:after {
     top: 5px;
-    left: 102px;
+    right: 15%;
     height: 100%;
     position: absolute;
     content: url("../img/pagination-down.svg");

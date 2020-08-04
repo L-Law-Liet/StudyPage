@@ -7,6 +7,7 @@ use App\GrantsDiscounts;
 use App\Models\City;
 use App\Models\CostEducation;
 use App\Models\Direction;
+use App\Models\Faq;
 use App\Models\Parner;
 use App\Models\Requirement;
 use App\Models\Specialty;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class PagesController extends Controller
 {
@@ -37,42 +39,37 @@ class PagesController extends Controller
         return view('college')->with('costs', $costs)->with('page', $pages)->with('active', 'college')->with('map', 'Главная , Колледж');
     }
     public function viewCollege($sid, $uid){
-        $map = 'Главная , Колледж , Обзор';
         $u = University::find($uid);
         $speciality = Specialty::find($sid);
         $ar['requirement'] = Requirement::where('degree_id', 1)->first();
         $features = [ 'Квалификация' , 'Поступление в колледж', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income];
         if ($speciality->degree_id == 2){
-            $map = 'Главная , Магистратура , Обзор';
             $ar['requirement'] = Requirement::where('degree_id', 2)->first();
             $features = [ 'Степень обучения' , 'Сфера направления', $speciality->relSphere->name_ru];
         }
         else if ($speciality->degree_id == 3){
-            $map = 'Главная , Докторантура , Обзор';
             $ar['requirement'] = Requirement::where('degree_id', 3)->first();
             $features = [ 'Степень обучения' , 'Сфера направления', $speciality->relSphere->name_ru ];
         }
         else if(CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income == 'После 9 класса'){
-            $map = 'Главная , ВУЗ , Обзор';
             $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профильный предмет', $speciality->relSubject->name_ru ];
         }
         else if (CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income == 'После школы'){
             $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профессиональные дисциплины', $speciality->relSubdirection->name_ru ];
-            $map = 'Главная , Бакалавриат , Обзор';
-        }
+    }
         if (str_contains(url()->previous(), '/college')) {
             $hrefTitle = 'college';
         }
         else {
             $hrefTitle = 'univer';
         }
-        return view('view-college')->with('s', $speciality)->with('u', $u)->with('requirement', $ar['requirement'])->with('map', $map)->with('f', $features)->with('href', $hrefTitle);
+        return view('view-college')->with('s', $speciality)->with('u', $u)->with('requirement', $ar['requirement'])->with('f', $features)->with('href', $hrefTitle);
     }
     public function viewUniver($id){
 //        $u = University::find($id);
 
         $ar['requirement'] = Requirement::where('degree_id', 1)->first();
-        return view('view-univer')->with('requirement', $ar['requirement'])->with('map', 'Главная , Университет , Обзор')/*->with('college', $u)*/;
+        return view('view-univer')->with('requirement', $ar['requirement'])/*->with('college', $u)*/;
     }
     public function showUniversityAfterSchool($pages = 0){
         $specialities = Specialty::where('degree_id', 1)->get();
@@ -118,21 +115,23 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         $ar['specialties'] = $s->where('specialties.name_ru', 'LIKE', '%'.$query.'%');
     }
     if ($direction_id != 0) {
-        $subdirectionIds = Subdirection::select('id')
-            ->where('direction_id', $direction_id)->get()->toArray();
-        $s = $s->whereHas('relSpecialty', function ($q) use ($subdirectionIds) {
-            $q->whereIn('subdirection_id', $subdirectionIds);
-        });
+        if ($direction_id == 1){
+            $L = 'Очная (дневная)';
+        }
+        else{
+            $L = 'Заочная';
+        }
+        $s = $s->where('education_form', $L);
     }
     $S = $s->get();
     return $S;
 }
     public function showDoctor($degree, $page, Request $request){
         $city_id = 0;
-        $direction_id = 0;
+        $studyForm = 0;
         $query = null;
-        if ($request->get('direction_id')){
-            $direction_id = $request->get('direction_id');
+        if ($request->get('studyForm')){
+            $studyForm = $request->get('studyForm');
         }
         if ($request->get('city_id')){
             $city_id = $request->get('city_id');
@@ -140,10 +139,10 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         if ($request->get('search')){
             $query = $request->get('search');
         }
-        $costs = PagesController::mainFilter($degree, $direction_id, $city_id, $query);
+        $costs = PagesController::mainFilter($degree, $studyForm, $city_id, $query);
         $directions = Direction::all();
         $subDir = Subdirection::all();
-        $sub = Subject::all();
+        $subs = Subject::all();
         $sp = Sphere::all();
         $cs = City::all();
         $ts = Type::all();
@@ -161,32 +160,18 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         else {
             $map = 'Главная , Специалности';
         }
-        return view('doctor', ['dirs' => $directions, 'subDir' => $subDir, 'sub' => $sub, 'sp' => $sp, 'us' => $us, 'specs' => $specs,
+        $a = (object) array('sphere' => null, 'direction' => null, 'programGroup' => null, 'when' => null, 'startCost' => null, 'endCost' => null,
+            'firstSubject' => null, 'secondSubject' => null, 'sphereDirect' => null, 'univer' => null, 'uniType' => null, 'sort' => null);
+        return view('doctor', ['dirs' => $directions, 'subDir' => $subDir, 'subs' => $subs, 'sp' => $sp, 'us' => $us, 'specs' => $specs,
             'ts' => $ts, 'cs' => $cs])->with('costs', $costs)->with('page', $page)->with('degree', $degree)
-            ->with('query', $query)->with('dir_id', $request->get('direction_id'))->with('city_id', $request->get('city_id'))->with('map', $map);
+            ->with('query', $query)->with('studyForm', $studyForm)->with('city_id', $request->get('city_id'))->with('map', $map)->with('a', $a);
     }
 
 
-    public function showFAQSelectProfession(){
-        return view('faq.select-prof')->with('active', 'select-prof')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
-    }
-    public function showFAQGoodUni(){
-        return view('faq.good')->with('active', 'good')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
-    }
-    public function showFAQFutureProfession(){
-        return view('faq.future')->with('active', 'future')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
-    }
-    public function showFAQOpenDoors(){
-        return view('faq.open-door')->with('active', 'open-door')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
-    }
-    public function showFAQToCollege(){
-        return view('faq.college')->with('active', 'college')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
-    }
-    public function showFAQToUni(){
-        return view('faq.univer')->with('active', 'univer')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
-    }
-    public function showFAQEntCalc(){
-        return view('faq.calc')->with('active', 'calc')->with('map', 'Главная , Навигатор , Вопросы и ответы')->with('navActive', 1);
+    public function showFAQ($id = 1){
+        $faq = Faq::find($id);
+        $navActive = true;
+        return view('faq.select-prof', compact('faq', 'navActive'))->with('map', 'Главная , '.$faq->question);
     }
 
     public function collegeList(){
@@ -277,7 +262,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         if($a->getCost()->passing_score == $b->getCost()->passing_score){ return 0 ; }
         return ($a->getCost()->passing_score > $b->getCost()->passing_score) ? -1 : 1;
     }
-    public function entResult2($type, $entScore, $profs1, $profs2){
+    public function entResult2($type, $entScore, $profs1, $profs2, $page = 0){
         $array = [];
         $title = '';
         $n = 0;
@@ -334,13 +319,12 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
                 return redirect()->action('IndexController@index');
         }
         usort($array, array('App\Http\Controllers\PagesController', 'L'));
-        return view('ent-result2', ['score' => $entScore, 'title' => $title])->with('map', 'Главная , Калькулятор ЕНТ , Результаты')->with('array', $array);
+        return view('ent-result2', compact('page', 'type', 'profs1', 'profs2'), ['score' => $entScore, 'title' => $title])->with('map', 'Главная , Калькулятор ЕНТ , Результаты')->with('array', $array);
     }
-    public  function multiRating($type, $id = 0){
+    public  function multiRating($type, $id = 1){
         $class = $type;
         if ($type == 1){
             $map = 'Главная , Рейтинг ВУЗов';
-            $ratingName = 'Рейтинг ВУЗов - 2020';
             if ($id){
                 $map .= ' , '.Profile::find($id)->name;
                 $us = University::whereIn('id', ProfileUniversity::where('profile_id', $id)->pluck('university_id')->toArray())->get();
@@ -349,55 +333,89 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         }
         elseif($type == 2) {
             $map = 'Главная , Рейтинг Колледжей';
-            $ratingName = 'Рейтинг Колледжей - 2020';
             if ($id){
                 $map .= ' , '.Profile::find($id)->name;
                 $us = University::whereIn('id', ProfileUniversity::where('profile_id', $id)->pluck('university_id')->toArray())->get();
                 $class .= $id;
             }
         }
-        if (!$id){
-            $us = University::all();
-        }
-       return view('rating.multiprofile-rating', compact('type', 'ratingName'))->with('map', $map)->with('class', $class)->with('us', $us)->with('active', 'rating');
+       return view('rating.multiprofile-rating', compact('type'))->with('map', $map)->with('class', $class)->with('us', $us)->with('active', 'rating');
     }
     public function viewCollegeFromList($id, $name){
         $university = University::find($id);
         if ($name == 'college'){
-            $nav = 'колледже';
+            $map = 'Главная , Навигатор , Список колледжей , '.$university->name_ru.' , О колледже';
         }
         else {
-            $nav = 'ВУЗе';
+            $map = 'Главная , Навигатор , Список ВУЗов , '.$university->name_ru.' , О ВУЗе';
         }
-        return view('college.college-view')->with('university', $university)->with('class', 'view')->with('map', 'Главная , Навигатор , Список колледжей , О '.$nav)->with('name', $name);
+        return view('college.college-view', compact('map'))->with('university', $university)->with('class', 'view')->with('name', $name);
     }
-    public function achievementsCollegeFromList($id, $name){
+    public function attributesCollegeFromList($id, $name, $nav){
         $university = University::find($id);
-        return view('college.college-achieves')->with('university', $university)->with('class', 'achieve')->with('map', 'Главная , Навигатор , Список колледжей , Достижения')->with('name', $name);
-    }
-    public function coopCollegeFromList($id, $name){
-        $university = University::find($id);
-        return view('college.college-coop')->with('university', $university)->with('class', 'coop')->with('map', 'Главная , Навигатор , Список колледжей , Сотрудничество')->with('name', $name);
-    }
-    public function ratingCollegeFromList($id, $name){
-        $university = University::find($id);
-        return view('college.college-rating')->with('university', $university)->with('class', 'rating')->with('map', 'Главная , Навигатор , Список колледжей , Рейтинг')->with('name', $name);
+        if ($name == 'college'){
+            $map = 'Главная , Навигатор , Список колледжей , '.$university->name_ru;
+        }
+        else {
+            $map = 'Главная , Навигатор , Список ВУЗов , '.$university->name_ru;
+        }
+        switch ($nav){
+            case 1:
+                $header = 'ДОСТИЖЕНИЯ';
+                $data = $university->achievements;
+                $class = 'achieve';
+                $map .= ' , Достижения';
+                break;
+            case 2:
+                $header = 'СОТРУДНИЧЕСТВО';
+                $data = $university->coop;
+                $class = 'coop';
+                $map .= ' , Сотрудничество';
+                break;
+            case 3:
+                $header = 'РЕЙТИНГ';
+                $data = $university->rating;
+                $class = 'rating';
+                $map .= ' , Рейтинг';
+                break;
+            case 4:
+                $header = 'ДОКУМЕНТЫ ДЛЯ ПОСТУПЛЕНИЯ';
+                $data = $university->docs_income;
+                $class = 'docs';
+                $map .= ' , Документы для поступления';
+                break;
+        }
+        return view('college.college-attributes', compact('map', 'class', 'header', 'data', 'id'))->with('university', $university)->with('name', $name);
     }
     public function discountsCollegeFromList($id, $name){
         $university = University::find($id);
-        return view('college.college-discounts')->with('university', $university)->with('class', 'discounts')->with('map', 'Главная , Навигатор , Список колледжей , Гранты/Скидки')->with('name', $name);
+        if ($name == 'college'){
+            $map = 'Главная , Навигатор , Список колледжей , '.$university->name_ru.' , Гранты/Скидки';
+        }
+        else {
+            $map = 'Главная , Навигатор , Список ВУЗов , '.$university->name_ru.' , Гранты/Скидки';
+        }
+        return view('college.college-discounts', compact('map'))->with('university', $university)->with('class', 'discounts')->with('name', $name);
     }
     public function eduCollegeFromList($id, $name){
         $university = University::find($id);
-        return view('college.college-edu')->with('university', $university)->with('class', 'edu')->with('map', 'Главная , Навигатор , Список колледжей , Образовательные программы')->with('name', $name);
-    }
-    public function docsCollegeFromList($id, $name){
-        $university = University::find($id);
-        return view('college.college-docs')->with('university', $university)->with('class', 'docs')->with('map', 'Главная , Навигатор , Список колледжей , Документы для поступления')->with('name', $name);
+        if ($name == 'college'){
+            $map = 'Главная , Навигатор , Список колледжей , '.$university->name_ru.' , Образовательные программы';
+        }
+        else {
+            $map = 'Главная , Навигатор , Список ВУЗов , '.$university->name_ru.' , Образовательные программы';
+        }
+        return view('college.college-edu', compact('map'))->with('university', $university)->with('class', 'edu')->with('name', $name);
     }
     public function contactsCollegeFromList($id, $name){
         $university = University::find($id);
-        return view('college.college-contacts')->with('university', $university)->with('class', 'contacts')->with('map', 'Главная , Навигатор , Список колледжей , Контакты')->with('name', $name);
+        if ($name == 'college'){
+            $map = 'Главная , Навигатор , Список колледжей , '.$university->name_ru.' , Контакты';
+        }
+        else {
+            $map = 'Главная , Навигатор , Список ВУЗов , '.$university->name_ru.' , Контакты';
+        }
+        return view('college.college-contacts', compact('map'))->with('university', $university)->with('class', 'contacts')->with('name', $name);
     }
     public function showRegistrationForm(){
         $cs = City::all();
