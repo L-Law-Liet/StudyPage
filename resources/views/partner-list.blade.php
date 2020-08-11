@@ -7,7 +7,7 @@
                     <thead>
                     <tr>
                         <th class="w-30px">№</th>
-                        <th class="tl">Наименование организации</th>
+                        <th class="tl">Наименования организаций</th>
                         <th width="20%;">Регион</th>
                     </tr>
                     </thead>

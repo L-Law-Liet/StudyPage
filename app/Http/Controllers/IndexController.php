@@ -46,12 +46,14 @@ class IndexController extends Controller
     }
 
 
-    public function getCity($id){
-
+    public function getCity($id = 0){
+        if (!$id){
+            $id = City::where('active', 1)->orderBy('name_ru')->pluck('id')->first();
+        }
         $data['city'] = City::findOrFail($id);
         $data['cities'] = City::where('active', 1)->orderBy('name_ru')->pluck('name_ru', 'id')->all();
 
-        return view('city.view', $data)->with('map', 'Главная , Города , '.$data['city']->name_ru);
+        return view('city.view', $data)->with('map', 'Главная , ВУЗы в городах Казахстана , '.$data['city']->name_ru);
     }
 
     public function getNavigator($id){
@@ -70,7 +72,7 @@ class IndexController extends Controller
 
         $data['article'] = Article::findOrFail($id);
         if ($id == 1){
-            $map = 'Добавить ВУЗ';
+            $map = 'Добавить колледж/ВУЗ';
         }
         else if ($id == 2) {
             $map = 'О сайте';
@@ -79,10 +81,13 @@ class IndexController extends Controller
             $map = 'Рекламодателям';
         }
         else if ($id == 4) {
-            $map = 'Пользователям';
+            $map = 'Пользовательское соглашение';
+        }
+        else if ($id == 6) {
+            $map = 'Политика конфедициальности';
         }
         else {
-            $map = 'ВУЗам';
+            $map = 'Колледжам/ВУЗам';
         }
         return view('article', $data)->with('map', 'Главная , '.$map);
     }
@@ -100,28 +105,23 @@ class IndexController extends Controller
 
     public function postCallback(){
 
-
-
+        $l =
         $data = Input::all();
-
-
-
         $validator = Callback::validate($data);
         if(!$validator->fails()) { //Если проходит валидацю
             Callback::create($data);
+            $mail = Social::findOrFail(8);
+            $to_name = 'StudyPage';
+            $to_email = $mail->link;
+            $data = array('name'=>$data['name'], 'phone' => $data['phone'], 'email' => $data['email'], 'question' => $data['question']);
+            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+                $message->from('info.studypage@gmail.com', 'StudyPage')->to($to_email, $to_name)->subject('Обратная связь с сайта Studypage.net');
+            });
 
-//            $mail = Social::findOrFail(8);
-//            $to_name = 'StudPage';
-//            $to_email = $mail->link;
-//            $data = array('name'=>$data['name'], 'phone' => $data['phone'], 'email' => $data['email'], 'question' => $data['question']);
-//            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
-//                $message->to($to_email, $to_name)->subject('Обратная связь с сайта Studypage.net');
-//                $message->from('info.studypage@gmail.com', 'StudyPage');
-//            });
 
-            return redirect()->back()->with('success', 'Спасибо за обращение, Ваше письмо принято, мы скоро вам ответим');
+            return redirect('callback')->with('success', 'Спасибо за обращение, Ваше письмо принято, мы скоро вам ответим');
         } else{
-            return redirect()->back()->withInput()->withErrors(['errors' => $validator->errors()->all()]);
+            return redirect('callback')->withInput()->withErrors(['errors' => $validator->errors()->all()]);
         }
     }
 
@@ -132,17 +132,19 @@ class IndexController extends Controller
         if(!$validator->fails()) { //Если проходит валидацю
             Proposal::create($data);
 
-//            $mail = Social::findOrFail(8);
-//            $to_name = 'StudPage';
-//            $to_email = $mail->link;
-//            $data = array('contact_name'=>$data['contact_name'], 'university_name' => $data['university_name'], 'contact_phone' => $data['contact_phone'], 'email2' => $data['email']);
-//            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
-//                $message->to($to_email, $to_name)->subject('Обратная связь с сайта Studypage.net');
-//                $message->from('info.studypage@gmail.com', 'StudyPage');
-//            });
+            $mail = Social::findOrFail(8);
+            $to_name = 'StudPage';
+            $to_email = $mail->link;
+            $data = array('contact_name'=>$data['contact_name'], 'university_name' => $data['university_name'], 'contact_phone' => $data['contact_phone'], 'email2' => $data['email']);
+            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+                $message->to($to_email, $to_name)->subject('Обратная связь с сайта Studypage.net');
+                $message->from('info.studypage@gmail.com', 'StudyPage');
+            });
 
             return redirect()->back()->with('success', 'Спасибо за обращение, Ваше письмо принято, мы скоро вам ответим');
         } else{
+            $L = $validator->errors()->all();
+//            dd($L['0']);
             return redirect()->back()->withInput()->withErrors(['errors' => $validator->errors()->all()]);
         }
     }

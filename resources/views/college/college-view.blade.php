@@ -38,39 +38,33 @@
                              {{$university->description}}
                             </p>
                         </div>
-                        <div class="cv-media cv-content p-3">
+                        <div class="cv-media media-resources cv-content">
                             ВИДЕО
                             <div class="d-flex justify-content-between position-relative">
-                                <div class="position-absolute ml-2"
-                                style="top: 33%;">
-                                    <img src="{{asset('img/media-arrow-left.svg')}}" alt="">
-                                </div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="position-absolute mr-2"
-                                     style="top: 33%; right: 0%">
-                                    <img src="{{asset('img/media-arrow-right.svg')}}" alt="">
+
+                                <div class="slick-slider Autoplay w-100">
+                                    @foreach($partners as $k => $v)
+                                        <div class="">
+                                            <a href="{{$v->link}}" target="_blank">
+                                                <img style="width: 120px; height: 120px" class="m-auto img-fluid" src="{{asset("/img/partners/$v->image")}}">
+                                            </a>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-                        <div class="cv-media cv-content p-3">
+                        <div class="cv-media media-resources cv-content">
                             ГАЛЕРЕЯ
                             <div class="d-flex justify-content-between position-relative">
-                                <div class="position-absolute ml-2"
-                                     style="top: 33%;">
-                                    <img src="{{asset('img/media-arrow-left.svg')}}" alt="">
-                                </div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="media-div"></div>
-                                <div class="position-absolute mr-2"
-                                     style="top: 33%; right: 0%">
-                                    <img src="{{asset('img/media-arrow-right.svg')}}" alt="">
+
+                                <div class="slick-slider Autoplay w-100">
+                                    @foreach($partners as $k => $v)
+                                        <div class="">
+                                            <a href="{{$v->link}}" target="_blank">
+                                                <img style="width: 120px; height: 120px" class="m-auto img-fluid" src="{{asset("/img/partners/$v->image")}}">
+                                            </a>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -80,4 +74,10 @@
             @include('college/college-navbar')
         </div>
     </div>
+    <script !src="">
+        $('.Autoplay').slick({
+            autoplay: false,
+            slidesToShow: 4,
+        });
+    </script>
 @endsection

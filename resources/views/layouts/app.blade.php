@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -196,10 +196,10 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav {{ isset($is_main) ? 'is_index' : '' }}">
                     <li class="nav-item">
-                        <a class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{route('doctor', [4, 0])}}">КОЛЛЕДЖИ</a>
+                        <a id="CollegeActive" class="nav-link dC bK @if(($active ?? '') == 'college')active @endif" href="{{route('doctor', [4, 0])}}">КОЛЛЕДЖИ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{route('doctor', [1, 0])}}">ВУЗЫ</a>
+                        <a id="UniActive" class="nav-link dC mG  @if(($active ?? '') == 'university')active @endif" href="{{route('doctor', [0, 0])}}">ВУЗЫ</a>
                     </li>
                     <li id="li-nav" class="{{ isset($is_main) ? 'is_index' : '' }} position-relative nav-item">
                     <a id="rating" class="z-index {{ isset($is_main) ? 'is_index' : '' }} nav-link dC dK @if(($active ?? '') == 'rating')active @endif">РЕЙТИНГ</a>
@@ -257,46 +257,10 @@
             </div>
         </div>
     </nav>
-    <div id="map" class="container">
-        @if($map??'')
-        @if(str_contains($map, ','))
-            <div class="subnav">
-                @php
-                    $map = isset($map) ? $map : '';
-                    $map = preg_split("/[ ][,]+/", $map);
-
-
-                    $lastMap = $map[count($map)-1];
-                    for ($i = 0; $i < count($map)-1; $i++){
-                        switch (trim($map[$i])){
-                            case 'Главная':
-                                $path = '/';
-                                break;
-                            case 'Рейтинг ВУЗов':
-                                $path = 'university/list/multiprofile/0';
-                                break;
-                            case 'Рейтинг Колледжей':
-                                $path = 'university/list/multiprofile/1';
-                                break;
-                        }
-                        echo "<a class=\"underline\" href=\"".url($path??'#')."\">$map[$i]</a>";
-                @endphp
-                <img src="{{asset('img/faq-arrow-right.svg')}}">
-                @php
-                    }
-                    echo "<span class='subnav-last-child'>$lastMap</span>";
-                @endphp
-            </div>
-            @endif
-            @else
-
-            <div class="subnav pl-0">
-                <a href="{{url()->previous()}}"><span><img class="mr-2" src="{{asset('img/arrow-left.svg')}}" alt=""></span>Вернуться к результатам поиска</a>
-            </div>
-        @endif
-    </div>
+    @include('map')
     @yield('subnav')
     <main class="mt-3">
+        @yield('errors')
         <div id="myModal" class="modal">
 
             <!-- Modal content -->
@@ -333,19 +297,21 @@
                                 <img class="loginClose clickable-el" src="{{asset('img/login_form_close.svg')}}" alt="">
                             </div>
                             <div id="login-header" class="text-center m-1">
-                                Вход
+                                <b>Вход</b>
                             </div>
                             <div class="login-content">
                                 <div class="login-form">
                                     <form id="login-form" action="{{route('logging')}}" method="post">
                                         {{csrf_field()}}
                                         <div class="login-form-div">
-                                            <label>Электронная почта или телефон*</label>
-                                            <input class="login-form-input p-1" type="text" name="email">
+                                            <label>Электронная почта или телефон</label>
+                                            <input required class="@if($errors->first('email') && session('login')) border-danger border @else login-form-input @endif p-1" type="text" name="email">
+                                            <span class="text-danger"><small>@if(session('login')) {{ $errors->first('email')}} @endif</small></span>
                                         </div>
                                         <div class="login-form-div">
                                             <label>Пароль*</label>
-                                            <input class="login-form-input p-1" type="password" name="password">
+                                            <input required class="@if($errors->first('password') && session('login')) border-danger border @else login-form-input @endif p-1" type="password" name="password">
+                                            <span class="text-danger"><small>@if(session('login')) {{ $errors->first('password')}} @endif</small></span>
                                         </div>
                                         <div class="login-form-div">
                                             <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Войти">
@@ -353,21 +319,21 @@
                                     </form>
                                 </div>
                                 <div id="reg-href" class="text-center mt-1 mb-1">
-                                    У Вас не имеется личный кабинет? <a style="color: #2D7ABF;"  onclick="redirectToReg()" href="#">Регистрация</a>
-                                    <a style="color: #2D7ABF;" href="{{url('forgot-passwd')}}">Забыли пароль?</a>
+                                    У Вас не имеется кабинет? <a style="color: #2D7ABF;"  onclick="redirectToReg()" href="#">Регистрация</a>
+                                    <a href="#" style="color: #2D7ABF;" onclick="redirectToForgot()">Забыли пароль?</a>
                                 </div>
                                 <div class="login-form">
                                     <div class="login-form-div mt-2 mb-3 justify-content-between d-flex">
-                                        <img src="img/login_line.svg" alt=""> Или
-                                        <img src="img/login_line.svg" alt="">
+                                        <img src="{{asset('img/login_line.svg')}}" alt=""> Или
+                                        <img src="{{asset('img/login_line.svg')}}" alt="">
                                     </div>
                                     <div class="login-form-div">
                                         <button id="fb_btn" class="p-1 text-white">
-                                            <img class="mr-1 mb-1" src="img/fb_logo.svg" alt="">Продолжить с Facebook</button>
+                                            <img class="mr-1 mb-1" src="{{asset('img/fb_logo.svg')}}" alt="">Продолжить с Facebook</button>
                                     </div>
                                     <div class="login-form-div">
                                         <button id="google-btn" class="p-1">
-                                            <img class="mr-1" src="img/google_logo.svg" alt="">Продолжить с Google</button>
+                                            <img class="mr-1" src="{{asset('img/google_logo.svg')}}" alt="">Продолжить с Google</button>
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +351,7 @@
                             <img class="regClose clickable-el" src="{{asset('img/login_form_close.svg')}}" alt="">
                         </div>
                         <div id="login-header" class="text-center m-1">
-                            Регистрация
+                            <b>Регистрация</b>
                         </div>
                         <div class="login-content">
                             <div class="login-form">
@@ -393,47 +359,56 @@
                                     {{csrf_field()}}
                                     <div class="login-form-div">
                                         <label>Фамилия*</label>
-                                        <input class="login-form-input p-1" type="text" name="surname">
+                                        <input required class="@if($errors->first('surname') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="surname">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('surname')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Имя*</label>
-                                        <input class="login-form-input p-1" type="text" name="name">
+                                        <input required class="@if($errors->first('name') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="name">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('name')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Дата рождения*</label>
-                                        <input class="login-form-input p-1" type="date" min="1920-01-01" max="2020-01-01" name="birthDate">
+                                        <input required class="@if($errors->first('birthDate') && session('register')) border-danger border @else login-form-input @endif p-1" type="date" min="1920-01-01" max="2020-01-01" name="birthDate">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('birthDate')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Пол*</label>
-                                        <select class="login-form-input chsn p-1 w-100" name="gender">
+                                        <select required class="@if($errors->first('gender') && session('register')) border-danger border @else login-form-input @endif chsn p-1 w-100" name="gender">
                                             <option value="m">Мужчина</option>
                                             <option value="f">Женщина</option>
                                         </select>
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('gender')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Регион*</label>
-                                        <select class="login-form-input chsn p-1 w-100" name="region">
+                                        <select required class="@if($errors->first('region') && session('register')) border-danger border @else login-form-input @endif chsn p-1 w-100" name="region">
                                             @foreach(\App\Models\City::all() as $c)
                                                 <option value="{{$c->id}}">{{$c->name_ru}}</option>
                                             @endforeach
                                         </select>
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('region')}} @endif</small></span>
                                     </div>
 
                                     <div class="login-form-div">
                                         <label>Электронная почта*</label>
-                                        <input class="login-form-input p-1" type="text" name="email">
+                                        <input required class="@if($errors->first('email') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="email">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('email')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Контактный телефон*</label>
-                                        <input onkeypress='validate(event)' oninput="phone1(event)" class="login-form-input p-1" maxlength="12" value="+7" type="tel" name="phone">
+                                        <input required onkeypress='validate(event)' oninput="phone1(event)" class="@if($errors->first('phone') && session('register')) border-danger border @else login-form-input @endif p-1" maxlength="12" value="+7" type="tel" name="phone">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('phone')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Пароль*</label>
-                                        <input class="login-form-input p-1" type="password" name="password">
+                                        <input required class="@if($errors->first('password') && session('register')) border-danger border @else login-form-input @endif p-1" type="password" name="password">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('password')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Повторите пароль*</label>
-                                        <input class="login-form-input p-1" type="password" name="password_confirmation">
+                                        <input required class="@if($errors->first('password_confirmation') && session('register')) border-danger border @else login-form-input @endif p-1" type="password" name="password_confirmation">
+                                        <span class="text-danger"><small>@if(session('register')) {{ $errors->first('password_confirmation')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Зарегистрироваться">
@@ -441,18 +416,59 @@
                                 </form>
                             </div>
                             <div id="reg-href" class="text-center mt-1 mb-1 policy">
-                                Регистрируясь, Вы подтверждаете свое согласие
-                                <a class="color-2D7ABF" href="#">с Политическим соглашением. Полной</a>
-                                конфедициальностью на обработку персональных
-                                данных и на использование файлов “cookie”.
+                                Регистрируясь, Вы подтверждаете свое согласие с
+                                <a class="color-2D7ABF" href="/article/4"> Пользовательским соглашением</a>,
+                                <a class="color-2D7ABF" href="/article/6"> Политикой конфиденциальностью</a>,
+                                на обработку персональных данных и на использование файлов "cookie"
                             </div>
                             <div class="login-form">
                                 <div id="reg-line" class="mt-2 mb-3 justify-content-start d-flex">
-                                    <img src="img/reg-line.svg" alt="">
+                                    <img src="{{asset('img/reg-line.svg')}}" alt="">
                                 </div>
                                 <div id="reg-href" class="text-center mt-1 mb-1">
-                                    У Вас уже имеется личный кабинет?
+                                    У Вас уже имеется кабинет?
                                     <a onclick="redirectToLogin()" class="color-2D7ABF" href="#">Войти</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myForgotModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="login-content">
+                <div class="justify-content-center d-flex">
+                    <div id="form" class="">
+                        <div class="float-right">
+                            <img class="forgotClose clickable-el" src="{{asset('img/login_form_close.svg')}}" alt="">
+                        </div>
+                        <div id="login-header" class="text-center m-1">
+                            <b>Восстановление пароля</b>
+                        </div>
+                        <div class="">
+                            <div class="justify-content-center d-flex">
+                                <div>
+                                    <div class="m-3">
+                                        <div class="forgot-passwd-subtitle">
+                                            Введите электронную почту или телефон, указанный при регистрации. На указанную Вами
+                                            электронную почту или телефон придет письмо со ссылкой для восстановления пароля.
+                                        </div>
+                                    </div>
+                                    <form id="login-form" action="" class="p-2 m-1">
+                                        <div class="login-form-div">
+                                            <label>Электронная почта или телефон</label>
+                                            <input required class="login-form-input p-1" type="text">
+                                        </div>
+                                        <div class="clearfix">
+                                            <div class="form-group text-center m-1">
+                                                <button type="submit" class="btn text-capitalize btn-primary-custom">
+                                                    Отправить
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -473,10 +489,10 @@
                             <span>Степень</span>
                             <ul>
                                 <li class="">
-                                    <a href="{{url('college')}}">Колледжи</a>
+                                    <a href="{{route('doctor', [4, 0])}}">Колледжи</a>
                                 </li>
                                 <li class="">
-                                    <a href="{{url('university-college', 0)}}">Бакалавриат</a>
+                                    <a href="{{route('doctor', [1, 0])}}">Бакалавриат</a>
                                 </li>
                                 <li>
                                     <a href="{{url('doctor', [2, 0])}}">Магистратура</a>
@@ -513,10 +529,10 @@
                                     <a href="/article/3">Рекламодателям</a>
                                 </li>
                                 <li>
-                                    <a href="/article/5">Пользовательское соглашение</a>
+                                    <a href="/article/4">Пользовательское соглашение</a>
                                 </li>
                                 <li>
-                                    <a href="/article/4">Политика конфедициальности</a>
+                                    <a href="/article/6">Политика конфедициальности</a>
                                 </li>
                             </ul>
                         </li>
@@ -530,10 +546,10 @@
                                     <a href="/article/1">Добавить колледж/ВУЗ</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('callback-view')}}">Обратная связь</a>
+                                    <a href="{{url('callback')}}">Обратная связь</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('/#city')}}">ВУЗы в городах Казахстана</a>
+                                    <a href="{{url('/city/view')}}">ВУЗы в городах Казахстана</a>
                                 </li>
                             </ul>
                         </li>
@@ -661,6 +677,24 @@
     }
 </script>
 <script>
+    var fModal = document.getElementById("myForgotModal");
+
+    // Get the <span> element that closes the modal
+    var fSpan = document.getElementsByClassName("forgotClose")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    fSpan.onclick = function() {
+        fModal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == fModal) {
+            fModal.style.display = "none";
+        }
+    }
+</script>
+<script>
     function phone1(event) {
         console.log(event.target.value);
         event.target.value = '+7'+event.target.value.substr(2);
@@ -676,7 +710,24 @@ function redirectToReg() {
     $('#myLoginModal').hide();
     $('#myRegModal').show();
 }
+function redirectToForgot() {
+    $('#myLoginModal').hide();
+    $('#myForgotModal').show();
+}
 $('.chsn').chosen();
+</script>
+<script type="text/javascript">
+    @if (session()->get('login') && count($errors)> 0)
+    $('#myLoginModal').show();
+    @php
+        session()->forget('login');
+    @endphp
+    @elseif(session()->get('register') && count($errors)> 0)
+    $('#myRegModal').show();
+    @php
+    session()->forget('register');
+    @endphp
+    @endif
 </script>
 </body>
 </html>

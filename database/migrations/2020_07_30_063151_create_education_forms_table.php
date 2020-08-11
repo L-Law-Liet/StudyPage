@@ -15,6 +15,7 @@ class CreateEducationFormsTable extends Migration
     {
         Schema::create('education_forms', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->timestamps();
         });
     }

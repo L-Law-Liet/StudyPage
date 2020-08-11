@@ -7,7 +7,7 @@
                     <thead>
                     <tr>
                         <th class="w-30px">№</th>
-                        <th class="tl">Наименование колледжей</th>
+                        <th class="tl">Наименования колледжей</th>
                         <th width="20%;">Регион</th>
                     </tr>
                     </thead>

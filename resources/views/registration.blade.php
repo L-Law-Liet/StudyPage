@@ -64,9 +64,8 @@
                     </div>
                     <div id="reg-href" class="text-center mt-1 mb-1 policy">
                         Регистрируясь, Вы подтверждаете свое согласие
-                        <a class="color-2D7ABF" href="#">с Политическим соглашением. Полной</a>
-                        конфедициальностью на обработку персональных
-                        данных и на использование файлов “cookie”.
+                        <a class="color-2D7ABF" href="#"> с Пользовательским соглашением, Политикой </a>
+                        конфиденциальностью, на обработку персональных данных и на использование файлов "cookie"
                     </div>
                     <div class="login-form">
                         <div id="reg-line" class="mt-2 mb-3 justify-content-start d-flex">

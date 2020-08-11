@@ -4,6 +4,7 @@
     <div class="container pt-2">
         <div class="row">
             <div class="col-md-8">
+                <h5>{{$ratingName}}</h5>
                 @if(substr($class, 1))
                 <h4>{{mb_strtoupper(App\Profile::find(substr($class, 1))->name)??''}}</h4>
                 @endif
@@ -11,7 +12,7 @@
                     <thead>
                     <tr>
                         <th class="w-30px">№</th>
-                        <th>Наименование {{($class[0] == 1)?'ВУЗа':'Колледжа'}}</th>
+                        <th class="text-center">Наименования {{($class[0] == 1)?'ВУЗов':'колледжей'}}</th>
                         <th width="20%;">Город</th>
                     </tr>
                     </thead>

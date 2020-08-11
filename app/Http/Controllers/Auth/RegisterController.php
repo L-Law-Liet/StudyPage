@@ -34,7 +34,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/cabinet';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -58,10 +58,10 @@ class RegisterController extends Controller
             'surname' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'birthDate' => ['required', 'before:5 years ago'],
+            'birthDate' => ['required'],
             'gender' => 'required',
             'region' => 'required',
-            'phone' => ['required', 'unique:users', 'numeric'],
+            'phone' => ['required', 'min:12', 'unique:users', 'numeric'],
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required|same:password',
         ]);
@@ -75,7 +75,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        Session::flash('flash_message', trans('auth.registration_successful'));
         $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
@@ -103,12 +102,12 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        session(['register' => true]);
         $this->validator($request->all())->validate();
-
         event(new Registered($user = $this->create($request->all())));
 
-        return redirect(route('login'));
-
+        $this->guard()->login($user);
+        return redirect(route('index'));
     }
 
     public function sendEmail($thisUser){
@@ -121,9 +120,9 @@ class RegisterController extends Controller
         $user = User::where(['email' => $email, 'verify_token' => $verifyToken])->first();
         if($user){
             User::where(['email' => $email, 'verify_token' => $verifyToken])->update(['confirmed' => '1', 'verify_token' => null]);
-            return redirect(route('login'))->with('success', trans('auth.activation_successful'));
+            return redirect(route('index'))->with('success', trans('auth.activation_successful'));
         } else {
-            return redirect(route('login'))->with('error', trans('auth.activation_error'));
+            return redirect(route('index'))->with('error', trans('auth.activation_error'));
         }
     }
 }

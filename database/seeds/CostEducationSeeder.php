@@ -18,8 +18,8 @@ class CostEducationSeeder extends Seeder
 
         $costs->each(function ($cost_update, $key) {
             $faker = Factory::create();
-            $cost_update->income = $faker->randomElement(['После школы', 'После 9 класса']);
-            $cost_update->education_form = $faker->randomElement(['Очная (дневная)', 'Заочная']);
+            $cost_update->income = $faker->randomElement(['После школы', 'После колледжа']);
+            $cost_update->education_form = $faker->randomElement(['Очная (дневная)', 'Дистанционная']);
             $cost_update->degree_id = Degree::inRandomOrder()->first()->id;
             $cost_update->passing_score = random_int(50, 140);
             $cost_update->save();

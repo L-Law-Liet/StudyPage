@@ -232,13 +232,13 @@ Route::get('/faqs', 'FaqController@index')->name('faqs');
 Route::get('verify/{email}/{verify_token}', 'Auth\RegisterController@sendEmailDone')->name('sendEmailDone');
 
 Route::get('/', 'IndexController@index')->name('index');
-Route::get('/city/view/{id}', 'IndexController@getCity')->name('city');
+Route::get('/city/view/{id?}', 'IndexController@getCity')->name('city');
 Route::get('/navigator/view/{id}', 'IndexController@getNavigator')->name('navigator');
 Route::get('/navigator', 'IndexController@getNavigator1')->name('navigator');
 Route::get('/article/{id}', 'IndexController@getArticle')->name('article');
 //Route::get('/test/', 'IndexController@getTest')->name('test');
 Route::get('/callback', 'IndexController@getCallback')->name('callback');
-Route::post('/callback', 'IndexController@postCallback');
+Route::post('/callback', 'IndexController@postCallback')->name('callbackPost');
 Route::post('/proposal', 'IndexController@postProposal');
 
 Route::get('/login', 'LoginController@showLoginForm');
@@ -254,7 +254,7 @@ Route::prefix('college/')->group(function (){
 Route::get('/university-school/{pages}', 'PagesController@showUniversityAfterSchool')->name('uni-school');
 Route::get('/university-college/{pages}', 'PagesController@showUniversityAfterCollege')->name('uni-col');
 //Route::get('/magistr/{id?}/{degree}', 'PagesController@showMagistr');
-Route::get('/doctor/{degree}/{pages}', 'PagesController@showDoctor')->name('doctor');
+Route::get('/doctor/{degree?}/{pages}', 'PagesController@showDoctor')->name('doctor');
 Route::get('/university/list/multiprofile/{type}/{id?}', 'PagesController@multiRating');
 Route::get('faq/{id?}', 'PagesController@showFAQ');
 Route::get('/list/partner', 'PagesController@partnerList');
@@ -282,7 +282,7 @@ Route::get('success-payment/{m}/{sum}', 'PagesController@successPayment')->name(
 Route::get('fail-payment/{m}', 'PagesController@failPayment')->name('fail-payment');
 Route::get('show-payment/{m}', 'PagesController@showPayment')->name('show-payment');
 Route::get('ajax-filter/{pages}/{query?}', 'AjaxController@doctorFilter')->name('ajax-filter');
-
+Route::get('result/filter/{sid}/{uid}/{sub1}/{sub2}', 'AjaxController@resToSearch')->name('resToSearch');
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

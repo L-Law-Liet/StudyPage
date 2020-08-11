@@ -13,11 +13,18 @@
     <script>
                function ajaxFilter(e) {
                     let arr = [];
-                    if (['degreeSelect', 'oblSelect', 'dirSelect', 'incomeSelect'].includes(event.target.id))
+                    if (['degreeSelect', 'oblSelect', 'dirSelect', 'incomeSelect'].includes(e.target.id)){
                         dopFilter(e);
+                    }
                     var all = $(".ajax-filter").map(function() {
                         arr[$(this).attr('name')] = $(this).val();
                     });
+                    if(e.target.getAttribute('name') == 'pageBtn') {
+                        arr['pageBtn'] = parseInt(e.target.value);
+                    }
+                    else{
+                        arr['pageBtn'] = null;
+                    }
                     console.log('--------', arr);
                     $('#loading-image').show();
                     $.ajax({
@@ -26,7 +33,20 @@
                         data : {'a' : JSON.stringify(Object.assign ( {}, arr ))},
                         success:function (data) {
                             // console.log('success!--',data);
-                            $('#Resp').html(data);
+                            $('#Resp').html(data[0]);
+                            $("#Subnav-LC").html(data[1]);
+                            if (data[2] === 'university'){
+                                if(!$("#UniActive").hasClass('active')){
+                                    $("#UniActive").addClass('active');
+                                    $("#CollegeActive").removeClass('active');
+                                }
+                            }
+                            else if (data[2] === 'college'){
+                                if(!$("#CollegeActive").hasClass('active')){
+                                    $("#CollegeActive").addClass('active');
+                                    $("#UniActive").removeClass('active');
+                                }
+                            }
                         },
                         complete: function() {
                             $('#loading-image').hide();
@@ -34,41 +54,53 @@
                     });
                 }
 
-               $('body').on('click', 'div.ajax-filter', function (e) {
-
-                   console.log('LLL');
+               $('body').on('click', 'button.ajax-filter', function (e) {
                    ajaxFilter(e);
                });
                $("body").on('change', 'select.ajax-filter', function (e) {
-
-                   console.log('NNN');
+                   ajaxFilter(e);
+               });
+               $("body").on('change', 'input.ajax-filter', function (e) {
                    ajaxFilter(e);
                });
 
                 function dopFilter(event) {
                     console.log(event.target);
-                        if (event.target.id == 'degreeSelect'){
-                            if (event.target.value == '1' || event.target.value == '4'){
-                                document.getElementById('sferaSelect').value = '';
+                        if (event.target.id === 'degreeSelect'){
+                            if (event.target.value != '4'){
+                                document.getElementById('lpSelect').value = null;
                             }
-                            else if(event.target.value == '2' || event.target.value == '3'){
-                                document.getElementById('incomeSelect').value = '';
-                                document.getElementById('1profSelect').value = '';
-                                document.getElementById('2profSelect').value = '';
+                            document.getElementById('uniTypeSelect').value = null;
+                            document.getElementById('incomeSelect').value = null;
+                            if (event.target.value === '1'){
+                                document.getElementById('sferaSelect').value = null;
+                            }
+                            else if(event.target.value === '2'){
+                                document.getElementById('1profSelect').value = null;
+                                document.getElementById('2profSelect').value = null;
+                            }
+                            else if(event.target.value === '3'){
+                                document.getElementById('1profSelect').value = null;
+                                document.getElementById('2profSelect').value = null;
+                            }
+                            else if (event.target.value === '4'){
+                                document.getElementById('oblSelect').value = null;
+                                document.getElementById('dirSelect').value = null;
+                                document.getElementById('grupSelect').value = null;
+                                document.getElementById('sferaSelect').value = null;
                             }
                         }
-                        if (event.target.id == 'incomeSelect'){
-                                document.getElementById('1profSelect').value = '';
-                                document.getElementById('2profSelect').value = '';
+                        if (event.target.id === 'incomeSelect'){
+                                document.getElementById('1profSelect').value = null;
+                                document.getElementById('2profSelect').value = null;
                         }
-                        if (event.target.id == 'oblSelect'){
-                                document.getElementById('dirSelect').value = '';
-                                document.getElementById('grupSelect').value = '';
+                        if (event.target.id === 'oblSelect'){
+                                document.getElementById('dirSelect').value = null;
+                                document.getElementById('grupSelect').value = null;
                         }
-                        if (event.target.id == 'dirSelect'){
-                                document.getElementById('grupSelect').value = '';
+                        if (event.target.id === 'dirSelect'){
+                                document.getElementById('grupSelect').value = null;
                         }
-
                 }
 
                jQuery(function () {

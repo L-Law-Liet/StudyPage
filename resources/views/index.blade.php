@@ -92,7 +92,7 @@
                     </div>
                 </div>
             </form>
-            <p style="color: #2D7ABF;">ПЛАНИРУЕТЕ ПОСТУПИТЬ? СЕРВИСЫ “РЕЙТИНГ” И/ИЛИ “КАЛЬКУЛЯТОР ЕНТ” КАК РАЗ ДЛЯ ВАС!</p>
+            <p style="color: #2D7ABF;">ПЛАНИРУЕТЕ ПОСТУПИТЬ? СЕРВИСЫ "РЕЙТИНГ", "НАВИГАТОР" И "КАЛЬКУЛЯТОР ЕНТ" КАК РАЗ ДЛЯ ВАС!</p>
             <div>
                 <div class="d-flex justify-content-between mb-4">
                     <div onclick="window.location='{{url('calculator-ent')}}'" class="clickable-el d-table" style="width: 552px;
@@ -101,8 +101,15 @@
 
                             <div class="align-middle d-table-cell text-center text-white text-in-table">КАЛЬКУЛЯТОР ЕНТ</div>
                     </div>
-                    <div class="clickable-el d-table bg-plate" style="width: 388px; height: 234px;">
-                        <div onclick="window.location='{{url('/list/')}}'" class="align-middle d-table-cell text-center text-white text-in-table">РЕЙТИНГ</div>
+                    <div class="d-table bg-plate" style="width: 388px; height: 234px; background: url('{{asset('img/bgCalc.png')}}') no-repeat;
+                            background-size: cover">
+                        <div onclick="window.location='{{url('/list/')}}'" class="align-middle justify-content-around text-white text-in-table pt-5">
+                            <div class="d-flex flex-column justify-content-around pl-5">
+                                <div class="text-start pl-4">РЕЙТИНГ</div>
+                                <div class="text-start pl-4"><a class="text-decoration-none text-white fs-18px red-hover" href="{{url('university/list/multiprofile', 2)}}"><img src="{{asset('img/arrow-dots-white.svg')}}" alt="">Рейтинг колледжей</a></div>
+                                <div class="text-start pl-4"><a class="text-decoration-none text-white fs-18px red-hover" href="{{url('university/list/multiprofile', 1)}}"><img src="{{asset('img/arrow-dots-white.svg')}}" alt="">Рейтинг ВУЗов</a></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mb-4">
@@ -112,7 +119,7 @@
                     <div onclick="window.location='{{url('list/univer')}}'" class="clickable-el d-table three-tables bg-plate">
                         <div class="align-middle d-table-cell text-center text-white">ИНФОРМАЦИЯ О ВСЕХ ВУЗАХ КАЗАХСТАНА</div>
                     </div>
-                    <div onclick="window.location='{{url('faq/select-profession')}}'" class="clickable-el d-table bg-plate three-tables">
+                    <div onclick="window.location='{{url('faq')}}'" class="clickable-el d-table bg-plate three-tables">
                         <div class="align-middle d-table-cell text-center text-white">ВОПРОСЫ И ОТВЕТЫ</div>
                     </div>
                 </div>

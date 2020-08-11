@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\LearnProgramGroup;
 use App\Models\City;
 use App\Models\CostEducation;
 use App\Models\Degree;
@@ -26,34 +27,62 @@ use PHPUnit\Util\Json;
 
 class AjaxController extends Controller
 {
+    public function resToSearch($sid, $uid, $sub1, $sub2){
+        $subdirection = Subdirection::find($sid);
+        $r = new Request(['degree' => 1, 'sphere' => $subdirection->direction_id, 'direction' => $sid,
+            'univer' => $uid, 'firstSubject' => $sub1, 'secondSubject' => $sub2, 'region' => null,
+            'studyForm' => null, 'when' => 'afterSchool', 'programGroup' => null, 'uniType' => null, 'startCost' => null,
+            'endCost' => null, 'pagSelect' => null, 'sort' => null, 'sphereDirect' => null, 'pageBtn' => null]);
+
+        return $this->doctorFilter(0, $r, null);
+    }
+
     public function doctorFilter($page, Request $request, $query = null){
-        $a = json_decode($request->get('a'));
-        $degree = $a->degree;
-        if ($a->region){
-            $us = University::where('city_id', $a->region)->get();
+        $Test = false;
+        if ($request->get('a')) {
+            $Test = true;
+            $a = json_decode($request->get('a'));
         }
         else {
-            $us = University::all();
+            $a = (object)$request->all();
+        }
+        if ($a->degree){
+            $degree = $a->degree;
+        }
+        else{
+            $degree = 0;
         }
         $costs = PagesController::mainFilter($a->degree, $a->studyForm, $a->region, $query);
         if ($a->when){
             if ($a->when == 'after9' ){
                 $costs = $costs->where('income', 'После 9 класса')->values();
             }
+            if ($a->when == 'after11' ){
+                $costs = $costs->where('income', 'После 11 класса')->values();
+            }
             elseif ($a->when == 'afterSchool'){
                 $costs = $costs->where('income', 'После школы')->values();
             }
+            elseif ($a->when == 'afterCollege'){
+                $costs = $costs->where('income', 'После колледжа')->values();
+            }
         }
         if ($a->studyForm){
-            if ($a->studyForm == 'ochnaya' ){
+            if ($a->studyForm == 1 ){
                 $costs = $costs->where('education_form', 'Очная (дневная)')->values();
             }
-            elseif ($a->studyForm == 'dist' ){
-                $costs = $costs->where('education_form', 'Заочная')->values();
+            elseif ($a->studyForm == 2 ){
+                $costs = $costs->where('education_form', 'Дистанционная')->values();
             }
         }
         if ($a->sphere){
-            $costs = $costs->whereIn('specialty_id', Specialty::whereIn('subdirection_id', Subdirection::where('direction_id', $a->sphere)->pluck('id')->toArray())->pluck('id')->toArray())->values();
+            $costs = $costs->whereIn('specialty_id',
+                Specialty::whereIn('learn_program_group_id',
+                    LearnProgramGroup::whereIn('subdirection_id',
+                        Subdirection::where('direction_id', $a->sphere)->pluck('id')->toArray()
+                    )->pluck('id')->toArray()
+                )->pluck('id')->toArray()
+            )->values();
             $subDir = Subdirection::where('direction_id', $a->sphere)->get();
         }
         else {
@@ -61,14 +90,28 @@ class AjaxController extends Controller
         }
         $dirs = Direction::all();
         if ($a->direction){
-            $costs = $costs->whereIn('specialty_id', Specialty::where('subdirection_id', $a->direction)->pluck('id')->toArray())->values();
-            $specs = Specialty::where('subdirection_id', $a->direction)->get();
+            $costs = $costs->whereIn('specialty_id',
+                Specialty::whereIn('learn_program_group_id',
+                    LearnProgramGroup::where('subdirection_id', $a->direction)->pluck('id')->toArray()
+                )->pluck('id')->toArray()
+            )->values();
+            $specs = LearnProgramGroup::where('subdirection_id', $a->direction)->get();
         }
         else {
             $specs = Specialty::all();
         }
+        if ($degree == 4){
+            $specs = LearnProgramGroup::where('subdirection_id', null)->get();
+        }
         if ($a->programGroup){
-            $costs = $costs->where('specialty_id', $a->programGroup)->values();
+            $costs = $costs->whereIn('specialty_id',
+                Specialty::where('learn_program_group_id', $a->programGroup)->pluck('id')->toArray()
+            )->values();
+        }
+        elseif ($a->learnProgram){
+            $costs = $costs->whereIn('specialty_id',
+                Specialty::where('learn_program_group_id', $a->learnProgram)->pluck('id')->toArray()
+            )->values();
         }
         if ($a->univer){
             $costs = $costs->where('university_id', $a->univer)->values();
@@ -82,44 +125,93 @@ class AjaxController extends Controller
         if ($a->endCost){
             $costs = $costs->where('price', '<=', $a->endCost)->values();
         }
-        if ($a->pagSelect){
+        if ($a->pagSelect??''){
             $page = $a->pagSelect;
         }
-        $subs = Subject::all();
-        $sp = Sphere::all();
+        elseif ($a->pageBtn){
+            $page = $a->pageBtn;
+        }
+        else {
+            $page = 0;
+        }
+        if ($a->firstSubject){
+            $costs = $costs->whereIn('specialty_id', Specialty::where('subject_id', $a->firstSubject)->orWhere('subject_id2', $a->firstSubject)->pluck('id')->toArray())->values();
+        }
+        if ($a->secondSubject){
+            $costs = $costs->whereIn('specialty_id', Specialty::where('subject_id', $a->secondSubject)->orWhere('subject_id2', $a->secondSubject)->pluck('id')->toArray())->values();
+        }
+        if ($a->sphereDirect){
+            $costs = $costs->whereIn('specialty_id', Specialty::where('sphere_id', $a->sphereDirect)->pluck('id')->toArray())->values();
+        }
+        if ($a->region){
+            $us = University::where('city_id', $a->region)->get();
+        }
+        else {
+            $us = University::all();
+        }
+        if ($degree == 4){
+            $us = $us->where('type_id', 5)->values();
+        }
+        else {
+            $us = $us->where('type_id', '<>', 5)->values();
+        }
         $cs = City::all();
+        if ($a->when == 'afterSchool'){
+            $subs = Subject::where('forCollege', 0)->get();
+        }
+        elseif ($a->when == 'afterCollege'){
+            $subs = Subject::where('forCollege', 1)->get();
+        }
+        else {
+            $subs = Subject::all();
+        }
+        $sp = Sphere::all();
         $ts = Type::all();
         switch ($a->sort){
-            case 'name':
+            case 'popular':
                 $costs = CostEducation::with('relSpecialty')->get()
                     ->sortBy(function($cost) {
                         return $cost->relSpecialty->name_ru;
                     });
                 break;
-            case 'city':
-                $costs = $costs->sortBy('city_id')->values();
-                break;
-            case 'cost':
+            case 'asc':
                 $costs = $costs->sortBy('price')->values();
                 break;
+            case 'desc':
+                $costs = $costs->sortByDesc('price')->values();
+                break;
         }
-        if ($a->degree == 1) {
-            $map = 'Главная , Бакалавриат';
+        if ($degree == 1) {
+            $map = 'Бакалавриат';
+            $active = 'university';
         }
-        elseif ($a->degree == 2){
-            $map = 'Главная , Магистратура';
+        elseif ($degree == 2){
+            $map = 'Магистратура';
+            $active = 'university';
         }
-        elseif($a->degree == 3) {
-            $map = 'Главная , Докторантура';
+        elseif($degree == 3) {
+            $map = 'Докторантура';
+            $active = 'university';
+        }
+        elseif($degree == 4) {
+            $map = 'Колледжи';
+            $active = 'college';
         }
         else {
-            $map = 'Главная , Специалности';
+            $map = 'ВУЗы';
+            $active = 'university';
         }
         $city_id = $a->region;
         $studyForm = $a->studyForm;
-        $result = view('filter', compact('a', 'degree', 'dirs', 'subDir','specs', 'subs', 'sp',
-            'cs', 'ts', 'us', 'costs', 'page', 'query', 'studyForm', 'city_id', 'map'));
-        return $result;
+        if ($Test){
+            $result = [view('filter', compact('a', 'degree', 'dirs', 'subDir','specs', 'subs', 'sp',
+                'cs', 'ts', 'us', 'costs', 'page', 'query', 'studyForm', 'city_id'))->render(), $map, $active];
+            return $result;
+        }
+        else {
+            return view('doctor', compact('a', 'degree', 'dirs', 'subDir','specs', 'subs', 'sp',
+                'cs', 'ts', 'us', 'costs', 'page', 'query', 'studyForm', 'city_id'));
+        }
     }
 
     public function getCity(){

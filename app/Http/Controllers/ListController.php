@@ -46,7 +46,7 @@ class ListController extends Controller
                 $L = 'Очная (дневная)';
             }
             else{
-                $L = 'Заочная';
+                $L = 'Дистанционная';
             }
             $s = $s->where('education_form', $L);
         }

@@ -31,12 +31,11 @@ class ResetPasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'newPassword.string' => 'Поле «Новый пароль» пуст',
-            'newPassword.min' => 'Поле «Новый пароль» должен иметь минимум 8 символов',
-            'newPassword.required' => 'Поле «Новый пароль» пуст',
-            'newPassword.confirmed' => 'Поле «Новый пароль» не совпадает',
-            'newPassword_confirmation.required' => 'Поле «Повторите пароль» пуст',
-            'newPassword_confirmation.same' => 'ГГ',
+            'newPassword.string' => 'Поле «Новый пароль» пуст.',
+            'newPassword.min' => 'Поле «Новый пароль» должен иметь минимум 8 символов.',
+            'newPassword.required' => 'Поле «Новый пароль» пуст.',
+            'newPassword.confirmed' => 'Поле «Новый пароль» не совпадает.',
+            'newPassword_confirmation.required' => 'Поле «Повторите пароль» пуст.',
         ];
     }
 }

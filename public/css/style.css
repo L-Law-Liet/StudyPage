@@ -596,7 +596,7 @@ ul.sgs-list-ul {
     padding: 0;
     list-style: none;
 }
-.sgs-list-ul li:not(:last-child) {
+.sgs-list-ul li {
     background: url('../img/dotshorizontal.png') repeat-x left bottom;
     display: block;
     width: 100%;
@@ -607,6 +607,17 @@ ul.sgs-list-ul {
     margin: 10px;
     border-radius: 3px;
 }
+.pagination-block button {
+    background: none;
+    border: none;
+    outline: none;
+}
+.pagination-block button img {
+    z-index: -1;
+}
+.bold-label-div label {
+    font-weight: 700;
+}
 h3 {
     font-size: 18px;
     font-size: 1.125rem;
@@ -614,20 +625,6 @@ h3 {
     text-transform: uppercase;
     margin-bottom: 20px;
     border: 0;
-}
-.ch-pwd h3 {
-    text-transform: none !important;
-    font-size: 32px !important;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 40px;
-    /* or 125% */
-
-    align-items: center;
-    text-align: center;
-    letter-spacing: -0.02em;
-
-    color: #212529;
 }
 .sgs-list-ul li a {
     background: transparent;
@@ -790,6 +787,9 @@ h1, .h1, h2, .h2, h3, .h3, .wohnheimfinder legend, .btn-primary, .nav-tabs>li>a,
 #city{
     border-top: 1px solid #2d7abf;
     padding-top: 20px;
+}
+.text-start {
+    text-align: start !important;
 }
 .text-in-table {
     font-size: 24px;
@@ -1056,13 +1056,13 @@ h1, .h1, h2, .h2, h3, .h3, .wohnheimfinder legend, .btn-primary, .nav-tabs>li>a,
     margin: auto;
     width: 960px;
 }
-.partners .slick-track .slick-slide {
+.partners .slick-track .slick-slide, .media-resources .slick-track .slick-slide {
     display: flex;
     height: auto;
     align-items: center;
     justify-content: center;
 }
-.partners .slick-track{
+.partners .slick-track, .media-resources .slick-track{
     display: flex;
 }
 button.slick-prev, button.slick-next, .partners button.slick-next, .partners button.slick-prev {
@@ -1087,7 +1087,6 @@ button.slick-prev, button.slick-next, .partners button.slick-next, .partners but
     display: inline-block;
     width: 20px;
     height: 20px;
-
 }
 .city-teaser .slick-next:before, .partners button.slick-next:before {
     margin-left: 5px;
@@ -1097,10 +1096,31 @@ button.slick-prev, button.slick-next, .partners button.slick-next, .partners but
     width: 20px;
     height: 20px;
 }
-.partners button.slick-prev:hover, button.slick-next:hover {
+.media-resources button {
+    padding: 0;
+    top: 35%;
+}
+.media-resources button.slick-prev:before {
+    content: '';
+    background-image: url("../img/chevron-left.svg");
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.media-resources button.slick-next:before {
+    margin-left: 5px;
+    content: '';
+    background-image: url("../img/chevron-right.svg");
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.partners button.slick-prev:hover, button.slick-next:hover, .media-resources button.slick-prev:hover {
     opacity: 1;
 }
-#Ziti .slick-prev, .partners button.slick-prev {
+#Ziti .slick-prev, .partners button.slick-prev, .media-resources button.slick-prev {
     background: rgba(0,0,0,.6);
     left: 0;
     height: 60px;
@@ -1108,15 +1128,15 @@ button.slick-prev, button.slick-next, .partners button.slick-next, .partners but
     border-bottom-right-radius: 60px;
     border-top-right-radius: 60px;
 }
-.partners button.slick-arrow {
+.partners button.slick-arrow, .media-resources button.slick-arrow {
     max-height: 40px;
     max-width: 20px;
 }
-.partners button.slick-arrow:before {
+.partners button.slick-arrow:before, .media-resources button.slick-arrow:before {
     margin-top: 20%;
     background-size: 80%;
 }
-#Ziti .slick-next, .partners button.slick-next {
+#Ziti .slick-next, .partners button.slick-next,.media-resources button.slick-next {
     background: rgba(0,0,0,.6);
     right: 0;
     height: 60px;
@@ -1307,12 +1327,6 @@ ul.social-icons li a:not(#login):not(#register):not(#logged):not(#cabinetDropdow
     font-size: 1.125rem;
     padding: 0;
 }
-.cabinet-label-input label {
-    font-size: 20px;
-}
-.cabinet-label-input input {
-    font-size: 18px;
-}
 /* this border color controlls the outside, thin border */
 #cab-dd-menu:before {
     transform: rotate(-90deg);
@@ -1335,6 +1349,16 @@ ul.social-icons li a:not(#login):not(#register):not(#logged):not(#cabinetDropdow
     display: none;
 }
 #pagination-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    border: none;
+    text-overflow: '';
+}
+#pagination-select2::-ms-expand {
+    display: none;
+}
+#pagination-select2 {
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;
@@ -2053,9 +2077,6 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
     padding: 18.8px 10px;
     margin-bottom: 10px;
 }
-.Img:hover {
-    filter: brightness(0);
-}
 .subnav-last-child {
     font-weight: 600;
     color: #2D7ABF;
@@ -2069,7 +2090,7 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
     color: #2D7ABF;
 }
 .cv-img-div, .under-cv-img-div {
-    border-bottom: #212529 1.5px solid;
+    border-bottom: #212529 1px solid;
 }
 .under-cv-img-div {
     font-style: normal;
@@ -2113,7 +2134,23 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
 }
 .cv-content {
     padding-bottom: 30px;
-    border-bottom: #2D7ABF 1.5px solid;
+    border-bottom: #2D7ABF 1px solid;
+}
+.fs-13px {
+    font-size: 13px!important;
+}
+.h-32px {
+    height: 32px !important;
+}
+#sortorder ~ div a {
+    height: 32px !important;
+    font-size: 13px !important;
+}
+#sortorder ~ div a div b {
+    background-position: 0 5px !important;
+}
+#sortorder_chosen div.chosen-drop ul.chosen-results li:first-child {
+    display: none !important;
 }
 .cv-media {
     font-style: normal;
@@ -2156,7 +2193,7 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
     top: 70px;
 }
 .red-hover:hover {
-    color: red;
+    color: red !important;
 }
 .w-8 {
     min-width: 8% !important;
@@ -2184,10 +2221,12 @@ table>thead>tr>th, table>tbody>tr>th, table>tfoot>tr>th, table>thead>tr>td, tabl
 .w-37 {
     width: 37%;
 }
+.pr-20px {
+    padding-right: 20px;
+}
 .faq-text {
     font-style: normal;
     font-weight: normal;
-    font-size: 18px;
     line-height: 23px;
     color: #212529;
 }
@@ -2222,7 +2261,7 @@ table:not(#ent-table) {
     line-height: 13px;
     text-align: center;
 }
-#form input, #form select, button:not(.know-chance):not(.slick-next):not(.slick-prev) {
+#form input, #form select, button:not(.know-chance):not(.slick-next):not(.slick-prev):not(.pagination-block) {
     box-sizing: border-box;
     border-radius: 3px;
     width: 100%;
@@ -2409,16 +2448,43 @@ table:not(#ent-table) {
     100%{ opacity: 0%}
 }
 #select-div {
+     top: -5px;
+     position: relative;
+     z-index: 10;
+     margin-left: 36%;
+     padding: 5px;
+     width: 28%;
+     border-radius: 5px;
+ }
+#select-div:hover, #select-div2:hover {
+    height: 35px;
+    background: #f4f4f4;
+}
+#select-div:after {
+    top: 5px;
+    right: 15%;
+    height: 100%;
+    position: absolute;
+    content: url("../img/pagination-down.svg");
+}
+#select-div2 {
+    top: -5px;
     position: relative;
     z-index: 10;
     margin-left: 36%;
     padding: 5px;
-    width: 28%;
+    width: 18.7%;
     border-radius: 5px;
 }
-#select-div:hover {
-    height: 35px;
-    background: #f4f4f4;
+#select-div2:after {
+    top: 5px;
+    right: 18%;
+    height: 100%;
+    position: absolute;
+    content: url(../img/pagination-down.svg);
+}
+.w-90 {
+    width: 90%!important;
 }
 #pagination-select {
     top: 0;
@@ -2430,12 +2496,15 @@ table:not(#ent-table) {
     z-index: 10;
     background: transparent;
 }
-#select-div:after {
-    top: 5px;
-    right: 15%;
-    height: 100%;
+#pagination-select2 {
+    top: 0;
+    left: -47px;
+    padding: 5px 8px;
+    height: 30px;
+    width: 100%;
     position: absolute;
-    content: url("../img/pagination-down.svg");
+    z-index: 10;
+    background: transparent;
 }
 .clickable-el {
     cursor: pointer;

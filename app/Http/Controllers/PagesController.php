@@ -29,7 +29,7 @@ class PagesController extends Controller
 {
     public function showCabinet(){
         $cities = City::all();
-        return view('cabinet')->with('map', 'Главная , Кабинет')->with('cities', $cities);
+        return view('cabinet')->with('map', 'Главная , Личные данные')->with('cities', $cities);
     }
 
     public function showCollege($pages = 0){
@@ -95,12 +95,6 @@ class PagesController extends Controller
         $specialities = PagesController::mainFilter(1, $direction_id, $city_id, $query);
         return view('university-college')->with('costs', $specialities)->with('page', $pages)->with('active', 'university')->with('query', $query)->with('dir_id', $request->get('direction_id'))->with('city_id', $request->get('city_id'))->with('map', 'Главная , Бакалавриат');
     }
-//    public function showMagistr($pages = 0){
-//        $specialities = Specialty::where('degree_id', 2)->get();
-//        $specIDs = array_column($specialities->toArray(), 'id');
-//        $costs = CostEducation::whereIn('specialty_id', $specIDs)->get();
-//        return view('magistr')->with('costs', $costs)->with('page', $pages)->with('map', );
-//    }
 public static function mainFilter($degree, $direction_id, $city_id, $query){
     $s = CostEducation::select(DB::raw('cost_education.*'));
     $s->join('specialties', 'specialties.id', '=', 'cost_education.specialty_id');
@@ -119,7 +113,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
             $L = 'Очная (дневная)';
         }
         else{
-            $L = 'Заочная';
+            $L = 'Дистанционная';
         }
         $s = $s->where('education_form', $L);
     }
@@ -142,27 +136,42 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         $costs = PagesController::mainFilter($degree, $studyForm, $city_id, $query);
         $directions = Direction::all();
         $subDir = Subdirection::all();
-        $subs = Subject::all();
+        $subs = Subject::where('forCollege', 0)->get();
         $sp = Sphere::all();
         $cs = City::all();
         $ts = Type::all();
-        $us = University::all();
+        if ($degree == 4){
+            $us = University::where('type_id', 5)->get();
+        }
+        else {
+            $us = University::where('type_id', '<>', 5)->get();
+        }
         $specs = Specialty::all();
         if ($degree == 1) {
             $map = 'Главная , Бакалавриат';
+            $active = 'university';
         }
         elseif ($degree == 2){
             $map = 'Главная , Магистратура';
+            $active = 'university';
         }
         elseif($degree == 3) {
             $map = 'Главная , Докторантура';
+            $active = 'university';
+        }
+        elseif($degree == 4) {
+            $map = 'Главная , Колледжи';
+            $active = 'college';
         }
         else {
-            $map = 'Главная , Специалности';
+            $map = 'Главная , ВУЗы';
+            $active = 'university';
         }
-        $a = (object) array('sphere' => null, 'direction' => null, 'programGroup' => null, 'when' => null, 'startCost' => null, 'endCost' => null,
-            'firstSubject' => null, 'secondSubject' => null, 'sphereDirect' => null, 'univer' => null, 'uniType' => null, 'sort' => null);
-        return view('doctor', ['dirs' => $directions, 'subDir' => $subDir, 'subs' => $subs, 'sp' => $sp, 'us' => $us, 'specs' => $specs,
+        $a = (object) array('sphere' => null, 'direction' => null, 'programGroup' => null,
+            'when' => null, 'startCost' => null, 'endCost' => null, 'firstSubject' => null,
+            'secondSubject' => null, 'sphereDirect' => null, 'univer' => null, 'uniType' => null,
+            'sort' => null, 'pageBtn' => null, 'learnProgram' => null);
+        return view('doctor', compact('active', 'subDir'), ['dirs' => $directions, 'subs' => $subs, 'sp' => $sp, 'us' => $us, 'specs' => $specs,
             'ts' => $ts, 'cs' => $cs])->with('costs', $costs)->with('page', $page)->with('degree', $degree)
             ->with('query', $query)->with('studyForm', $studyForm)->with('city_id', $request->get('city_id'))->with('map', $map)->with('a', $a);
     }
@@ -171,7 +180,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
     public function showFAQ($id = 1){
         $faq = Faq::find($id);
         $navActive = true;
-        return view('faq.select-prof', compact('faq', 'navActive'))->with('map', 'Главная , '.$faq->question);
+        return view('faq.select-prof', compact('faq', 'navActive'))->with('map', 'Главная , Навигатор , '.$faq->question);
     }
 
     public function collegeList(){
@@ -193,7 +202,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         if (strstr(session()->get('refreshed'), '?', TRUE) == strstr(url()->previous(), '?', TRUE)){
             $error = null;
         }
-        return view('ent-calculator', ['ss' => Subject::all()])->with('active', 'ent-calc')->with('map', 'Главная , Калькулятор ЕНТ')->with('error', $error);
+        return view('ent-calculator', ['ss' => Subject::where('forCollege', 0)->get()])->with('active', 'ent-calc')->with('map', 'Главная , Калькулятор ЕНТ')->with('error', $error);
     }
     public function entResult(Request $request){
         $check = 0;
@@ -216,7 +225,6 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
 //                        '2profPoint' => $request->get('2profPoint'),
 //                        '1profSelect' => $request->get('1profSelect'),
 //                        '2profSelect' => $request->get('2profSelect'),
-//
 //                    ]);
                     //$epay = EpayController::entResultPayment(CalculatorCost::all('calc_price')->first()->calc_price);
                 }
@@ -224,57 +232,57 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
                     $request->input('matGr') + $request->input('readGr') + $request->input('historyKZ');
                 $arrProf = [$request->input('1profSelect'), $request->input('2profSelect')];
 
-                return redirect()->route('ent-show', ['score' => $L, 'profs1' => $arrProf[0], 'profs2' => $arrProf[1], 'map' => 'Главная , Калькулятор ЕНТ , Результаты']);
+                return redirect()->route('ent-show', ['score' => encrypt($L), 'profs1' => $arrProf[0], 'profs2' => $arrProf[1], 'map' => 'Главная , Калькулятор ЕНТ , Результаты']);
         }
         else {
             return redirect()->route('calculator-ent')->with('m1', 'Данная услуга доступна в личном кабинете')->with('active', 'ent-calc')->with('map', 'Главная , Калькулятор ЕНТ');
         }
     }
     public function showENTResult($L, $profs1, $profs2, $map){
+        $L = decrypt($L);
         $arrProf = [$profs1, $profs2];
-        $specs = Specialty::whereIn('subject_id', $arrProf)->whereIn('subject_id2', $arrProf)->get();
+        $specs = Specialty::whereIn('subject_id', $arrProf)->whereIn('subject_id2', $arrProf)->with('cost')->get();
         $sHigh = [];
         $sMiddle = [];
         $sLow = [];
         $sPaid = [];
         foreach ($specs as $s) {
-            if ($s->getCost()) {
-                if ($L >= $s->getCost()->passing_score) {
+            $getCost = $s->cost;
+            if ($getCost) {
+                if ($L >= $getCost->passing_score) {
                     $sHigh[] = $s;
-                } elseif ($L >= $s->getCost()->passing_score - 5) {
+                } elseif ($L >= $getCost->passing_score - 5) {
                     $sMiddle[] = $s;
-                } elseif ($L >= $s->getCost()->passing_score - 13) {
+                } elseif ($L >= $getCost->passing_score - 13) {
                     $sLow[] = $s;
-                } elseif ($L >= $s->getCost()->paid_score) {
+                } elseif ($L >= $getCost->paid_score) {
                     $sPaid[] = $s;
                 }
             }
         }
-
-        usort($sHigh, array('App\Http\Controllers\PagesController', 'L'));
-        usort($sMiddle, array('App\Http\Controllers\PagesController', 'L'));
-        usort($sLow, array('App\Http\Controllers\PagesController', 'L'));
-        usort($sPaid, array('App\Http\Controllers\PagesController', 'L'));
+        $sHigh = collect($sHigh);
+        $sHigh = $sHigh->sortByDesc('cost.passing_score')->values();
+        $sMiddle = collect($sMiddle);
+        $sMiddle = $sMiddle->sortByDesc('cost.passing_score')->values();
+        $sLow = collect($sLow);
+        $sLow = $sLow->sortByDesc('cost.passing_score')->values();
+        $sPaid = collect($sPaid);
+        $sPaid = $sPaid->sortByDesc('cost.passing_score')->values();
         $sRes = [$sHigh, $sMiddle, $sLow, $sPaid];
         return view('ent-result', ['sRes' => $sRes, 'score' => $L, 'profs' =>$arrProf, 'map' => $map]);
-    }
-    public static function L($a, $b) {
-        if($a->getCost()->passing_score == $b->getCost()->passing_score){ return 0 ; }
-        return ($a->getCost()->passing_score > $b->getCost()->passing_score) ? -1 : 1;
     }
     public function entResult2($type, $entScore, $profs1, $profs2, $page = 0){
         $array = [];
         $title = '';
         $n = 0;
         $entScore = decrypt($entScore);
-        $profs1 = decrypt($profs1);
-        $profs2 = decrypt($profs2);
-        $specs = Specialty::whereIn('subject_id', [$profs1, $profs2])->whereIn('subject_id2', [$profs1, $profs2])->get();
+        $specs = Specialty::whereIn('subject_id', [$profs1, $profs2])->whereIn('subject_id2', [$profs1, $profs2])->with('cost')->get();
         switch ($type){
             case 1:
                 foreach ($specs as $spec){
-                    if ($spec->getCost()) {
-                        if ($entScore >= $spec->getCost()->passing_score) {
+                    $getCost = $spec->cost;
+                    if ($getCost) {
+                        if ($entScore >= $getCost->passing_score) {
                             $array[] = $spec;
                             $n++;
                         }
@@ -284,8 +292,9 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
                 break;
             case 2:
                 foreach ($specs as $spec){
-                    if ($spec->getCost()) {
-                        if ($entScore >= $spec->getCost()->passing_score - 5 && $entScore < $spec->getCost()->passing_score) {
+                    $getCost = $spec->cost;
+                    if ($getCost) {
+                        if ($entScore >= $getCost->passing_score - 5 && $entScore < $getCost->passing_score) {
                             $array[] = $spec;
                             $n++;
                         }
@@ -295,8 +304,9 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
                 break;
             case 3:
                 foreach ($specs as $spec){
-                    if ($spec->getCost()) {
-                        if ($entScore >= $spec->getCost()->passing_score - 13 && $entScore < $spec->getCost()->passing_score -5) {
+                    $getCost = $spec->cost;
+                    if ($getCost) {
+                        if ($entScore >= $getCost->passing_score - 13 && $entScore < $getCost->passing_score -5) {
                             $array[] = $spec;
                             $n++;
                         }
@@ -306,8 +316,9 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
                 break;
             case 4:
                 foreach ($specs as $spec){
-                    if ($spec->getCost()) {
-                        if ($entScore >= $spec->getCost()->paid_score && $entScore < $spec->getCost()->passing_score-13) {
+                    $getCost = $spec->cost;
+                    if ($getCost) {
+                        if ($entScore >= $getCost->paid_score && $entScore < $getCost->passing_score-13) {
                             $array[] = $spec;
                             $n++;
                         }
@@ -318,13 +329,15 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
             default:
                 return redirect()->action('IndexController@index');
         }
-        usort($array, array('App\Http\Controllers\PagesController', 'L'));
-        return view('ent-result2', compact('page', 'type', 'profs1', 'profs2'), ['score' => $entScore, 'title' => $title])->with('map', 'Главная , Калькулятор ЕНТ , Результаты')->with('array', $array);
+        $array = collect($array);
+        $array = $array->sortByDesc('cost.passing_score')->values();
+        return view('ent-result2', compact('page', 'type', 'profs1', 'profs2'), ['score' => $entScore, 'title' => $title])->with('map', 'Главная , Калькулятор ЕНТ , Результаты , '.$title)->with('array', $array);
     }
     public  function multiRating($type, $id = 1){
         $class = $type;
         if ($type == 1){
-            $map = 'Главная , Рейтинг ВУЗов';
+            $map = 'Главная , Рейтинг , Рейтинг ВУЗов';
+            $ratingName = 'Рейтинг ВУЗов - '.date("Y");
             if ($id){
                 $map .= ' , '.Profile::find($id)->name;
                 $us = University::whereIn('id', ProfileUniversity::where('profile_id', $id)->pluck('university_id')->toArray())->get();
@@ -332,14 +345,15 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
             }
         }
         elseif($type == 2) {
-            $map = 'Главная , Рейтинг Колледжей';
+            $map = 'Главная , Рейтинг , Рейтинг колледжей';
+            $ratingName = 'Рейтинг колледжей - '.date("Y");
             if ($id){
                 $map .= ' , '.Profile::find($id)->name;
                 $us = University::whereIn('id', ProfileUniversity::where('profile_id', $id)->pluck('university_id')->toArray())->get();
                 $class .= $id;
             }
         }
-       return view('rating.multiprofile-rating', compact('type'))->with('map', $map)->with('class', $class)->with('us', $us)->with('active', 'rating');
+       return view('rating.multiprofile-rating', compact('type', 'ratingName'))->with('map', $map)->with('class', $class)->with('us', $us)->with('active', 'rating');
     }
     public function viewCollegeFromList($id, $name){
         $university = University::find($id);
@@ -349,7 +363,9 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         else {
             $map = 'Главная , Навигатор , Список ВУЗов , '.$university->name_ru.' , О ВУЗе';
         }
-        return view('college.college-view', compact('map'))->with('university', $university)->with('class', 'view')->with('name', $name);
+
+        $partners = Parner::all();
+        return view('college.college-view', compact('map', 'partners'))->with('university', $university)->with('class', 'view')->with('name', $name);
     }
     public function attributesCollegeFromList($id, $name, $nav){
         $university = University::find($id);
@@ -428,7 +444,7 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
         return view('callback')->with('map', 'Главная , Обратная связь');
     }
     public function  showForgotPasswd(){
-        return view('forgot-passwd')->with('map', 'Главная , Вход , Забыли пароль');
+        return view('forgot-passwd')->with('map', 'Главная , Забыли пароль');
     }
     public function successPayment($m, $sum){
         $user = User::find(Auth::id());

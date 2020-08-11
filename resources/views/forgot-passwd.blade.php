@@ -4,9 +4,6 @@
         <div class="login-content">
             <div class="justify-content-center d-flex">
                 <div id="form" class="forgot-passwd-form p-3">
-                    <div class="float-right">
-                        <img id="login-form-close" src="img/login_form_close.svg" alt="">
-                    </div>
                     <div class="m-3">
                         <div id="login-header">
                             Восстановление пароля
@@ -21,13 +18,11 @@
                             <label>Электронная почта или телефон*</label>
                             <input class="login-form-input p-1" type="text">
                         </div>
-                        <div class="row">
-                            <div class="col-3"></div>
-                            <div class="login-form-div col-4 pr-0">
-                                <input class="p-1 text-white bg-C4C4C4" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Отменить">
-                            </div>
-                            <div class="login-form-div col-4 pr-0">
-                                <input class="p-1 text-white" style="background: linear-gradient(180deg, #336490 0%, #124B7E 100%); border: 0;" type="submit" value="Отправить">
+                        <div class="clearfix">
+                            <div class="form-group text-center p-2 m-1">
+                                <button type="submit" class="btn w-50 text-capitalize btn-primary-custom">
+                                    Отправить
+                                </button>
                             </div>
                         </div>
                     </form>

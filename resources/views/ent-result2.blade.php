@@ -50,13 +50,13 @@
                                         <div class="justify-content-start d-flex">
                                             <div class="w-8"><i class="fas fa-graduation-cap"></i></div>
                                             <b>
-                                                <a class="ent-href" href="{{url('/college/view', [$array[$j]->id, 'uid', $array[$j]->getCost()->university_id])}}">{{$array[$j]->relSubdirection->name_ru}}</a>
+                                                <a class="ent-href" href="{{route('resToSearch', [$array[$j]->subdirection_id, $array[$j]->getCost()->university_id, $profs1, $profs2])}}">{{$array[$j]->relSubdirection->name_ru}}</a>
                                             </b>
                                         </div>
                                         <div class="d-flex justify-content-start">
                                             <div class="w-8"><i class="fas fa-building"></i></div>
                                             <p class="mb-0">
-                                                <a class="ent-href" href="{{url('/college/view', [$array[$j]->getCost()->university_id, 'univer'])}}">{{$array[$j]->getCost()->relUniversity->name_ru}}</a>
+                                                <a class="ent-href" href="{{route('resToSearch', [$array[$j]->subdirection_id, $array[$j]->getCost()->university_id, $profs1, $profs2])}}">{{$array[$j]->getCost()->relUniversity->name_ru}}</a>
                                             </p>
                                         </div>
                                         <div class="d-flex justify-content-start">
@@ -72,23 +72,23 @@
 
                 <div class="pagination-block m-2 p-2">
                     <div class="row m-1">
-                        <div @if($page > 0) onclick="window.location='{{route('result-ent2', [$type, encrypt($score), encrypt($profs1), encrypt($profs2), ($page-1)])}}'" style="cursor: pointer" @else disabled @endif class="col-1 text-center"><img @if($page > 0) class="Img" @endif src="{{asset('img/pagination-left.svg')}}" alt=""></div>
+                        <button id="prevPage" @if($page > 0) onclick="window.location='{{route('result-ent2', [$type, encrypt($score), $profs1, $profs2, ($page-1)])}}'" style="cursor: pointer" @else disabled @endif class="col-1 d-flex text-center"><img @if($page > 0) class="Img" @endif src="{{asset('img/pagination-left.svg')}}" alt=""></button>
                         <div class="col-10 text-center form-group position-relative">
-                            <div id="select-div">
-                                <select id="pagination-select" class="custom-control-inline border-0 m-0 ml-5" style="outline: 0" onchange="javascript:location.href = this.value;">
+                            <div id="select-div2">
+                                <select id="pagination-select2" class="custom-control-inline border-0 m-0 ml-5" style="outline: 0" onchange="javascript:location.href = this.value;">
                                     @for($i = 0; $i < ceil(count($array)/20); $i++)
                                         @if($i == $page)
                                             <option value="" hidden selected>{{(1+$page)}} из {{ceil(count($array)/20)}}</option>
-                                            <option value="" disabled>Страница {{$i+1}}</option>
+                                            <option class="font-weight-bold" value="" disabled>Страница {{$i+1}}</option>
                                         @else
-                                            <option class="nPage" value="{{route('result-ent2', [$type, encrypt($score), encrypt($profs1), encrypt($profs2), $i])}}">Страница {{$i+1}}</option>
+                                            <option class="nPage" value="{{route('result-ent2', [$type, encrypt($score), $profs1, $profs2, $i])}}">Страница {{$i+1}}</option>
                                         @endif
                                     @endfor
                                 </select>
                                 {{--                                <img id="img-page" src="{{asset('img/pagination-down.svg')}}" alt="">--}}
                             </div>
                         </div>
-                        <div @if($page < ceil(count($array)/20)-1) onclick="window.location='{{route('result-ent2', [$type, encrypt($score), encrypt($profs1), encrypt($profs2), ($page+1)])}}'" style="cursor: pointer" @else disabled @endif class="col-1 text-center"><img @if($page < ceil(count($array)/20)-1) class="Img" @endif src="{{asset('img/pagination-right.svg')}}" alt=""></div>
+                        <button id="nextPage" @if($page < ceil(count($array)/20)-1) onclick="window.location='{{route('result-ent2', [$type, encrypt($score), $profs1, $profs2, ($page+1)])}}'" style="cursor: pointer" @else disabled @endif class="col-1 d-flex text-center"><img @if($page < ceil(count($array)/20)-1) class="Img" @endif src="{{asset('img/pagination-right.svg')}}" alt=""></button>
                     </div>
                 </div>
             </div>
@@ -107,9 +107,25 @@
                     "color": "black",
                 });
             });
+            $('.pagination-block button').mouseover(function () {
+                if(this.id == 'nextPage'){
+                    $('img', this).attr('src', "{{asset('img/pagination-right-red.svg')}}");
+                }
+                else {
+                    $('img', this).attr('src', "{{asset('img/pagination-left-red.svg')}}");
+                }
+            });
+            $('.pagination-block button').mouseout(function () {
+                if(this.id == 'nextPage'){
+                    $('img', this).attr('src', "{{asset('img/pagination-right.svg')}}");
+                }
+                else {
+                    $('img', this).attr('src', "{{asset('img/pagination-left.svg')}}");
+                }
+            });
         });
         jQuery(function () {
-            jQuery("#pagination-select").change(function () {
+            jQuery("#pagination-select2").change(function () {
                 location.href = jQuery(this).val();
             });
         })

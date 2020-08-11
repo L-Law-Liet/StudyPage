@@ -117,28 +117,19 @@
                         </div>
                         <div class="text-center m-5">
                             <input type="text" hidden name="access" value="1">
-                            <button type="submit" class="know-chance p-3">Узнать шансы (50 ед.)</button>
+                            <div class="clearfix">
+                                <div class="form-group">
+                                    <button type="submit" class="btn col-4 text-capitalize btn-primary-custom">
+                                        Узнать шансы (50 ед.)
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
     </div>
     <script>
         $(".chosen").chosen().on('change', function(evt, params) {
-            // console.log('GGGGG:', params);
-            // if (params.deselected !== undefined) {
-            //     $(this).find('option').not(':selected').map(function() {
-            //         if ($(this).attr('value') == params.deselected){
-            //             let L = $(this).prop('value');
-            //             console.log($(this).prop('id')[0], '11111');
-            //             if($(this).prop('id')[0] == 'f'){
-            //                 $('#sid' + L).prop('disabled', false).trigger("chosen:updated");
-            //             }
-            //             else {
-            //                 $('#fid' + L).prop('disabled', false).trigger("chosen:updated");
-            //             }
-            //         }
-            //     });
-            // }
             if (params.selected !== undefined) {
                 $(this).find('option:selected').map(function() {
                     if ($(this).attr('value') == params.selected) {

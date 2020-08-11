@@ -843,9 +843,9 @@ function hideSubject(e) {
 		$('#'+L).prop('disabled', true);
 	}
 	else {
-		let L = 'fid'+ e.target.value;
-		console.log(L);
-		$('option').prop('disabled', false);
-		$('#'+L).prop('disabled', true);
+	 	let L = 'fid'+ e.target.value;
+	 	console.log(L);
+	 	$('option').prop('disabled', false);
+	 	$('#'+L).prop('disabled', true);
 	}
 }

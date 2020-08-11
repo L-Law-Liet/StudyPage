@@ -14,8 +14,10 @@
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <h3 class="text-center m-b-10 font-weight-bold">ОБРАТНАЯ СВЯЗЬ</h3>
-                <div style="text-align:center;"><p>Администрация сайта прочтет сообщение и постарается ответить на него в кратчайшие сроки. ВНИМАНИЕ! Studypage.net&nbsp;вправе не отвечать, если: содержание сообщения нарушает законодательство; содержание сообщения противоречит основам морали и нравственности, несет оскорбительный характер; содержание сообщения не относится к деятельности Studypage.net; анонимное обращение.</p></div>                <form action="https://studypage.net/callback" method="POST">
-                    <input type="hidden" name="_token" value="gwF7BBQP1olBJjEJmsi4cjBAd3XK6gxHgFyYXgRF">                    <div class="form-group row">
+                <div style="text-align:center;"><p>Администрация сайта прочтет сообщение и постарается ответить на него в кратчайшие сроки. ВНИМАНИЕ! Studypage.net&nbsp;вправе не отвечать, если: содержание сообщения нарушает законодательство; содержание сообщения противоречит основам морали и нравственности, несет оскорбительный характер; содержание сообщения не относится к деятельности Studypage.net; анонимное обращение.</p></div>
+                <form action="{{route('callbackPost')}}" method="POST">
+                    {{csrf_field()}}
+                    <div class="form-group row">
                         <label class="col-md-3">Ваше имя*</label>
                         <div class="col-md-9">
                             <input type="text" name="name" class="form-control" value="">
@@ -40,7 +42,11 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <button class="btn w-25 btn-success float-right">Отправить</button>
+                        <div class="form-group">
+                            <button class="btn col-4 text-capitalize btn-primary-custom float-right">
+                                Отправить
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -19,6 +19,6 @@ class CustomAuthController extends Controller
         elseif (filter_var($request->get('email'), FILTER_VALIDATE_EMAIL)) {
             return ['email' => $request->get('email'), 'password'=>$request->get('password')];
         }
-        return ['username' => $request->get('email'), 'password'=>$request->get('password')];
+        return ['email' => $request->get('email'), 'password'=>$request->get('password')];
     }
 }
