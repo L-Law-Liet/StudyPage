@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Models\Article;
 use App\Models\Callback;
 use App\Models\City;
@@ -13,7 +15,10 @@ use App\Models\Navigator;
 use App\Models\Parner;
 use App\Models\Proposal;
 use App\Models\Social;
+use App\Models\User;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 
@@ -148,5 +153,24 @@ class IndexController extends Controller
             return redirect()->back()->withInput()->withErrors(['errors' => $validator->errors()->all()]);
         }
     }
+    public function resetPassword(ForgotPasswordRequest $request){
+        $user = User::where('email', $request->get('email'))->first();
 
+        if ($user){
+            $to_name = $user->name.' '.$user->surname;
+            $to_email = $user->email;
+            $password = str_random(8);
+            $user->password = Hash::make($password);
+            $user->save();
+            Mail::send('emails.forgot', ['email' => $user->email, 'password' => $password], function($message) use ($to_name, $to_email) {
+                $message->to($to_email, $to_name)->subject('Восстановление пароля с сайта Studypage.net');
+                $message->from('info.studypage@gmail.com', 'StudyPage');
+            });
+            return redirect()->back()->with('success', 'На указанную электтронную почту было отправлено письмо. Перейдите по ссылке указанный в письме.');
+        }
+        else {
+            session(['forgot' => true]);
+            return redirect()->back()->withErrors('Такого пользователя не существует.');
+        }
+    }
 }

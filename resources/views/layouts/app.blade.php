@@ -305,7 +305,8 @@
                                         {{csrf_field()}}
                                         <div class="login-form-div">
                                             <label>Электронная почта или телефон</label>
-                                            <input required class="@if($errors->first('email') && session('login')) border-danger border @else login-form-input @endif p-1" type="text" name="email">
+                                            <input required class="@if($errors->first('email') && session('login')) border-danger border @else login-form-input @endif p-1"
+                                                   type="text" name="email" @if(session('login')) value="{{old('email')}}" @endif>
                                             <span class="text-danger"><small>@if(session('login')) {{ $errors->first('email')}} @endif</small></span>
                                         </div>
                                         <div class="login-form-div">
@@ -332,7 +333,7 @@
                                             <img class="mr-1 mb-1" src="{{asset('img/fb_logo.svg')}}" alt="">Продолжить с Facebook</button>
                                     </div>
                                     <div class="login-form-div">
-                                        <button id="google-btn" class="p-1">
+                                        <button onclick="window.location='{{url('/sign-in/google')}}'" id="google-btn" class="p-1">
                                             <img class="mr-1" src="{{asset('img/google_logo.svg')}}" alt="">Продолжить с Google</button>
                                     </div>
                                 </div>
@@ -359,30 +360,30 @@
                                     {{csrf_field()}}
                                     <div class="login-form-div">
                                         <label>Фамилия*</label>
-                                        <input required class="@if($errors->first('surname') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="surname">
+                                        <input required class="@if($errors->first('surname') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="surname" value="{{old('surname')}}">
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('surname')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Имя*</label>
-                                        <input required class="@if($errors->first('name') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="name">
+                                        <input required class="@if($errors->first('name') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="name" value="{{old('name')}}">
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('name')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Дата рождения*</label>
-                                        <input required class="@if($errors->first('birthDate') && session('register')) border-danger border @else login-form-input @endif p-1" type="date" min="1920-01-01" max="2020-01-01" name="birthDate">
+                                        <input required class="@if($errors->first('birthDate') && session('register')) border-danger border @else login-form-input @endif p-1" type="date" min="1920-01-01" max="2020-01-01" name="birthDate" value="{{old('birthDate')}}">
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('birthDate')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Пол*</label>
                                         <select required class="@if($errors->first('gender') && session('register')) border-danger border @else login-form-input @endif chsn p-1 w-100" name="gender">
-                                            <option value="m">Мужчина</option>
-                                            <option value="f">Женщина</option>
+                                            <option @if(old('gender') == 'm') selected @endif value="m">Мужчина</option>
+                                            <option @if(old('gender') == 'f') selected @endif value="f">Женщина</option>
                                         </select>
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('gender')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Регион*</label>
-                                        <select required class="@if($errors->first('region') && session('register')) border-danger border @else login-form-input @endif chsn p-1 w-100" name="region">
+                                        <select required class="@if($errors->first('region') && session('register')) border-danger border @else login-form-input @endif chsn p-1 w-100" name="region" value="{{old('region')}}">
                                             @foreach(\App\Models\City::all() as $c)
                                                 <option value="{{$c->id}}">{{$c->name_ru}}</option>
                                             @endforeach
@@ -392,12 +393,13 @@
 
                                     <div class="login-form-div">
                                         <label>Электронная почта*</label>
-                                        <input required class="@if($errors->first('email') && session('register')) border-danger border @else login-form-input @endif p-1" type="text" name="email">
+                                        <input required class="@if($errors->first('email') && session('register')) border-danger border @else login-form-input @endif p-1"
+                                               type="text" name="email" @if(session('register')) value="{{old('email')}}" @endif>
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('email')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
                                         <label>Контактный телефон*</label>
-                                        <input required onkeypress='validate(event)' oninput="phone1(event)" class="@if($errors->first('phone') && session('register')) border-danger border @else login-form-input @endif p-1" maxlength="12" value="+7" type="tel" name="phone">
+                                        <input required onkeypress='validate(event)' oninput="phone1(event)" class="@if($errors->first('phone') && session('register')) border-danger border @else login-form-input @endif p-1" maxlength="12" value="+7{{substr(old('phone'), 2)}}" type="tel" name="phone">
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('phone')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
@@ -456,10 +458,13 @@
                                             электронную почту или телефон придет письмо со ссылкой для восстановления пароля.
                                         </div>
                                     </div>
-                                    <form id="login-form" action="" class="p-2 m-1">
+                                    <form id="login-form" action="{{route('forgot-password')}}" method="post" class="p-2 m-1">
+                                        @csrf
                                         <div class="login-form-div">
                                             <label>Электронная почта или телефон</label>
-                                            <input required class="login-form-input p-1" type="text">
+                                            <input required class="@if($errors->first('email') && session('forgot')) border-danger border @else login-form-input @endif p-1"
+                                                   name="email" type="text" @if(session('forgot')) value="{{old('email')}}" @endif>
+                                            <span class="text-danger"><small>@if(session('forgot')) @if(session()->get('errors')) @foreach($errors->all() as $e) {{$e}} @endforeach @endif @endif</small></span>
                                         </div>
                                         <div class="clearfix">
                                             <div class="form-group text-center m-1">
@@ -640,6 +645,8 @@
 
     // When the user clicks on <span> (x), close the modal
     loginSpan.onclick = function() {
+        $('input.border-danger').removeClass('border', 'border-danger').addClass('login-form-input');
+        $('span.text-danger').hide();
         loginModal.style.display = "none";
     }
 
@@ -666,6 +673,8 @@
 
     // When the user clicks on <span> (x), close the modal
     regSpan.onclick = function() {
+        $('input.border-danger').removeClass('border', 'border-danger').addClass('login-form-input');
+        $('span.text-danger').hide();
         regModal.style.display = "none";
     }
 
@@ -684,6 +693,8 @@
 
     // When the user clicks on <span> (x), close the modal
     fSpan.onclick = function() {
+        $('input.border-danger').removeClass('border', 'border-danger').addClass('login-form-input');
+        $('span.text-danger').hide();
         fModal.style.display = "none";
     }
 
@@ -726,6 +737,11 @@ $('.chsn').chosen();
     $('#myRegModal').show();
     @php
     session()->forget('register');
+    @endphp
+    @elseif(session()->get('forgot') && (count($errors)> 0 || session()->get('errors')))
+    $('#myForgotModal').show();
+    @php
+        session()->forget('forgot');
     @endphp
     @endif
 </script>

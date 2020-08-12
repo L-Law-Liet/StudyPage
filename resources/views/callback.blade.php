@@ -9,6 +9,20 @@
         }
     </style>
     @endsection
+@section('errors')
+    @if (is_object($errors) && $errors->any())
+        <div class="container">
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>
+                            {{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+@endsection
 @section('content')
     <div class="container">
         <div class="row">

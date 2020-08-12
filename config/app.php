@@ -162,6 +162,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
         Unisharp\Ckeditor\ServiceProvider::class,
         Dosarkz\EPayAlfaBank\AlfaBankServiceProvider::class,
     ],
@@ -216,6 +218,7 @@ return [
         'Html' => 'Collective\Html\HtmlFacade',
         'Image' => Intervention\Image\Facades\Image::class,
         'AlfaBank' => Dosarkz\EPayAlfaBank\Facades\AlfaBank::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

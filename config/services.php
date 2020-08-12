@@ -13,7 +13,16 @@ return [
     | to have a conventional place to find your various credentials.
     |
     */
-
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
+    ],
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => 'FACEBOOK_REDIRECT',
+    ],
     'ses' => [
         'key' => env('SES_KEY'),
         'secret' => env('SES_SECRET'),

@@ -57,7 +57,7 @@ class PagesController extends Controller
         else if (CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income == 'После школы'){
             $features = [ 'Степень обучения' , 'Поступление в ВУЗ', CostEducation::where('specialty_id', $sid)->where('university_id', $uid)->first()->income, 'Профессиональные дисциплины', $speciality->relSubdirection->name_ru ];
     }
-        if (str_contains(url()->previous(), '/college')) {
+        if ($speciality->degree_id == 4) {
             $hrefTitle = 'college';
         }
         else {
@@ -101,6 +101,9 @@ public static function mainFilter($degree, $direction_id, $city_id, $query){
     $s->join('universities', 'universities.id', '=', 'cost_education.university_id');
     if ($degree != 0) {
         $ar['specialties'] = $s->where('specialties.degree_id', $degree);
+    }
+    else {
+        $ar['specialties'] = $s->where('specialties.degree_id', '<>', '4');
     }
     if ($city_id != 0) {
         $ar['specialties'] = $s->where('city_id', $city_id);
