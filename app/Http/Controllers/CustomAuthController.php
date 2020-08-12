@@ -49,6 +49,20 @@ class CustomAuthController extends Controller
     }
     public function facebookRedirect(){
         $user = Socialite::driver('facebook')->user();
+        $u = User::where('email', $user->email)->first();
+        if ($u) {
+            Auth::login($u);
+        }
+        else {
+            $u = new User();
+            $u->name = substr($user->name, 0, strpos($user->name, ' '));
+            $u->surname = substr($user->name, strpos($user->name, ' ')+1, strlen($user->name)-1);
+            $u->email = $user->email;
+            $u->confirmed = 0;
+            $u->save();
+            Auth::login($u);
+        }
+        return redirect('/');
         return redirect('/');
     }
 }

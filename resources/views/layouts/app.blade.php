@@ -329,7 +329,7 @@
                                         <img src="{{asset('img/login_line.svg')}}" alt="">
                                     </div>
                                     <div class="login-form-div">
-                                        <button id="fb_btn" class="p-1 text-white">
+                                        <button onclick="window.location='{{url('/sign-in/facebook')}}'" id="fb_btn" class="p-1 text-white">
                                             <img class="mr-1 mb-1" src="{{asset('img/fb_logo.svg')}}" alt="">Продолжить с Facebook</button>
                                     </div>
                                     <div class="login-form-div">
