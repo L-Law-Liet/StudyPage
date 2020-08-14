@@ -125,7 +125,24 @@
 
             <!-- Main content -->
             <section class="content">
-
+                @if(Session::has('errors'))
+                    <div class="container">
+                        <div class="alert alert-danger">
+                            <p> {{ Session::get('errors') }} </p>
+                        </div>
+                    </div>
+                @endif
+                @if (is_object($errors) && $errors->any())
+                        <div class="container">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
                 @include('error')
 
                 @yield('content')

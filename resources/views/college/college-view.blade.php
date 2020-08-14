@@ -27,15 +27,29 @@
                                     <p class="m-1"><b>Веб-сайт: </b><u>{{ltrim($university->web_site, 'Website:')}}</u></p>
                                 </div>
                             </div>
+                            @php
+                            $description = explode(' ', $university->description);
+                            $short = [];
+                            $line = 60;
+                            for ($i = 0; $i < $line; $i++) {
+                                $short[] = $description[$i];
+                            }
+                            $long = [];
+                            for ($i = $line; $i < sizeof($description); $i++) {
+                                $long[] = $description[$i];
+                            }
+                            $long = implode(' ', $long);
+                            $short = implode(' ', $short);
+                            @endphp
                             <div class="w-63 ml-4 pr-0">
                                 <p class="cv-text">
-                                    {{$university->short_description}}
+                                    {{$short}}
                                 </p>
                             </div>
                         </div>
                         <div class="cv-text cv-content">
                             <p>
-                             {{$university->description}}
+                             {{$long}}
                             </p>
                         </div>
                         <div class="cv-media media-resources cv-content">

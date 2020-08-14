@@ -115,6 +115,30 @@ return [
             'can'  => 'manage-blog',
         ],
         [
+            'text'        => 'Пользователи',
+            'url'         => 'admin/user',
+            'icon'        => 'users',
+            'icon_color' => 'red',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
+        ],
+        [
+            'text'        => 'Колледжи',
+            'url'         => 'admin/college',
+            'icon'        => 'building',
+            'icon_color' => 'yellow',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
+        ],
+        [
+            'text'        => 'Страницы Колледжей',
+            'url'         => 'admin/list/college',
+            'icon'        => 'building',
+            'icon_color' => 'green',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
+        ],
+        [
             'text'        => 'ВУЗы',
             'url'         => 'admin/university',
             'icon'        => 'university',
@@ -123,7 +147,7 @@ return [
             'label_color' => 'success',*/
         ],
         [
-            'text'        => 'Список ВУЗов',
+            'text'        => 'Страницы ВУЗОВ',
             'url'         => 'admin/list',
             'icon'        => 'university',
             'icon_color' => 'green',

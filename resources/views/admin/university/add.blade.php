@@ -6,12 +6,13 @@
     @php
         $title = is_null($id) ? 'Добавить' : 'Редактировать'
     @endphp
-    <h1>{{ $title }} ВУЗ</h1>
+    <h1>{{ $title }} {{str_contains(url()->current(), 'university')?'ВУЗ':'Колледж'}}</h1>
 @stop
 
 @section('content')
     @php
-        $action = is_null($id)?'/admin/university/add':"/admin/university/add/$id";
+            $which = str_contains(url()->current(), 'university')?'university':'college';
+            $action = is_null($id)?'/admin/'.$which.'/add':"/admin/".$which."/add/$id";
     @endphp
     <div class="row">
         <div class="col-md-12">
@@ -23,7 +24,7 @@
                     <form action="{{ $action }}" method="POST">
                         @csrf
                         <div class="form-group row">
-                            <label class="col-md-3">Наименование ВУЗа {{--на русском--}}</label>
+                            <label class="col-md-3">Наименование {{str_contains(url()->current(), 'university')?'ВУЗа':'Колледжа'}} {{--на русском--}}</label>
                             <div class="col-md-9">
                                 <input type="text" name="name_ru" class="form-control" @if(is_object($university)) value="{{ $university->name_ru }}" @endif >
                             </div>
@@ -41,7 +42,7 @@
                             </div>
                         </div>--}}
                         <div class="form-group row">
-                            <label class="col-md-3">Город</label>
+                            <label class="col-md-3">Регион</label>
                             <div class="col-md-9">
                                 <select name="city_id" class="form-control city">
                                     <option></option>
@@ -52,7 +53,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3">Адресс{{-- на русском--}}</label>
+                            <label class="col-md-3">Адрес{{-- на русском--}}</label>
                             <div class="col-md-9">
                                 <input type="text" name="address_ru" class="form-control" @if(is_object($university)) value="{{ $university->address_ru }}" @endif >
                             </div>
@@ -76,7 +77,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3">E-mail для обращения</label>
+                            <label class="col-md-3">E-mail</label>
                             <div class="col-md-9">
                                 <input type="text" name="email" class="form-control" @if(is_object($university)) value="{{ $university->email }}" @endif>
                             </div>
@@ -87,17 +88,22 @@
                                 <input type="text" name="web_site" class="form-control" @if(is_object($university)) value="{{ $university->web_site }}" @endif>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-md-3">Тип учебного заведения</label>
-                            <div class="col-md-9">
-                                <select name="type_id" class="form-control city">
-                                    <option></option>
-                                    @foreach($types as $k => $v)
-                                        <option @if(is_object($university) && $university->type_id == $k) selected @endif value="{{ $k }}">{{ $v }}</option>
-                                    @endforeach
-                                </select>
+                            <div @if(!str_contains(url()->current(), 'university')) hidden @endif class="form-group row">
+                                <label class="col-md-3">Тип учебного заведения</label>
+                                <div class="col-md-9">
+                                    <select name="type_id" class="form-control city">
+                                        @if(str_contains(url()->current(), 'university'))
+                                        <option></option>
+                                            @foreach($types as $k => $v)
+                                                <option @if(is_object($university) && $university->type_id == $k) selected @endif value="{{ $k }}">{{ $v }}</option>
+                                            @endforeach
+                                            @else
+                                            <option selected value="5"></option>
+                                            @endif
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+
                         {{--<div class="form-group row">--}}
                             {{--<label class="col-md-3">Код</label>--}}
                             {{--<div class="col-md-9">--}}

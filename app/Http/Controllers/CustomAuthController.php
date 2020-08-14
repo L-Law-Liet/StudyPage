@@ -63,6 +63,5 @@ class CustomAuthController extends Controller
             Auth::login($u);
         }
         return redirect('/');
-        return redirect('/');
     }
 }

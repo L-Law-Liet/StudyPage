@@ -7,6 +7,7 @@ use App\Models\ListUn;
 use App\Models\RankingSource;
 use App\Models\Rating;
 use App\Models\RatingCategory;
+use App\Models\University;
 use Illuminate\Support\Facades\Input;
 
 class ListController
@@ -14,10 +15,9 @@ class ListController
     public function index(){
 
         $data = [];
-        $rating = ListUn::orderBy('id', 'desc');
-        $data['rating'] = $rating->paginate(20);
-        $data['count'] = $data['rating']->total();
-        $data['ranking'] = RankingSource::first();
+        $universities = University::where('hasCollege', 0)->where('description', '<>', null)->orderBy('id', 'desc');
+        $data['universities'] = $universities->paginate(20);
+        $data['count'] = $data['universities']->total();
         if (isset($_GET['page'])) {
             setcookie("page", $_GET['page'], time()+3600);
         } else {

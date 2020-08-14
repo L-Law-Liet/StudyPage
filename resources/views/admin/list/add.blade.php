@@ -1,17 +1,24 @@
 @extends('adminlte::page')
 
-@section('title', 'Добавить список ВУЗов')
+@section('title', 'Редактировать Страницу ВУЗов')
 
 @section('content_header')
     @php
         $title = is_null($id) ? 'Добавить' : 'Редактировать'
     @endphp
-    <h1>{{ $title }}  список ВУЗов</h1>
+    <h1>{{ $title }} {{!str_contains(url()->current(), 'college')?'ВУЗ':'Колледж'}}</h1>
 @stop
 
 @section('content')
     @php
-        $action = is_null($id)?'/admin/list/add':"/admin/list/add/$id";
+        $which = !str_contains(url()->current(), 'college')?'university':'college';
+        if (!str_contains(url()->current(), 'college')){
+            $hasVal = 0;
+        }
+        else{
+            $hasVal = 1;
+        }
+        $action = is_null($id)?'/admin/list/'.$which.'/add':"/admin/list/".$which."/add/$id";
     @endphp
     <div class="row">
         <div class="col-md-12">
@@ -23,15 +30,68 @@
                     <form action="{{ $action }}" method="POST">
                         @csrf
                         <div class="form-group row">
-                            <label class="col-md-3">Название ВУЗа</label>
+                            <label class="col-md-3">Наименование {{!str_contains(url()->current(), 'college')?'ВУЗа':'Колледжа'}} {{--на русском--}}</label>
                             <div class="col-md-9">
-                                <input type="text" name="name" class="form-control" @if(is_object($rating)) value="{{ $rating->name }}" @endif>
+                                <select name="id" @if(is_object($university)) disabled @endif class="form-control">
+                                    <option value=""></option>
+                                    @if(is_object($university))
+                                        @foreach(\App\Models\University::where('description', '<>', null)->where('hasCollege', $hasVal)->get() as $u)
+                                            <option @if($u->id == $university->id) selected @endif value="{{$u->id}}">{{$u->name_ru}}</option>
+                                        @endforeach
+                                        @else
+                                    @foreach(\App\Models\University::where('description', null)->where('hasCollege', $hasVal)->get() as $u)
+                                    <option value="{{$u->id}}">{{$u->name_ru}}</option>
+                                        @endforeach
+                                        @endif
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3">Код ВУЗа</label>
+                            <label class="col-md-3">О {{!str_contains(url()->current(), 'college')?'ВУЗе':'колледже'}}</label>
                             <div class="col-md-9">
-                                <input type="text" name="code" class="form-control" @if(is_object($rating)) value="{{ $rating->code }}" @endif>
+                                <textarea name="description" class="form-control">@if(is_object($university)) {{ $university->description }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Достижения</label>
+                            <div class="col-md-9">
+                                <textarea name="achievements" class="form-control">@if(is_object($university)) {{ $university->achievements }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Сотрудничество</label>
+                            <div class="col-md-9">
+                                <textarea name="coop" class="form-control">@if(is_object($university)) {{ $university->coop }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Рейтинг</label>
+                            <div class="col-md-9">
+                                <textarea name="rating" class="form-control">@if(is_object($university)) {{ $university->rating }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Гранты/Скидки</label>
+                            <div class="col-md-9">
+                                <textarea name="grants" class="form-control">@if(is_object($university)) {{ $university->grants }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Образовательные программы</label>
+                            <div class="col-md-9">
+                                <textarea name="learn_program" class="form-control">@if(is_object($university)) {{ $university->learn_program }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Документы для поступления</label>
+                            <div class="col-md-9">
+                                <textarea name="docs_income" class="form-control">@if(is_object($university)) {{ $university->docs_income }} @endif</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Контакты</label>
+                            <div class="col-md-9">
+                                <textarea name="short_description" class="form-control">@if(is_object($university)) {{ $university->short_description }} @endif</textarea>
                             </div>
                         </div>
                         <div class="clearfix">

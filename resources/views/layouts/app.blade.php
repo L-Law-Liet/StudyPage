@@ -399,7 +399,7 @@
                                     </div>
                                     <div class="login-form-div">
                                         <label>Контактный телефон*</label>
-                                        <input required onkeypress='validate(event)' oninput="phone1(event)" class="@if($errors->first('phone') && session('register')) border-danger border @else login-form-input @endif p-1" maxlength="12" value="+7{{substr(old('phone'), 2)}}" type="tel" name="phone">
+                                        <input required onkeypress='validate(event)' onclick="phone1(event)" oninput="phone1(event)" class="@if($errors->first('phone') && session('register')) border-danger border @else login-form-input @endif p-1" maxlength="12" value="+7{{substr(old('phone'), 2)}}" type="tel" name="phone">
                                         <span class="text-danger"><small>@if(session('register')) {{ $errors->first('phone')}} @endif</small></span>
                                     </div>
                                     <div class="login-form-div">
@@ -707,8 +707,8 @@
 </script>
 <script>
     function phone1(event) {
+        event.target.value = '+7'+event.target.value.substr(2).replace(/\D/g,'');
         console.log(event.target.value);
-        event.target.value = '+7'+event.target.value.substr(2);
     }
 </script>
 <script !src="">

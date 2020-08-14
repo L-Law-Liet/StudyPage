@@ -31,7 +31,7 @@
                                     @php
                                     $i = 1;
                                     @endphp
-                                    @foreach($university->grants as $grant)
+                                    @foreach($university->grantS as $grant)
 
                                         <tr>
                                             <td>{{ $i }}</td>

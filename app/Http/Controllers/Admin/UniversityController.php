@@ -21,7 +21,7 @@ class UniversityController
     public function index(){
 
         $data = [];
-        $universities = University::orderBy('id', 'desc');
+        $universities = University::where('hasCollege', 0)->orderBy('id', 'desc');
         $data['universities'] = $universities->paginate(20);
         $data['count'] = $data['universities']->total();
         if (isset($_GET['page'])) {
@@ -36,7 +36,7 @@ class UniversityController
         $data = [];
         $data['id'] = $id;
         $data['cities'] = City::where('active', 1)->pluck('name_ru', 'id')->all();
-        $data['types'] = Type::pluck('name_ru', 'id')->all();
+        $data['types'] = Type::where('id', '<>', 5)->pluck('name_ru', 'id')->all();
         $data['university'] = null;
         if(!is_null($id)){
             $data['university'] = University::findOrFail($id);
@@ -73,9 +73,64 @@ class UniversityController
         $university->delete();
 
         if (!empty($_COOKIE['page'])) {
-            return \redirect('admin/university?page='.$_COOKIE['page'])->with('errors', 'Запись успешна удалена');
+            return \redirect('admin/list/university?page='.$_COOKIE['page'])->with('errors', 'Запись успешна удалена');
         } else {
-            return \redirect('admin/university')->with('errors', 'Запись успешна удалена');
+            return \redirect('admin/list/university')->with('errors', 'Запись успешна удалена');
+        }
+    }
+    public function getPageView($id){
+        $university = University::find($id);
+        return view('admin.list.view', compact('university'));
+    }
+
+    public function getPageAdd($id = null){
+        $data = [];
+        $data['id'] = $id;
+        $data['university'] = null;
+        if(!is_null($id)){
+            $data['university'] = University::findOrFail($id);
+        }
+        return view('admin.list.add', $data);
+    }
+
+    public function postPageAdd($id = null){
+        $data = Input::all();
+        $data['user_id'] = Auth::user()->id;
+        $u = University::findOrFail($id??$data['id']);
+        $u->description = $data['description'];
+        $u->short_description = $data['short_description'];
+        $u->achievements = $data['achievements'];
+        $u->coop = $data['coop'];
+        $u->rating = $data['rating'];
+        $u->grants = $data['grants'];
+        $u->learn_program = $data['learn_program'];
+        $u->docs_income = $data['docs_income'];
+        $u->user_id = $data['user_id'];
+        $u->save();
+        if (!empty($_COOKIE['page'])) {
+            return \redirect('admin/list?page='.$_COOKIE['page'])->with('success', 'Запись успешна сохранена');
+        } else {
+            return \redirect('admin/list')->with('success', 'Запись успешна сохранена');
+        }
+    }
+
+    public function getPageDelete($id){
+
+        $university = University::findOrFail($id);
+        $university->description = null;
+        $university->achievements = null;
+        $university->short_description = null;
+        $university->coop = null;
+        $university->rating = null;
+        $university->docs_income = null;
+        $university->learn_program = null;
+        $university->grants = null;
+        $university->save();
+
+        if (!empty($_COOKIE['page'])) {
+            return \redirect('admin/list?page='.$_COOKIE['page'])->with('errors', 'Запись успешна удалена');
+        } else {
+            return \redirect('admin/list')->with('errors', 'Запись успешна удалена');
         }
     }
 

@@ -19,5 +19,8 @@
         "popper.js": "^1.12",
         "slick-slider": "^1.8.2",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^21.0.0"
     }
 }

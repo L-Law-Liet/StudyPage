@@ -26,6 +26,15 @@ Route::group([
         Route::get('/view/{id}', 'UniversityController@getView');
         Route::get('/delete/{id}', 'UniversityController@getDelete');
     });
+    Route::prefix('college')->group(function () {
+        Route::get('/', 'CollegeController@index');
+        Route::get('/add', 'CollegeController@getAdd');
+        Route::get('/add/{id}', 'CollegeController@getAdd');
+        Route::post('/add', 'CollegeController@postAdd');
+        Route::post('/add/{id}', 'CollegeController@postAdd');
+        Route::get('/view/{id}', 'CollegeController@getView');
+        Route::get('/delete/{id}', 'CollegeController@getDelete');
+    });
     Route::prefix('direction')->group(function () {
         Route::get('/', 'DirectionController@index');
         Route::get('/add', 'DirectionController@getAdd');
@@ -75,6 +84,23 @@ Route::group([
     });
     Route::prefix('list')->group(function () {
         Route::get('/', 'ListController@index');
+        Route::prefix('/university')->group(function (){
+            Route::get('/add', 'UniversityController@getPageAdd');
+            Route::get('/add/{id}', 'UniversityController@getPageAdd');
+            Route::post('/add', 'UniversityController@postPageAdd');
+            Route::post('/add/{id}', 'UniversityController@postPageAdd');
+            Route::get('/view/{id}', 'UniversityController@getPageView');
+            Route::get('/delete/{id}', 'UniversityController@getPageDelete');
+        });
+        Route::prefix('/college')->group(function (){
+            Route::get('/', 'CollegeController@list');
+            Route::get('/add', 'CollegeController@getPageAdd');
+            Route::get('/add/{id}', 'CollegeController@getPageAdd');
+            Route::post('/add', 'CollegeController@postPageAdd');
+            Route::post('/add/{id}', 'CollegeController@postPageAdd');
+            Route::get('/view/{id}', 'CollegeController@getPageView');
+            Route::get('/delete/{id}', 'CollegeController@getPageDelete');
+});
         Route::get('/add', 'ListController@getAdd');
         Route::get('/add/{id}', 'ListController@getAdd');
         Route::post('/add', 'ListController@postAdd');
@@ -199,6 +225,8 @@ Route::group([
     });
     Route::prefix('user')->group(function () {
         Route::get('/', 'UserController@index');
+        Route::get('/view/{id}', 'UserController@getView');
+        Route::get('/delete/{id}', 'UserController@getDelete');
     });
 });
 
